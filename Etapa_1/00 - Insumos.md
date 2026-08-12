@@ -1,4 +1,4 @@
-# Indústria escolhida: Manufatura Flexível
+# Indústria escolhida: Manufatura Flexível (FMS)
 
 ## Insumos: Matérias-Primas Primárias e Utilidades da Célula
 
