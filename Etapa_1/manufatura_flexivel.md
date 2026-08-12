@@ -2,7 +2,9 @@
 
 Na automação industrial (norma ISA-5.1), instrumentos e atuadores emitem e recebem sinais discretos (binários: $0$ = Falso / $1$ = Verdadeiro). Este documento detalha a arquitetura de controle e o mapeamento de I/O para a planta de manufatura flexível.
 
-![Diagrama de Blocos do Sistema SCADA](/watermarked_img_16292007902663843627.png)
+<img width="1024" height="559" alt="Manufatura_flexivel" src="https://github.com/user-attachments/assets/2b93cfd7-2a52-4ebc-a76f-bbe0ae858e86" />
+
+
 
 Abaixo, as variáveis da planta de manufatura são discretizadas em proposições lógicas:
 
