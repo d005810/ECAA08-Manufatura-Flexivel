@@ -5,7 +5,7 @@
 * **Entradas de Peças (Materiais a serem processados no Silo):**
 
     * **Peças por Formato (Geometrias A e B):** Peças industriais diferenciadas no túnel de inspeção pelos sensores ópticos de formato (ZS-201 e ZS-202).
-    * **Peças por Pigmentação/Cor (Vermelho, Verde e Azul):** Peças classificadas pelos sensores ópticos de cor (AS-201, AS-202 e AS-203) para encaminhamento aos lotes específicos.
+    * **Peças por Cor (Vermelho, Verde e Azul):** Peças classificadas pelos sensores ópticos de cor (AS-201, AS-202 e AS-203) para encaminhamento aos lotes específicos.
 
 * **Insumos Energéticos e Utilidades do Processo:**
 
