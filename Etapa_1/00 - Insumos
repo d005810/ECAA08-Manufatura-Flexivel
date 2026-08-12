@@ -1,0 +1,19 @@
+# Indústria escolhida: Manufatura Flexível
+
+## Insumos: Matérias-Primas Primárias e Utilidades da Célula
+
+* **Entradas de Peças (Materiais a serem processados):**
+
+    * **Peças de Alumínio:** Componentes metálicos processados no sistema.
+    * **Peças de Aço / Ferro:** Componentes ferromagnéticos identificados diretamente por sensores indutivos.
+    * **Peças Poliméricas:** Componentes não-metálicos detectados por sensores ópticos e capacitivos.
+
+* **Insumos Energéticos e Utilidades:**
+
+    * **Energia Elétrica (AC/DC):** Alimentação dos motores das esteiras, inversores e do controlador do robô articulado.
+    * **Ar Comprimido (Linha Pneumática):** Insumo regulado (entre 6 a 8 bar) para acionamento dos atuadores e pistões desviadores.
+    * **Fluidos de Lubrificação:** Óleo pneumático para preservação das válvulas e atuadores.
+
+* **Insumos de Suporte e Consumíveis:**
+
+    * **Bandejas e Paletes:** Dispositivos de fixação padronizados para transporte das peças nas esteiras.
