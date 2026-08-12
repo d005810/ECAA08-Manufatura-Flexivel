@@ -11,3 +11,7 @@ Motor computacional de supervisão, controle e diagnóstico para Célula de Manu
   A peça se desloca até a estação de medição, onde o processo de transporte é momentaneamente pausado. Neste ponto, ocorrem duas avaliações simultâneas:
 - Inspeção Dimensional: Sensores de perfil ou chaves fim de curso determinam se a peça é Pequena ou Grande.
 - Inspeção de Cor: Um sensor de visão (ou sensor de cor RGB) identifica a pigmentação da peça, classificando-a como Azul, Verde ou Vermelha.
+## 2.3 Roteamento e Triagem:
+  Com base na combinação de cor e tamanho (exemplos: "Azul e Pequena" ou "Vermelha e Grande"), o controlador lógico aciona desviadores pneumáticos (cilindros empurradores) localizados ao longo da esteira.
+## 2.4 Estocagem
+  A peça é empurrada para a rampa ou esteira secundária correspondente ao seu slot de estocagem específico. Sensores de capacidade nas caixas de estocagem monitoram se o limite máximo foi atingido, bloqueando a entrada de novas peças daquela categoria caso o estoque esteja cheio.
