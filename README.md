@@ -3,3 +3,4 @@ Motor computacional de supervisão, controle e diagnóstico para Célula de Manu
 ## 1. Definição da Planta de Automação
 ### Processo Selecionado
 **Célula de Manufatura Flexível e Triagem Automática de Peças.**
+## 2. Descritivo de funcionamento
