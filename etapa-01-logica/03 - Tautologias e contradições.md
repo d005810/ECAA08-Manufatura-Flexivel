@@ -135,3 +135,28 @@ Para garantir a coerência do sistema, aplicam-se restrições booleanas de inte
 * **Intertravamento de Processo:**
   $$CMD_{pist\_alim} = \overline{S_{vazio}} \cdot \overline{S_{p\_saida}} \cdot \overline{ALM_{cx1}} \cdot \overline{ALM_{cx2}} \cdot \overline{ALM_{cx3}}$$
 * **Tratamento de Exceções na FSM:** Redirecionamento de qualquer combinação de entrada indefinida na matriz de transição diretamente para o estado de repouso $S_0$.
+
+## 6. Lógica de Ativação de Alarmes e Supervisão de Falhas
+
+Para garantir a segurança da operação e a integridade lógica da máquina, o sistema de supervisão e alarme deve ser ativado sempre que houver uma violação física, emergência ou contradição booleana no processo. A variável que representa o sinaleiro/stack de alarme de produção e o sistema em estado de FALHA/ALERTA é a $a_1$ (Tag **HS-302**).
+
+### 6.1. Condições Críticas e de Segurança
+O alarme deve ser disparado imediatamente sob condições que representem risco operacional ou mecânico:
+* **Parada de Emergência:** Acionamento do botão de emergência/segurança manual ($e_1 = 1$, Tag **HS-301**) ou pela interrupção do contato NF do botão de emergência da esteira ($S_{emerg} = 0$).
+* **Sobrecarga do Motor:** Detecção de sobrecarga térmica ou elétrica no motor da esteira principal ($S_{sobrecarga} = 1$).
+
+### 6.2. Condições por Contradições Lógicas (Inconsistências)
+Baseando-se na análise de contradições do sistema, o alarme ($a_1$) também atua como um supervisor de coerência sensorial para evitar comportamentos indeterminados:
+* **Inconsistência Geométrica (Formato):** Leitura de acionamento do sensor superior sem o inferior, o que indica falha física ($\overline{A} \cdot B = 1$).
+* **Ambiguidade de Cor:** Detecção simultânea de múltiplas cores pelo sensor óptico, representada pela equação $(C_R \cdot C_G) + (C_R \cdot C_B) + (C_G \cdot C_B) = 1$.
+* **Incompatibilidade no Silo:** Leitura simultânea indicando silo vazio e presença de peça na saída ($S_{vazio} \cdot S_{p\_saida} = 1$).
+
+### 6.3. Alarmes de Processo e Produção
+* **Loteamento e Transbordo:** O sistema possui indicadores de caixa cheia para lotes de 10 peças ($ALM_{cx1}$, $ALM_{cx2}$ e $ALM_{cx3}$). A ativação do pistão de alimentação ($CMD_{pist\_alim} = 1$) em concomitância com o alarme de caixa cheia ($ALM_{cx1} \cdot ALM_{cx2} \cdot ALM_{cx3} = 1$) resulta em acúmulo e transbordo de peças. Portanto, essa combinação também deve disparar o estado de falha/alerta geral da planta.
+
+### 6.4. Equação Booleana de Ativação do Alarme Geral ($a_1$)
+Sintetizando as variáveis de controle e as inconsistências, a proposição lógica para a ativação do alarme geral ($a_1$) é definida pela soma lógica (porta OR) de todas as condições críticas e de falha mapeadas:
+
+$$a_1 = e_1 + \overline{S_{emerg}} + S_{sobrecarga} + (\overline{A} \cdot B) + (C_R \cdot C_G) + (C_R \cdot C_B) + (C_G \cdot C_B) + (S_{vazio} \cdot S_{p\_saida}) + (CMD_{pist\_alim} \cdot (ALM_{cx1} \cdot ALM_{cx2} \cdot ALM_{cx3}))$$
+
+*(Onde o nível lógico alto ($1$) em qualquer um dos termos independentes acima torna $a_1 = 1$, acionando o estado de alerta e interrompendo o avanço da máquina).*
