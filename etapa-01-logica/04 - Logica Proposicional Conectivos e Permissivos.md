@@ -56,6 +56,12 @@ $$\text{Trip}_{\text{M-101}} \equiv e_1 \lor a_1 \lor batch\_full$$
 
 Pelas Leis de De Morgan, podemos provar matematicamente que o bloqueio (Trip) é a negação exata das condições bases de permissão de partida:
 
-$$\text{Trip}_{\text{M-101}} \equiv \neg (\neg e_1 \land \neg a_1 \land \neg batch\_full) \equiv \neg P_{\text{M-101\_base}}$$
+$$	ext{Trip}_{	ext{M-101}} \equiv 
+eg (
+eg e_1 \land 
+eg a_1 \land 
+eg batch\_full) \equiv 
+eg P_{	ext{M-101\_base}}$$
+
 
 
