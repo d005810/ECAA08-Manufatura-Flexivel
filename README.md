@@ -5,7 +5,7 @@ Motor computacional de supervisão, controle e diagnóstico para Célula de Manu
 **Célula de Manufatura Flexível e Triagem Automática de Peças.**
 ## 2. Descritivo de funcionamento
   A Célula de Manufatura Flexível opera de forma sequencial e automatizada para o recebimento, identificação, roteamento, loteamento e supervisão de segurança/diagnóstico de peças manufaturadas. O processo está estruturado em três setores principais de controle (Setor 100: Alimentação e Transporte, Setor 200: Inspeção e Triagem, e Setor 300: Loteamento, Segurança e Supervisão) e funciona da seguinte maneira:
-## 2.1 Entrada e Alimentação (Setor 100): 
+## 2.1 Entrada e Alimentação: 
   As peças ficam armazenadas em um silo de alimentação. Após o comando de partida do sistema, a esteira transportadora principal é acionada e um pistão pneumático insere individualmente cada peça na esteira, liberando o início do ciclo de triagem.
 ## 2.2 Estação de Inspeção (Dimensional e Cor):
   A peça se desloca até a estação de medição, onde o processo de transporte é momentaneamente pausado. Neste ponto, ocorrem duas avaliações simultâneas:
