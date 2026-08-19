@@ -13,27 +13,20 @@ As operações sobre variáveis proposicionais são definidas por operadores ló
 6. **Bicondicional ($A \leftrightarrow B$):** $(A \rightarrow B) \land (B \rightarrow A)$. Modela equivalência de estados operacionais.
 
 ---
-
 ## 2. Aplicação em Engenharia: Permissivos de Partida de Equipamentos Críticos
 
 Em controle e automação, um **permissivo de partida** (*Start Permissive*) é uma condição booleana que deve ser estritamente satisfeita para que um atuador de potência (esteira, pistão de alimentação, braço pneumático) possa receber o comando de energização.
 
-### 2.1. Permissivo da Esteira Principal ($P_{	ext{M-101}}$)
+### 2.1. Permissivo da Esteira Principal ($P_{\text{M-101}}$)
 
-O motor da esteira principal $	ext{M-101}$ é responsável por transportar as peças do silo até as caixas de loteamento. Seu acionamento ($cmd_{	ext{M-101}}$) requer:
+O motor da esteira principal $\text{M-101}$ é responsável por transportar as peças do silo até as caixas de loteamento. Seu acionamento ($cmd_{\text{M-101}}$) requer:
 
-- Sem botão de parada de emergência ativo: $
-eg e_1$
-- Sistema sem alarmes ativos ou falhas: $
-eg a_1$
-- Nenhuma caixa de loteamento cheia (condição de parada solicitada): $
-eg batch\_full$
-- Modo operacional definido de forma única: $	ext{Auto} \oplus 	ext{Manual}$
+- Sem botão de parada de emergência ativo: $\neg e_1$
+- Sistema sem alarmes ativos ou falhas: $\neg a_1$
+- Nenhuma caixa de loteamento cheia (condição de parada solicitada): $\neg batch\_full$
+- Modo operacional definido de forma única: $\text{Auto} \oplus \text{Manual}$
 
-$$P_{	ext{M-101}} \equiv 
-eg e_1 \land 
-eg a_1 \land 
-eg batch\_full \land (	ext{Auto} \oplus 	ext{Manual})$$
+$$P_{\text{M-101}} \equiv \neg e_1 \land \neg a_1 \land \neg batch\_full \land (\text{Auto} \oplus \text{Manual})$$
 
 ```mermaid
 graph LR
@@ -44,32 +37,25 @@ graph LR
     AND --> Permissivo["Permissivo Motor M-101 (True/False)"]
 ```
 
-### 2.2. Permissivo de Alimentação do Silo ($P_{	ext{XV-101}}$)
+### 2.2. Permissivo de Alimentação do Silo ($P_{\text{XV-101}}$)
 
-Para que o pistão pneumático de alimentação $	ext{XV-101}$ libere uma nova peça, a esteira já deve estar rodando e não pode haver congestionamento na saída:
+Para que o pistão pneumático de alimentação $\text{XV-101}$ libere uma nova peça, a esteira já deve estar rodando e não pode haver congestionamento na saída:
 
 - Motor da esteira principal ligado e confirmado: $m_1$
-- Silo não está vazio: $
-eg l_{silo}$
-- Saída do alimentador está livre (sem peça presa): $
-eg s_{feed}$
-- Permissivo geral da esteira (M-101) verdadeiro: $P_{	ext{M-101}}$
+- Silo não está vazio: $\neg l_{silo}$
+- Saída do alimentador está livre (sem peça presa): $\neg s_{feed}$
+- Permissivo geral da esteira (M-101) verdadeiro: $P_{\text{M-101}}$
 
-$$P_{	ext{XV-101}} \equiv m_1 \land 
-eg l_{silo} \land 
-eg s_{feed} \land P_{	ext{M-101}}$$
+$$P_{\text{XV-101}} \equiv m_1 \land \neg l_{silo} \land \neg s_{feed} \land P_{\text{M-101}}$$
 
 ### 2.3. Intertrava de Bloqueio Contínuo (Run Interlock)
 
 Mesmo após a partida da esteira, se qualquer condição crítica falhar (como uma caixa encher ou alguém acionar o botão de emergência), a operação é imediatamente interrompida (Trip).
 
-$$	ext{Trip}_{	ext{M-101}} \equiv e_1 \lor a_1 \lor batch\_full$$
+$$\text{Trip}_{\text{M-101}} \equiv e_1 \lor a_1 \lor batch\_full$$
 
 Pelas Leis de De Morgan, podemos provar matematicamente que o bloqueio (Trip) é a negação exata das condições bases de permissão de partida:
 
-$$	ext{Trip}_{	ext{M-101}} \equiv 
-eg (
-eg e_1 \land 
-eg a_1 \land 
-eg batch\_full) \equiv 
-eg P_{	ext{M-101\_base}}$$
+$$\text{Trip}_{\text{M-101}} \equiv \neg (\neg e_1 \land \neg a_1 \land \neg batch\_full) \equiv \neg P_{\text{M-101\_base}}$$
+
+
