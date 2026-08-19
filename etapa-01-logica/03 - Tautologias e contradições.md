@@ -159,3 +159,25 @@ Sintetizando as variáveis de controle e as inconsistências, a proposição ló
 
 $$a_1 = e_1 + \overline{S_{emerg}} + S_{sobrecarga} + (\overline{A} \cdot B) + (C_R \cdot C_G) + (C_R \cdot C_B) + (C_G \cdot C_B) + (S_{vazio} \cdot S_{p\_saida}) + (CMD_{pist\_alim} \cdot (ALM_{cx1} \cdot ALM_{cx2} \cdot ALM_{cx3}))$$
 
+## 7. Tabela de Verdade dos Intertravamentos de Segurança
+
+A tabela abaixo valida as combinações lógicas dos sensores críticos de inspeção e segurança, provando que estados proibidos resultam na inibição das saídas de atuação ($CMD_{px} = 0$) e na ativação obrigatória do alarme de supervisão ($a_1 = 1$).
+
+### 7.1. Validação de Formato e Cor (Inspeção)
+
+| $A$ (Base) | $B$ (Topo) | $C_R$ | $C_G$ | $C_B$ | Classificação / Estado | $CMD_{p1}$ | $CMD_{p2}$ | $CMD_{p3}$ | Alarme $a_1$ | Condição Lógica |
+| :---: | :---: | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :--- |
+| 0 | 0 | 0 | 0 | 0 | Sem peça na área de leitura | 0 | 0 | 0 | 0 | Repouso |
+| 1 | 0 | 0 | 0 | 1 | Peça Pequena Azul | 0 | 0 | 1 | 0 | Válido |
+| 1 | 1 | 1 | 0 | 0 | Peça Grande Vermelha | 1 | 0 | 0 | 0 | Válido |
+| 1 | 1 | 0 | 1 | 0 | Peça Grande Verde | 0 | 1 | 0 | 0 | Válido |
+| 0 | 1 | X | X | X | **Sensor Topo s/ Base ($\overline{A} \cdot B$)** | **0** | **0** | **0** | **1** | **Estado Proibido (Falha)** |
+| 1 | X | 1 | 1 | 0 | **Ambiguidade Cor ($C_R \cdot C_G$)** | **0** | **0** | **0** | **1** | **Estado Proibido (Falha)** |
+| 1 | X | 1 | 0 | 1 | **Ambiguidade Cor ($C_R \cdot C_B$)** | **0** | **0** | **0** | **1** | **Estado Proibido (Falha)** |
+| 1 | X | 0 | 1 | 1 | **Ambiguidade Cor ($C_G \cdot C_B$)** | **0** | **0** | **0** | **1** | **Estado Proibido (Falha)** |
+
+### 7.2. Prova de Tautologia de Segurança
+
+A propriedade de segurança da planta estipula que atuadores de triagem nunca devem ser acionados na presença de falhas ou contradições:
+
+$$\text{Segurança} = \overline{CMD_{p1} \cdot a_1} \land \overline{CMD_{p2} \cdot a_1} \land \overline{CMD_{p3} \cdot a_1} \equiv 1 \quad (\text{Tautologia})$$
