@@ -159,4 +159,3 @@ Sintetizando as variáveis de controle e as inconsistências, a proposição ló
 
 $$a_1 = e_1 + \overline{S_{emerg}} + S_{sobrecarga} + (\overline{A} \cdot B) + (C_R \cdot C_G) + (C_R \cdot C_B) + (C_G \cdot C_B) + (S_{vazio} \cdot S_{p\_saida}) + (CMD_{pist\_alim} \cdot (ALM_{cx1} \cdot ALM_{cx2} \cdot ALM_{cx3}))$$
 
-*(Onde o nível lógico alto ($1$) em qualquer um dos termos independentes acima torna $a_1 = 1$, acionando o estado de alerta e interrompendo o avanço da máquina).*
