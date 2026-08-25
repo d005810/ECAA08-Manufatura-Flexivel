@@ -121,7 +121,7 @@ graph TD
 
 ## 3. Estudo de Casos: Otimização na Linha de Manufatura Flexível
 
-Abaixo, aplicamos a extração canônica e a minimização booleana aos blocos de decisão da planta de manufatura flexível mapeada nas Aulas 02, 03 e 04.
+Abaixo, aplicamos a extração canônica e a minimização booleana aos blocos de decisão da planta de manufatura flexível.
 
 ---
 
