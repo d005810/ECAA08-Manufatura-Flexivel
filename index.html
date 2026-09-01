@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCADA-Core: Célula de Manufatura Flexível | ECAA08</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --panel-bg: #1e293b;
+            --border-color: #334155;
+            --primary: #38bdf8;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        header h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: var(--panel-bg);
+            color: var(--text-light);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background: var(--primary);
+            color: var(--bg-dark);
+            border-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* --- SEÇÃO 1: SLIDES --- */
+        .slide-container {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            min-height: 480px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .slide-body h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .slide-body ul {
+            list-style-type: none;
+            margin-top: 15px;
+        }
+
+        .slide-body li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        .slide-body li::before {
+            content: "•";
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.4rem;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+
+        .slide-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+        }
+
+        .slide-btn {
+            background: var(--primary);
+            color: var(--bg-dark);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .slide-btn:disabled {
+            background: var(--border-color);
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        /* --- SEÇÃO 2: SIMULAÇÃO VISUAL --- */
+        .sim-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .canvas-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        canvas {
+            background: #090d16;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 750px;
+            height: 380px;
+        }
+
+        .controls-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .controls-card h3 {
+            color: var(--primary);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .act-btn {
+            background: #334155;
+            color: var(--text-light);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .act-btn:hover {
+            filter: brightness(1.2);
+        }
+
+        .act-btn.red { background: #b91c1c; }
+        .act-btn.green { background: #15803d; }
+        .act-btn.blue { background: #1d4ed8; }
+        .act-btn.warn { background: #d97706; }
+        .act-btn.estop { background: var(--danger); grid-column: span 2; }
+
+        .status-box {
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            min-height: 90px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        /* --- SEÇÃO 3: EXPLICAÇÃO LÓGICA --- */
+        .doc-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .doc-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        .doc-card p, .doc-card ul {
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .doc-card ul { margin-left: 20px; }
+
+        .tag {
+            background: #334155;
+            color: var(--primary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Célula de Manufatura Flexível (FMS) — SCADA-Core</h1>
+        <p>ECAA08: Automação / Matemática Discreta | Módulo 1: Lógica Formal & Sistemas Especialistas</p>
+    </header>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('simulacao')">🕹️ Simulação Visual</button>
+        <button class="tab-btn" onclick="switchTab('slides')">📊 Apresentação (Slides)</button>
+        <button class="tab-btn" onclick="switchTab('explicacao')">📖 Explicação da Etapa 1</button>
+    </div>
+
+    <!-- TAB 1: SIMULAÇÃO VISUAL -->
+    <div id="simulacao" class="tab-content active">
+        <div class="sim-layout">
+            <div class="canvas-card">
+                <canvas id="plantCanvas" width="750" height="380"></canvas>
+            </div>
+            <div class="controls-card">
+                <h3>Painel de Telemetria e I/O</h3>
+                
+                <p style="font-size:0.85rem; color:var(--text-muted);">Alimentação de Peças (Infeed):</p>
+                <div class="btn-grid">
+                    <button class="act-btn red" onclick="spawnPiece('RED', 'LARGE')">Grande Vermelha</button>
+                    <button class="act-btn green" onclick="spawnPiece('GREEN', 'LARGE')">Grande Verde</button>
+                    <button class="act-btn blue" onclick="spawnPiece('BLUE', 'SMALL')">Pequena Azul</button>
+                    <button class="act-btn warn" onclick="spawnPiece('FAULT_GEO', 'LARGE')">Falha Geometria</button>
+                </div>
+
+                <p style="font-size:0.85rem; color:var(--text-muted);">Comandos de Supervisão:</p>
+                <div class="btn-grid">
+                    <button class="act-btn estop" id="btnEstop" onclick="toggleEstop()">PARADA DE EMERGÊNCIA (HS-301)</button>
+                    <button class="act-btn" onclick="resetSystem()">Reset Geral / Caixas</button>
+                </div>
+
+                <div class="status-box" id="scadaConsole">
+                    [SCADA] Sistema em operação contínua.<br>
+                    [SCAN] Motor M-101: LIGADO | Permissivo: OK
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: SLIDES DE APRESENTAÇÃO -->
+    <div id="slides" class="tab-content">
+        <div class="slide-container">
+            <div class="slide-body" id="slideContent">
+                <!-- Conteúdo dinâmico via JS -->
+            </div>
+            <div class="slide-controls">
+                <button class="slide-btn" id="prevSlide" onclick="changeSlide(-1)">Anterior</button>
+                <span id="slideIndicator" style="color:var(--text-muted); font-size:0.9rem;">Slide 1 de 5</span>
+                <button class="slide-btn" id="nextSlide" onclick="changeSlide(1)">Próximo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 3: EXPLICAÇÃO LÓGICA -->
+    <div id="explicacao" class="tab-content">
+        <div class="doc-card">
+            <h3>Arquitetura Lógica da Etapa 1</h3>
+            <p>O Módulo 1 implementa uma cadeia lógica formal em 4 estágios construtivos:</p>
+            <ul>
+                <li><strong>Mapeamento ISA-5.1 e Proposições (Aulas 00 e 02):</strong> Discretização das grandezas físicas dos setores 100 (alimentação), 200 (inspeção de cor/formato e triagem) e 300 (loteamento e emergência) em variáveis booleanas atômicas (<span class="tag">s_a</span>, <span class="tag">s_b</span>, <span class="tag">c_r</span>, <span class="tag">cnt_1..3</span>).</li>
+                <li><strong>Tautologias e Formas Normais (Aulas 03 a 05):</strong> Modelagem das equações mínimas de intertravamento (<span class="tag">P_M-101</span>) via Quine-McCluskey e prova formal de segurança (<span class="tag">f_canonica ↔ f_otimizada ≡ 1</span>).</li>
+                <li><strong>Lógica de Predicados e Quantificadores (Aula 06):</strong> Varredura global sobre conjuntos finitos de instrumentos via operadores <span class="tag">FORALL (∀)</span> e <span class="tag">EXISTS (∃)</span>.</li>
+                <li><strong>Sistemas Especialistas e Forward Chaining (Aulas 08 a 10):</strong> Dedução em tempo real de diagnósticos de causa-raiz em Cláusulas de Horn com catálogo de procedimentos operacionais padrão (POP).</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // --- NAVEGAÇÃO DE TABS ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // --- SISTEMA DE SLIDES ---
+        const slidesData = [
+            {
+                title: "1. Visão Geral da Planta de Manufatura Flexível",
+                bullets: [
+                    "Linha automatizada de classificação e loteamento inteligente com 3 setores funcionais.",
+                    "Setor 100: Silo de peças com chave de nível LS-101, atuador XV-101 e esteira M-101.",
+                    "Setor 200: Túnel de inspeção de formato (ZS-201/202), cor (AS-201..203) e triagem pneumática (XV-201..203).",
+                    "Setor 300: Loteamento em caixas (US-301..303) com limite de 10 peças por lote."
+                ]
+            },
+            {
+                title: "2. Discretização e Intertravamentos de Segurança",
+                bullets: [
+                    "Equação do Permissivo do Motor M-101: P = ¬e1 ∧ ¬a1 ∧ ¬batch_full ∧ (auto ⊕ man).",
+                    "Condição contínua de Trip: Desarme imediato sob emergência (HS-301), sobrecarga ou transbordo geral.",
+                    "Otimização booleana via Quine-McCluskey: redução drástica de termos com equivalência lógica tautológica (100%)."
+                ]
+            },
+            {
+                title: "3. Lógica de Predicados em Redes de Sensores",
+                bullets: [
+                    "Operadores de Primeira Ordem implementados sobre domínios finitos de instrumentos industriais.",
+                    "Quantificador Existencial: ∃x ∈ Sensores, Falha(x) → Disparo de Alarme Geral HS-302 (a1).",
+                    "Quantificador Universal: ∀s ∈ Saídas, CaixaCheia(s) → Transbordo Geral e bloqueio de infeed."
+                ]
+            },
+            {
+                title: "4. Base de Conhecimento e Sistema Especialista",
+                bullets: [
+                    "Regras de produção modeladas em Cláusulas de Horn com severidade, prioridade e POP.",
+                    "Diagnóstico de Inconsistência Geométrica: (ZS-202 ∧ ¬ZS-201) → Peça tombada ou desalinhada.",
+                    "Diagnóstico de Ambiguidade de Cor: Múltiplos canais de cor ativos simultaneamente → Falha óptica."
+                ]
+            },
+            {
+                title: "5. Motor de Inferência Integrado (Módulo 1)",
+                bullets: [
+                    "Forward Chaining avalia os fatos da telemetria de campo em tempo real até atingir ponto fixo.",
+                    "Backward Chaining reconstrói a árvore causal para auditoria de alarmes e desarmes de atuadores.",
+                    "Pipeline completo executando em ciclo de scan contínuo com validação formal via asserts."
+                ]
+            }
+        ];
+
+        let currentSlide = 0;
+
+        function renderSlide() {
+            const slide = slidesData[currentSlide];
+            const container = document.getElementById('slideContent');
+            let html = `<h2>${slide.title}</h2><ul>`;
+            slide.bullets.forEach(b => html += `<li>${b}</li>`);
+            html += `</ul>`;
+            container.innerHTML = html;
+
+            document.getElementById('slideIndicator').innerText = `Slide ${currentSlide + 1} de ${slidesData.length}`;
+            document.getElementById('prevSlide').disabled = (currentSlide === 0);
+            document.getElementById('nextSlide').disabled = (currentSlide === slidesData.length - 1);
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 0) currentSlide = 0;
+            if (currentSlide >= slidesData.length) currentSlide = slidesData.length - 1;
+            renderSlide();
+        }
+
+        renderSlide();
+
+        // --- SIMULAÇÃO VISUAL EM CANVAS (FMS) ---
+        const canvas = document.getElementById('plantCanvas');
+        const ctx = canvas.getContext('2d');
+        const consoleEl = document.getElementById('scadaConsole');
+
+        let estopActive = false;
+        let pieces = [];
+        let boxCounts = [0, 0, 0];
+        let pistons = [
+            { x: 340, y: 155, active: false, targetY: 155 },
+            { x: 470, y: 155, active: false, targetY: 155 },
+            { x: 600, y: 155, active: false, targetY: 155 }
+        ];
+
+        function logScada(msg) {
+            consoleEl.innerHTML = `[${new Date().toLocaleTimeString()}] ${msg}<br>` + consoleEl.innerHTML;
+        }
+
+        function toggleEstop() {
+            estopActive = !estopActive;
+            const btn = document.getElementById('btnEstop');
+            if (estopActive) {
+                btn.style.background = '#7f1d1d';
+                btn.innerText = 'EMERGÊNCIA ACIONADA (TRIP M-101)';
+                logScada("<span style='color:#ef4444;'>[TRIP] Parada de Emergência HS-301 acionada! Motor M-101 parado.</span>");
+            } else {
+                btn.style.background = '#ef4444';
+                btn.innerText = 'PARADA DE EMERGÊNCIA (HS-301)';
+                logScada("<span style='color:#22c55e;'>[RESET] Emergência desarmada. Sistema restabelecido.</span>");
+            }
+        }
+
+        function resetSystem() {
+            pieces = [];
+            boxCounts = [0, 0, 0];
+            estopActive = false;
+            document.getElementById('btnEstop').style.background = '#ef4444';
+            document.getElementById('btnEstop').innerText = 'PARADA DE EMERGÊNCIA (HS-301)';
+            logScada("[RESET] Caixas zeradas e esteira limpa.");
+        }
+
+        function spawnPiece(type, size) {
+            if (estopActive) {
+                logScada("<span style='color:#f59e0b;'>[AVISO] Infeed bloqueado: Sistema em Trip de Emergência!</span>");
+                return;
+            }
+            pieces.push({
+                x: 40,
+                y: 190,
+                type: type,
+                size: size,
+                diverted: false,
+                divertPath: null,
+                divertProgress: 0
+            });
+            logScada(`[INFEED] Pistão XV-101 alimentou peça: ${type} (${size})`);
+        }
+
+        function update() {
+            if (!estopActive) {
+                // Atualiza peças
+                for (let i = pieces.length - 1; i >= 0; i--) {
+                    let p = pieces[i];
+
+                    if (!p.diverted) {
+                        p.x += 1.8; // Velocidade da esteira principal M-101
+
+                        // Sensor de Inspeção (Túnel x: 190 a 250)
+                        if (p.x > 210 && p.x < 214) {
+                            if (p.type === 'FAULT_GEO') {
+                                logScada("<span style='color:#ef4444;'>[ALARME a1] Inconsistência Geométrica: ZS-202 ativo s/ ZS-201!</span>");
+                            }
+                        }
+
+                        // Triagem Braço 1 (Vermelho Grande -> x: 340)
+                        if (p.x >= 340 && p.type === 'RED' && p.size === 'LARGE' && boxCounts[0] < 10) {
+                            p.diverted = true;
+                            p.divertPath = 0;
+                            pistons[0].active = true;
+                            setTimeout(() => pistons[0].active = false, 400);
+                        }
+                        // Triagem Braço 2 (Verde Grande -> x: 470)
+                        else if (p.x >= 470 && p.type === 'GREEN' && p.size === 'LARGE' && boxCounts[1] < 10) {
+                            p.diverted = true;
+                            p.divertPath = 1;
+                            pistons[1].active = true;
+                            setTimeout(() => pistons[1].active = false, 400);
+                        }
+                        // Triagem Braço 3 (Azul Pequeno -> x: 600)
+                        else if (p.x >= 600 && p.type === 'BLUE' && p.size === 'SMALL' && boxCounts[2] < 10) {
+                            p.diverted = true;
+                            p.divertPath = 2;
+                            pistons[2].active = true;
+                            setTimeout(() => pistons[2].active = false, 400);
+                        }
+                        // Fim da esteira principal (peça não classificada / descarte)
+                        else if (p.x > 710) {
+                            pieces.splice(i, 1);
+                        }
+                    } else {
+                        // Movimento na esteira secundária
+                        p.y += 2.0;
+                        if (p.y >= 310) {
+                            boxCounts[p.divertPath]++;
+                            logScada(`[CONTAGEM] Sensor US-30${p.divertPath + 1}: Caixa ${p.divertPath + 1} (${boxCounts[p.divertPath]}/10)`);
+                            if (boxCounts[p.divertPath] === 10) {
+                                logScada(`<span style='color:#f59e0b;'>[LOT] Caixa ${p.divertPath + 1} CHEIA! Intervenção necessária.</span>`);
+                            }
+                            pieces.splice(i, 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 1. Silo de Alimentação (Setor 100)
+            ctx.fillStyle = '#475569';
+            ctx.fillRect(20, 90, 50, 80);
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '10px monospace';
+            ctx.fillText('SILO 100', 24, 130);
+
+            // 2. Esteira Principal M-101
+            ctx.fillStyle = estopActive ? '#450a0a' : '#1e293b';
+            ctx.fillRect(20, 200, 710, 22);
+            ctx.strokeStyle = estopActive ? '#ef4444' : '#38bdf8';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(20, 200, 710, 22);
+
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = '11px monospace';
+            ctx.fillText(`ESTEIRA PRINCIPAL M-101 [${estopActive ? 'TRIP' : 'RUNNING'}]`, 250, 215);
+
+            // 3. Túnel de Inspeção (Setor 200)
+            ctx.fillStyle = '#334155';
+            ctx.fillRect(180, 160, 80, 70);
+            ctx.strokeStyle = '#f59e0b';
+            ctx.strokeRect(180, 160, 80, 70);
+            ctx.fillStyle = '#f59e0b';
+            ctx.fillText('INSPEÇÃO', 195, 185);
+            ctx.fillText('ZS/AS-200', 193, 200);
+
+            // 4. Pistões de Triagem e Esteiras Secundárias (Setor 200 & 300)
+            const sortX = [340, 470, 600];
+            for (let k = 0; k < 3; k++) {
+                const sx = sortX[k];
+
+                // Braço Empurrador (Pistão XV-201..203)
+                ctx.fillStyle = pistons[k].active ? '#ef4444' : '#64748b';
+                const py = pistons[k].active ? 180 : 155;
+                ctx.fillRect(sx - 8, py, 16, 25);
+                ctx.fillStyle = '#94a3b8';
+                ctx.fillText(`XV-20${k+1}`, sx - 18, 150);
+
+                // Esteira Secundária M-301..303
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(sx - 15, 222, 30, 90);
+                ctx.strokeStyle = '#64748b';
+                ctx.strokeRect(sx - 15, 222, 30, 90);
+
+                // Caixa de Loteamento (Setor 300)
+                const isFull = boxCounts[k] >= 10;
+                ctx.fillStyle = isFull ? '#7f1d1d' : '#1e3a8a';
+                ctx.fillRect(sx - 25, 315, 50, 45);
+                ctx.strokeStyle = isFull ? '#ef4444' : '#38bdf8';
+                ctx.strokeRect(sx - 25, 315, 50, 45);
+
+                ctx.fillStyle = '#f8fafc';
+                ctx.font = '10px monospace';
+                ctx.fillText(`CX ${k+1}`, sx - 12, 332);
+                ctx.fillText(`${boxCounts[k]}/10`, sx - 12, 347);
+            }
+
+            // 5. Renderização das Peças
+            pieces.forEach(p => {
+                ctx.fillStyle = (p.type === 'RED' || p.type === 'FAULT_GEO') ? '#ef4444' : (p.type === 'GREEN' ? '#22c55e' : '#3b82f6');
+                const pSize = p.size === 'LARGE' ? 18 : 12;
+                ctx.fillRect(p.x - pSize/2, p.y - pSize/2, pSize, pSize);
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(p.x - pSize/2, p.y - pSize/2, pSize, pSize);
+            });
+        }
+
+        function loop() {
+            update();
+            draw();
+            requestAnimationFrame(loop);
+        }
+
+        loop();
+    </script>
+</body>
+</html>
