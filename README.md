@@ -1,5 +1,10 @@
 # ECAA08-Manufatura-Flexivel
 Motor computacional de supervisão, controle e diagnóstico para Célula de Manufatura Flexível - ECAA08.
+
+## Site do Projeto
+
+[SCADA-Manufatura Flexível](https://d005810.github.io/ECAA08-Manufatura-Flexivel/)
+
 ## 1. Definição da Planta de Automação
 ## Processo Selecionado
 **Célula de Manufatura Flexível e Triagem Automática de Peças.**
