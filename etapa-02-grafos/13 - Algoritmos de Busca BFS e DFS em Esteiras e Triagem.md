@@ -85,9 +85,6 @@ Durante a execução da DFS em um dígrafo com tempos de descoberta $d[u]$ e de 
 | **Aresta de Avanço** (*Forward Edge*) | $v$ é um descendente não-imediato de $u$ já finalizado (estado PRETO, $d[u] < d[v]$). | **Bypass Direto:** atalho físico de esteira que salta postos intermediários (ex: bypass da inspeção ou de postos inoperantes). |
 | **Aresta de Cruzamento** (*Cross Edge*) | Conecta ramos disjuntos onde $v$ já foi finalizado sem relação de ancestralidade ($d[v] < d[u]$). | **Transferência Entre Linhas:** conector entre células de produção paralelas independentes. |
 
-#### Teorema do Dígrafo Acíclico Dirigido (DAG):
-$$\text{Um dígrafo } G \text{ é acíclico (DAG)} \iff \text{A busca DFS em } G \text{ não produz nenhuma aresta de retorno (*back edge*)}.$$
-
 * **Topologia Nominal da FMS:** A malha padrão ($9$ nós e $8$ arestas) é estritamente um DAG. Isso garante matematicamente que peças industriais nunca entrarão em *deadlock* ou rota infinita descontrolada.
 * **Topologia com Recirculação:** Ao instalar a esteira de reaproveitamento de refugos `DESC-304` $\rightarrow$ `SILO-100`, a DFS classifica esta conexão instantaneamente como **aresta de retorno**, detectando a formação do ciclo $C = (\text{SILO-100} \rightarrow \text{INSP-200} \rightarrow \text{DIV-201} \dots \rightarrow \text{DESC-304} \rightarrow \text{SILO-100})$. Isso sinaliza ao SCADA a obrigatoriedade de habilitar contadores de passagem para evitar acúmulo excessivo no silo.
 
@@ -155,14 +152,3 @@ A verificação `if v_nome not in nos_bloqueados` opera em tempo amortizado $O(1
 2. **Auditoria de DAG e Detecção de Ciclos:** Na malha ampliada da fábrica contendo a esteira de retorno `DESC-304 -> SILO-100`, execute mentalmente o algoritmo DFS e indique os vértices cujos intervalos de descoberta $[d[u], f[u]]$ comprovam a existência da aresta de retorno (*back edge*).
 3. **Intertravamento com Redundância:** Considere uma célula equipada com esteira auxiliar de bypass `INSP-200 -> DIV-203`. Se o nó `DIV-201` falhar, demonstre analiticamente se a caixa `CX-303` continuará acessível e descreva a nova rota gerada pelo motor de busca.
 4. **Análise de Escalabilidade de Memória:** Em uma fábrica automotiva de grande porte com centenas de postos interconectados por veículos autônomos guiados (AGVs), analise o comportamento da pegada de memória ($O(|V|)$ na BFS vs. $O(h)$ na DFS, onde $h$ é a profundidade máxima) e discuta qual algoritmo é mais vantajoso para auditoria de rotas longas em controladores com memória RAM restrita.
-
----
-
-## 5. Entregável da Aula 13
-
-* **Motor de Busca Topológica da FMS em Python (`13 - Algoritmos de Busca BFS e DFS em Esteiras e Triagem.ipynb`):**
-  - Implementação completa das classes `GrafoManufatura` e `NavegadorFMS`;
-  - Algoritmo BFS para cálculo determinístico de rotas de menor número de atuadores/arestas;
-  - Algoritmo DFS com retrocesso (*backtracking*) para enumeração exaustiva de rotas de contingência;
-  - Classificador formal de arestas (Árvore, Retorno, Avanço, Cruzamento) com diagnóstico automático de ciclos (DAG);
-  - Simulador de eventos com injeção de falhas (`nos_bloqueados`) e auditoria de intertravamento SCADA.
