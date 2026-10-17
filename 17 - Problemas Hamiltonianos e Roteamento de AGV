@@ -1,0 +1,86 @@
+def formatar_tabela(dados):
+    """Formata lista de dicionarios em tabela ASCII pura."""
+    if not dados:
+        return "Tabela Vazia"
+    colunas = list(dados[0].keys())
+    larguras = {c: len(str(c)) for c in colunas}
+    for row in dados:
+        for c in colunas:
+            larguras[c] = max(larguras[c], len(str(row.get(c, ""))))
+    header = " | ".join(f"{c:<{larguras[c]}}" for c in colunas)
+    divisor = "-+-".join("-" * larguras[c] for c in colunas)
+    linhas = [header, divisor]
+    for row in dados:
+        linhas.append(" | ".join(f"{str(row.get(c, '')):<{larguras[c]}}" for c in colunas))
+    return "\n".join(linhas)
+
+from typing import List
+
+class RoteadorAGV_TSP:
+    def __init__(self, locais: List[str], matriz_distancias: List[List[float]]):
+        self.locais = locais
+        self.dist = matriz_distancias
+        self.n = len(locais)
+        
+    def calcular_custo_rota(self, rota: List[int]) -> float:
+        c = sum(self.dist[rota[i]][rota[i+1]] for i in range(len(rota)-1))
+        c += self.dist[rota[-1]][rota[0]]
+        return c
+
+    def vizinho_mais_proximo(self, inicio_idx: int = 0) -> List[int]:
+        nao_vis = set(range(self.n))
+        nao_vis.remove(inicio_idx)
+        rota = [inicio_idx]
+        atual = inicio_idx
+        while nao_vis:
+            prox = min(nao_vis, key=lambda v: self.dist[atual][v])
+            rota.append(prox)
+            nao_vis.remove(prox)
+            atual = prox
+        return rota
+
+    def otimizar_2opt(self, rota: List[int]) -> List[int]:
+        melhor = list(rota)
+        melhor_c = self.calcular_custo_rota(melhor)
+        melhorou = True
+        while melhorou:
+            melhorou = False
+            for i in range(1, self.n - 1):
+                for j in range(i + 1, self.n):
+                    nova = melhor[:i] + melhor[i:j+1][::-1] + melhor[j+1:]
+                    c = self.calcular_custo_rota(nova)
+                    if c < melhor_c:
+                        melhor_c = c
+                        melhor = nova
+                        melhorou = True
+                        break
+                if melhorou: break
+        return melhor
+
+# Postos de Manutenção/Inspeção da Célula SCADA
+locais = [
+    "Estacao_AGV", 
+    "Silo_Alimentacao", 
+    "Tunel_Inspecao", 
+    "Bancada_Pistoes", 
+    "Estacao_Loteamento", 
+    "Painel_PLC_SCADA"
+]
+
+# Matriz de Distâncias Físicas Didáticas (em Metros)
+dist_mat = [
+    [0.0,  12.0, 25.0, 38.0, 45.0, 30.0],
+    [12.0,  0.0, 15.0, 28.0, 35.0, 22.0],
+    [25.0, 15.0,  0.0, 14.0, 22.0, 18.0],
+    [38.0, 28.0, 14.0,  0.0, 10.0, 16.0],
+    [45.0, 35.0, 22.0, 10.0,  0.0, 20.0],
+    [30.0, 22.0, 18.0, 16.0, 20.0,  0.0]
+]
+
+agv_tsp = RoteadorAGV_TSP(locais, dist_mat)
+r_ini = agv_tsp.vizinho_mais_proximo(0)
+r_opt = agv_tsp.otimizar_2opt(r_ini)
+
+print("=== ROTEAMENTO LOGÍSTICO DO AGV NA CÉLULA INDUSTRIAL ===")
+print("Rota Inicial NN:", " -> ".join([locais[i] for i in r_ini]) + f" | Distância: {agv_tsp.calcular_custo_rota(r_ini):.1f}m")
+print("Rota Ótima 2-Opt:", " -> ".join([locais[i] for i in r_opt]) + f" | Distância: {agv_tsp.calcular_custo_rota(r_opt):.1f}m")
