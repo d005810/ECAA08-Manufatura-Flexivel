@@ -1,0 +1,101 @@
+from dataclasses import dataclass
+from heapq import heappop, heappush
+from math import inf
+from typing import Dict, List, Tuple
+
+@dataclass(frozen=True)
+class Rota:
+    destino: str
+    peso: float
+    descricao: str
+
+class GrafoLogistico:
+    def __init__(self) -> None:
+        self._adjacencias: Dict[str, List[Rota]] = {}
+
+    def adicionar_rota(self, origem: str, destino: str, peso: float, descricao: str) -> None:
+        if peso < 0:
+            raise ValueError("Dijkstra exige pesos não negativos.")
+        self._adjacencias.setdefault(origem, []).append(Rota(destino, peso, descricao))
+        self._adjacencias.setdefault(destino, [])
+
+    def menor_caminho(self, origem: str, destino: str) -> Tuple[float, List[str]]:
+        if origem not in self._adjacencias or destino not in self._adjacencias:
+            raise KeyError("Origem e destino devem pertencer ao grafo.")
+
+        distancias = {vertice: inf for vertice in self._adjacencias}
+        predecessores: Dict[str, str] = {}
+        distancias[origem] = 0.0
+        fila: List[Tuple[float, str]] = [(0.0, origem)]
+
+        while fila:
+            distancia_atual, atual = heappop(fila)
+            if distancia_atual != distancias[atual]:
+                continue
+            if atual == destino:
+                break
+            for rota in self._adjacencias[atual]:
+                candidata = distancia_atual + rota.peso
+                if candidata < distancias[rota.destino]:
+                    distancias[rota.destino] = candidata
+                    predecessores[rota.destino] = atual
+                    heappush(fila, (candidata, rota.destino))
+
+        if distancias[destino] == inf:
+            raise ValueError(f"Não existe rota de {origem} para {destino}.")
+
+        caminho = [destino]
+        while caminho[-1] != origem:
+            caminho.append(predecessores[caminho[-1]])
+        caminho.reverse()
+        return distancias[destino], caminho
+
+def adicionar_rotas(grafo: GrafoLogistico, rotas: List[Tuple[str, str, float, str]]) -> None:
+    for origem, destino, peso, descricao in rotas:
+        grafo.adicionar_rota(origem, destino, peso, descricao)
+
+# GM: Grafo de Fluxo de Materiais na Linha de Triagem
+fluxo_materiais = GrafoLogistico()
+adicionar_rotas(fluxo_materiais, [
+    ("Portaria", "Silo_Pecas_Entrada", 15.0, "Recepção de peças brutas mistas"),
+    ("Silo_Pecas_Entrada", "Pistao_XV_101", 5.0, "Alimentação pneumática infeed"),
+    ("Pistao_XV_101", "Esteira_Principal_M101", 3.0, "Injeção de peças na esteira"),
+    ("Esteira_Principal_M101", "Tunel_Inspecao_Sensores", 12.0, "Transporte até túnel óptico"),
+    ("Tunel_Inspecao_Sensores", "Pistao_XV_301_Vermelho", 8.0, "Desvio para Rota 1"),
+    ("Tunel_Inspecao_Sensores", "Pistao_XV_302_Verde", 12.0, "Desvio para Rota 2"),
+    ("Tunel_Inspecao_Sensores", "Pistao_XV_303_Azul", 16.0, "Desvio para Rota 3"),
+    ("Pistao_XV_301_Vermelho", "Esteira_Secundaria_1", 4.0, "Transporte secundário 1"),
+    ("Pistao_XV_302_Verde", "Esteira_Secundaria_2", 4.0, "Transporte secundário 2"),
+    ("Pistao_XV_303_Azul", "Esteira_Secundaria_3", 4.0, "Transporte secundário 3"),
+    ("Esteira_Secundaria_1", "Caixa_Lote_1", 10.0, "Contagem de lote US-301"),
+    ("Esteira_Secundaria_2", "Caixa_Lote_2", 10.0, "Contagem de lote US-302"),
+    ("Esteira_Secundaria_3", "Caixa_Lote_3", 10.0, "Contagem de lote US-303"),
+    ("Caixa_Lote_1", "Docas_Expedicao", 18.0, "Retirada de lote concluído"),
+    ("Caixa_Lote_2", "Docas_Expedicao", 18.0, "Retirada de lote concluído"),
+    ("Caixa_Lote_3", "Docas_Expedicao", 18.0, "Retirada de lote concluído")
+])
+
+dist_mat, caminho_mat = fluxo_materiais.menor_caminho("Portaria", "Docas_Expedicao")
+print("=== FLUXO DE MATERIAIS ATÉ A EXPEDIÇÃO (ROTA MÍNIMA ROTA 1) ===")
+print("  " + " -> ".join(caminho_mat))
+print(f"  Distância Didática Total: {dist_mat:.1f} m")
+assert "Tunel_Inspecao_Sensores" in caminho_mat
+assert "Caixa_Lote_1" in caminho_mat
+
+# GV: Circulação Interna de Veículos no Pátio
+circulacao_veiculos = GrafoLogistico()
+anel_viario = [
+    ("Portaria", "Balanca_Entrada", 25.0, "Entrada de caminhões"),
+    ("Balanca_Entrada", "Patio_Descarregamento", 40.0, "Acesso ao silo"),
+    ("Patio_Descarregamento", "Galpao_Estoque_Caixas", 50.0, "Acesso às caixas de saída"),
+    ("Galpao_Estoque_Caixas", "Docas_Expedicao", 30.0, "Acesso ao carregamento"),
+    ("Docas_Expedicao", "Balanca_Saida", 45.0, "Pesagem final"),
+    ("Balanca_Saida", "Portaria", 30.0, "Saída da fábrica")
+]
+adicionar_rotas(circulacao_veiculos, anel_viario)
+
+dist_v, caminho_v = circulacao_veiculos.menor_caminho("Docas_Expedicao", "Portaria")
+print("\n=== CIRCULAÇÃO DE VEÍCULO APÓS O CARREGAMENTO ===")
+print("  " + " -> ".join(caminho_v))
+print(f"  Distância Didática Total: {dist_v:.1f} m")
+assert caminho_v == ["Docas_Expedicao", "Balanca_Saida", "Portaria"]
