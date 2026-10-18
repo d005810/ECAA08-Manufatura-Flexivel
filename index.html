@@ -10,6 +10,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 
+  <!-- MathJax Configurado com Carregamento Seguro e Delimitadores Claros -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
   <style>
     :root {
       --bg-dark: #030812;
@@ -78,7 +92,7 @@
 
     .container-wide { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
 
-    /* SLIDES */
+    /* SLIDES WRAPPER */
     .slides-wrapper {
       background: var(--bg-card); border: 1px solid var(--border-dim);
       border-radius: 10px; margin-bottom: 2rem; overflow: hidden;
@@ -110,10 +124,29 @@
     .slide-header-content h2 { font-size: 1.7rem; font-weight: 800; color: #fff; margin-bottom: 0.4rem; }
     .slide-header-content p.subtitle { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.5rem; }
     .slide-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+    
     .slide-math-box {
       background: #030813; border: 1px solid var(--border-dim); border-left: 3px solid var(--secondary);
       border-radius: 6px; padding: 1.25rem; font-size: 0.92rem; line-height: 1.6;
     }
+    .math-title {
+      color: #38bdf8; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.5rem; display: block;
+    }
+    .math-display {
+      font-size: 1.25rem;
+      font-family: var(--font-mono);
+      color: #34d399;
+      text-align: center;
+      margin: 0.85rem 0;
+      padding: 0.6rem 0.5rem;
+      background: rgba(16, 185, 129, 0.05);
+      border-radius: 4px;
+      border: 1px dashed rgba(16, 185, 129, 0.2);
+    }
+    .math-desc {
+      font-size: 0.88rem; color: #cbd5e1; line-height: 1.55; margin-top: 0.5rem;
+    }
+
     .slide-table {
       width: 100%; border-collapse: collapse; font-size: 0.82rem; font-family: var(--font-mono);
       background: #030712; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-dim);
@@ -318,9 +351,7 @@
         </div>
       </div>
 
-      <div class="slide-body" id="slide-body-viewport">
-        <!-- Renderizado de forma síncrona sem falha -->
-      </div>
+      <div class="slide-body" id="slide-body-viewport"></div>
 
       <div style="background:#020610; padding:0.65rem 1.5rem; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-dim);">
         <div class="dots-nav" id="dots-container"></div>
@@ -489,7 +520,6 @@
               </g>
             </g>
 
-            <!-- Elemento de Movimento em Tempo Real -->
             <circle id="anim-runner" cx="-100" cy="-100" r="7" class="packet-runner" opacity="0"></circle>
           </svg>
         </div>
@@ -569,7 +599,7 @@
 
   <script>
     /* =========================================================================
-       1. SLIDES EXECUTIVOS (AULAS 11 A 18) - 10 SLIDES EM 2 COLUNAS
+       1. SLIDES EXECUTIVOS COM FORMATAÇÃO MATEMÁTICA E TABELAS ESTRUTURADAS
        ========================================================================= */
     const slidesData = [
       {
@@ -578,26 +608,28 @@
         subtitulo: "A Célula de Manufatura Flexível (FMS) sob a ótica de Grafos Dirigidos e Ponderados",
         col1: `
           <div class="slide-math-box">
-            <strong>Definição Formal do Dígrafo:</strong><br>
-            A malha de transporte contínuo e triagem é definida pela tripla formal:
-            $$\\mathcal{G}_{FMS} = (V, E, W)$$
-            Onde $V$ representa os postos operacionais da fábrica ($|V| = 9$), $E$ os trechos de esteiras unidirecionais ($|E| = 8$) e $W$ o comprimento físico em metros ou tempos nominais de trânsito mecânico.
+            <span class="math-title">Definição Formal do Dígrafo Ponderado:</span>
+            A malha de esteiras e postos operacionais é formalizada pela tripla ordenada:
+            <div class="math-display">G<sub>FMS</sub> = (V, E, W)</div>
+            <p class="math-desc">
+              Onde <strong>V</strong> representa o conjunto de 9 postos de trabalho, <strong>E</strong> os 8 segmentos orientados de esteira transportadora, e <strong>W</strong> associa o comprimento métrico linear (m) e tempo a cada trecho.
+            </p>
           </div>
-          <p style="margin-top:1rem; font-size:0.88rem; color:#cbd5e1;">
-            Diferente de bancos de dados planos em tabelas relacionais, a representação em grafos viabiliza auditorias analíticas de acessibilidade, deteção de caminhos ótimos e contingência dinâmica em tempo de varredura (*scan cycle* do CLP).
+          <p style="margin-top:0.85rem; font-size:0.88rem; color:#cbd5e1;">
+            Essa modelagem permite ao SCADA aplicar algoritmos de otimização combinatória para roteamento dinâmico dentro de cada ciclo de varredura (*scan cycle*).
           </p>
         `,
         col2: `
           <table class="slide-table">
             <thead>
-              <tr><th>Vértice ISA</th><th>Tipo Topológico</th><th>Função Operacional</th></tr>
+              <tr><th>Vértice ISA</th><th>Classificação</th><th>Função Operacional</th></tr>
             </thead>
             <tbody>
-              <tr><td><span class="tag-blue">SILO-100</span></td><td>Fonte Pura (deg⁻=0)</td><td>Dosagem e Infeed de Tarugos Brutos</td></tr>
-              <tr><td><span class="tag-blue">INSP-200</span></td><td>Nó Intermediário</td><td>Túnel com Leitura Óptica (Cor/Dimensão)</td></tr>
-              <tr><td><span class="tag-blue">DIV-201..203</span></td><td>Bifurcação (deg⁺=2)</td><td>Pontos de Triagem Pneumática (Pistões)</td></tr>
-              <tr><td><span class="tag-blue">CX-301..303</span></td><td>Sumidouro (deg⁺=0)</td><td>Caixas Coletoras de Lotes Empacotados</td></tr>
-              <tr><td><span class="tag-blue">DESC-304</span></td><td>Sumidouro Terminal</td><td>Calha de Descarte de Peças Não-Conformes</td></tr>
+              <tr><td><span class="tag-blue">SILO-100</span></td><td>Fonte Pura (deg⁻=0)</td><td>Infeed de Tarugos Brutos</td></tr>
+              <tr><td><span class="tag-blue">INSP-200</span></td><td>Nó de Passagem</td><td>Túnel de Leitura Óptica</td></tr>
+              <tr><td><span class="tag-blue">DIV-201..203</span></td><td>Bifurcação (deg⁺=2)</td><td>Pontos de Desvio Pneumático</td></tr>
+              <tr><td><span class="tag-blue">CX-301..303</span></td><td>Sumidouros</td><td>Caixas Coletoras de Lotes</td></tr>
+              <tr><td><span class="tag-blue">DESC-304</span></td><td>Terminal Rejeito</td><td>Calha de Descarte de Sucata</td></tr>
             </tbody>
           </table>
         `
@@ -608,9 +640,12 @@
         subtitulo: "Vértices, arcos de esteiras, graus topológicos e comprovação matemática de consistência",
         col1: `
           <div class="slide-math-box">
-            <strong>Lema do Aperto de Mãos Dirigido:</strong>
-            $$\\sum_{v \\in V} \\deg^+(v) = \\sum_{v \\in V} \\deg^-(v) = |E| = 8$$
-            Cada segmento de esteira transportadora possui exatamente um posto de origem e um posto de destino. Logo, a soma dos graus de saída deve ser identicamente igual à soma dos graus de entrada, comprovando a inexistência de nós órfãos ou arestas desconexas.
+            <span class="math-title">Lema do Aperto de Mãos Dirigido:</span>
+            Em todo dígrafo, a soma dos graus de saída é identicamente igual à soma dos graus de entrada:
+            <div class="math-display">∑ deg<sup>+</sup>(v) = ∑ deg<sup>-</sup>(v) = |E| = 8</div>
+            <p class="math-desc">
+              Essa invariante garante que nenhuma peça pode se perder ao longo do trajeto: toda esteira emissora possui exatamente um receptor acoplado na planta.
+            </p>
           </div>
         `,
         col2: `
@@ -630,30 +665,32 @@
       },
       {
         tag: "Slide 03 / 10 • Aula 12",
-        titulo: "Matriz de Incidência $B$ e Balanço Matricial de Peças",
+        titulo: "Matriz de Incidência e Balanço Matricial de Peças",
         subtitulo: "Conservação contínua de fluxo e integridade física em regime permanente",
         col1: `
           <div class="slide-math-box">
-            <strong>Balanço Discreto de Kirchhoff:</strong>
-            $$B \\cdot \\vec{Q} = \\vec{S}$$
-            Onde $B \\in \\{-1, 0, 1\\}^{n \\times m}$ é a matriz de incidência vértice-aresta, $\\vec{Q}$ o vetor de taxas contínuas de peças em trânsito (peças/min) e $\\vec{S}$ o saldo líquido em cada posto da linha.
+            <span class="math-title">Balanço Discreto de Kirchhoff:</span>
+            A conservação do fluxo de peças na esteira é dada pelo produto matricial:
+            <div class="math-display">B · Q&#770; = S&#770;</div>
+            <p class="math-desc">
+              Onde <strong>B</strong> é a matriz de incidência (-1 para saída, +1 para entrada), <strong>Q&#770;</strong> é a taxa de alimentação (peças/min) e <strong>S&#770;</strong> é o vetor de saldo em cada posto.
+            </p>
           </div>
-          <p style="margin-top:0.8rem; font-size:0.85rem; color:#cbd5e1;">
-            <strong>Propriedade da Soma por Coluna Nula:</strong><br>
-            $\\sum_{i=1}^n B[i, j] = 0, \\; \\forall j$. Garante matematicamente que nenhuma peça é criada ou destruída durante o transporte sobre a esteira.
+          <p style="margin-top:0.75rem; font-size:0.85rem; color:#cbd5e1;">
+            <strong>Propriedade da Soma por Coluna Nula:</strong> ∑ B[i, j] = 0. Nenhuma peça é criada ou destruída no processo.
           </p>
         `,
         col2: `
           <table class="slide-table">
             <thead>
-              <tr><th>Posto FMS</th><th>Equação de Linha</th><th>Balanço $\\vec{S}$</th><th>Interpretação</th></tr>
+              <tr><th>Posto FMS</th><th>Equação de Linha</th><th>Balanço S&#770;</th><th>Interpretação</th></tr>
             </thead>
             <tbody>
-              <tr><td>SILO-100</td><td>$-Q_{e1}$</td><td>$-20.0\\text{ pç/min}$</td><td>Fonte Primária de Peças</td></tr>
-              <tr><td>INSP-200</td><td>$+Q_{e1} - Q_{e2}$</td><td>$0.0\\text{ pç/min}$</td><td>Sem Acúmulo (Regime Normal)</td></tr>
-              <tr><td>DIV-201</td><td>$+Q_{e2} - Q_{e3} - Q_{e4}$</td><td>$0.0\\text{ pç/min}$</td><td>Separação de Peças Vermelhas</td></tr>
-              <tr><td>DIV-202</td><td>$+Q_{e4} - Q_{e5} - Q_{e6}$</td><td>$0.0\\text{ pç/min}$</td><td>Separação de Peças Verdes</td></tr>
-              <tr><td>CX-301..303</td><td>$+Q_{e\\text{dest}}$</td><td>$> 0.0\\text{ pç/min}$</td><td>Sumidouros de Loteamento</td></tr>
+              <tr><td>SILO-100</td><td>- Q<sub>e1</sub></td><td>- 20.0 pç/min</td><td>Fonte Primária</td></tr>
+              <tr><td>INSP-200</td><td>+ Q<sub>e1</sub> - Q<sub>e2</sub></td><td>0.0 pç/min</td><td>Regime Permanente</td></tr>
+              <tr><td>DIV-201</td><td>+ Q<sub>e2</sub> - Q<sub>e3</sub> - Q<sub>e4</sub></td><td>0.0 pç/min</td><td>Triagem Vermelhas</td></tr>
+              <tr><td>DIV-202</td><td>+ Q<sub>e4</sub> - Q<sub>e5</sub> - Q<sub>e6</sub></td><td>0.0 pç/min</td><td>Triagem Verdes</td></tr>
+              <tr><td>CX-301..303</td><td>+ Q<sub>e_dest</sub></td><td>> 0.0 pç/min</td><td>Destinos Finais</td></tr>
             </tbody>
           </table>
         `
@@ -664,21 +701,26 @@
         subtitulo: "Minimização de atuadores acionados vs. auditoria estrutural de aciclicidade (DAG)",
         col1: `
           <div class="slide-math-box">
-            <strong>Invariante da Fila FIFO na BFS:</strong>
-            $$\\text{Se } v \\text{ desenfileirado antes de } u \\implies d(s, v) \\leq d(s, u)$$
-            A BFS encontra a rota com o <em>menor número de arestas/atuadores comutados</em> em $O(|V| + |E|)$. Minimizar comutações de pistões pneumáticos reduz diretamente o desgaste de vedações e previne falhas de fim de curso.
+            <span class="math-title">Invariante da Fila FIFO na BFS:</span>
+            Garante a rota com o menor número de saltos topológicos:
+            <div class="math-display">d(s, v) ≤ d(s, u)</div>
+            <p class="math-desc">
+              A BFS minimiza o número de <strong>atuadores e pistões comutados</strong> em O(|V| + |E|), reduzindo o desgaste mecânico e o risco de falhas de fim de curso.
+            </p>
           </div>
         `,
         col2: `
           <div class="slide-math-box" style="border-left-color:var(--primary);">
-            <strong>Classificação de Arestas via DFS:</strong><br>
-            A Busca em Profundidade utiliza marcação temporal com três cores (BRANCO, CINZA, PRETO):
-            <ul>
-              <li><strong>Árvore (Tree Edge):</strong> Segmentos principais da esteira.</li>
-              <li><strong>Retorno (Back Edge):</strong> Indica a presença de <em>ciclos direcionados</em>.</li>
-              <li><strong>Avanço (Forward Edge):</strong> Linhas de bypass expresso.</li>
+            <span class="math-title" style="color:#34d399;">Classificação de Arestas via DFS:</span>
+            A DFS classifica as arestas da planta em 3 categorias temporais:
+            <ul style="margin: 0.6rem 0; padding-left:1.2rem; font-size:0.85rem; color:#cbd5e1; line-height:1.6;">
+              <li><strong>Árvore:</strong> Trajetória principal de transporte.</li>
+              <li><strong>Avanço:</strong> Linhas expressas de bypass.</li>
+              <li><strong>Retorno:</strong> Indica formação de ciclos.</li>
             </ul>
-            <strong>Diagnóstico:</strong> A ausência de arestas de retorno prova que a malha nominal da FMS é estritamente um <strong>DAG</strong>.
+            <p style="font-size:0.85rem; color:#38bdf8; font-weight:700;">
+              Diagnóstico: Ausência de arestas de retorno comprova que a FMS é um DAG estrito.
+            </p>
           </div>
         `
       },
@@ -688,24 +730,24 @@
         subtitulo: "Princípio de relaxação sistemática com Min-Heap binário para roteamento ótimo",
         col1: `
           <div class="slide-math-box">
-            <strong>Operação de Relaxação Gulosa:</strong>
-            $$\\text{se } d[u] + w(u, v) < d[v] \\implies d[v] \\leftarrow d[u] + w(u, v), \\; \\text{pred}[v] \\leftarrow u$$
-            Empregando uma fila de prioridade binária (<code>heapq</code>), Dijkstra soluciona o problema de caminho mínimo métrico em $O((|V|+|E|)\\log |V|)$.
+            <span class="math-title">Operação de Relaxação Gulosa:</span>
+            Se a distância acumulada até <em>u</em> somada ao peso for menor que <em>d[v]</em>:
+            <div class="math-display">d[v] ← d[u] + w(u, v)</div>
+            <p class="math-desc">
+              Implementado com fila de prioridades binária em O((|V| + |E|) log |V|). A não-negatividade dos pesos (distâncias físicas L &gt; 0) assegura convergência ao ótimo global.
+            </p>
           </div>
-          <p style="margin-top:0.8rem; font-size:0.85rem; color:#cbd5e1;">
-            A não-negatividade dos comprimentos físicos ($L > 0$) e tempos de trânsito assegura formalmente a convergência ótima global.
-          </p>
         `,
         col2: `
           <table class="slide-table">
             <thead>
-              <tr><th>Destino Final</th><th>Rota Nominal (Dijkstra)</th><th>Distância</th><th>Atuadores ISA</th></tr>
+              <tr><th>Destino</th><th>Rota Nominal</th><th>Distância</th><th>Atuadores ISA</th></tr>
             </thead>
             <tbody>
-              <tr><td>CX-301 (Vermelha)</td><td>SILO → INSP → DIV1 → CX1</td><td>$2.5\\text{ m}$</td><td>XV-101, M-101, XV-201</td></tr>
-              <tr><td>CX-302 (Verde)</td><td>SILO → ... → DIV2 → CX2</td><td>$3.5\\text{ m}$</td><td>XV-101, M-101, XV-202</td></tr>
-              <tr><td>CX-303 (Azul)</td><td>SILO → ... → DIV3 → CX3</td><td>$4.5\\text{ m}$</td><td>XV-101, M-101, XV-203</td></tr>
-              <tr><td>DESC-304 (Refugo)</td><td>SILO → ... → DIV3 → DESC</td><td>$4.8\\text{ m}$</td><td>XV-101, M-101 Contínuo</td></tr>
+              <tr><td>CX-301 (Vermelha)</td><td>SILO → INSP → DIV1 → CX1</td><td>2.5 m</td><td>XV-101, M-101, XV-201</td></tr>
+              <tr><td>CX-302 (Verde)</td><td>SILO → ... → DIV2 → CX2</td><td>3.5 m</td><td>XV-101, M-101, XV-202</td></tr>
+              <tr><td>CX-303 (Azul)</td><td>SILO → ... → DIV3 → CX3</td><td>4.5 m</td><td>XV-101, M-101, XV-203</td></tr>
+              <tr><td>DESC-304 (Refugo)</td><td>SILO → ... → DIV3 → DESC</td><td>4.8 m</td><td>XV-101, M-101 Contínuo</td></tr>
             </tbody>
           </table>
         `
@@ -716,30 +758,33 @@
         subtitulo: "Reponderação dinâmica sob emperramento pneumático e recálculo em milissegundos",
         col1: `
           <div class="slide-math-box">
-            <strong>Reponderação Topológica Instantânea:</strong>
-            $$W(\\text{DIV-201}, \\text{DIV-202}) \\leftarrow \\infty$$
-            Ao detectar a falha de fim de curso no pistão XV-202 ou travamento de correia, o supervisor SCADA eleva o peso da aresta danificada para infinito, eliminando-a do espaço de busca.
+            <span class="math-title">Reponderação Topológica Instantânea:</span>
+            Em caso de falha mecânica de um pistão de desvio:
+            <div class="math-display">W(DIV-201, DIV-202) ← ∞</div>
+            <p class="math-desc">
+              Ao detectar falha de fim de curso (FC_p), o supervisor SCADA eleva o peso do trecho danificado para infinito, forçando o recálculo imediato por rotas alternativas de bypass.
+            </p>
           </div>
-          <p style="margin-top:0.8rem; font-size:0.85rem; color:#cbd5e1;">
-            <strong>Métrica SIS (IEC 61511):</strong> O recálculo da rota pelo motor Dijkstra leva menos de $0.05\\text{ ms}$, operando centenas de vezes mais rápido que o tempo de curso mecânico do cilindro ($150\\text{ ms}$).
+          <p style="margin-top:0.75rem; font-size:0.85rem; color:#cbd5e1;">
+            <strong>Métrica SIS (IEC 61511):</strong> Latência de decisão menor que <strong>0.05 ms</strong>, compatível com a cinemática rápida do processo.
           </p>
         `,
         col2: `
           <table class="slide-table">
             <thead>
-              <tr><th>Trecho Travado</th><th>Nova Rota Ativa</th><th>Distância</th><th>Tempo Resposta</th></tr>
+              <tr><th>Falha Induzida</th><th>Nova Rota Ativa</th><th>Distância</th><th>Latência</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td><span style="color:var(--danger); font-weight:700;">DIV-202 Bloqueado</span></td>
+                <td><span style="color:var(--danger); font-weight:700;">DIV-202 Travado</span></td>
                 <td>SILO → INSP → <strong>DIV-203 (Bypass XV-200B)</strong> → CX-303</td>
-                <td>$3.8\\text{ m}$</td>
+                <td>3.8 m</td>
                 <td><span class="tag-blue">0.046 ms</span></td>
               </tr>
               <tr>
-                <td><span style="color:var(--danger); font-weight:700;">M-101 (DIV1→DIV2)</span></td>
-                <td>SILO → INSP → <strong>DIV-201 → DIV-203 (Contorno)</strong> → CX-303</td>
-                <td>$4.7\\text{ m}$</td>
+                <td><span style="color:var(--danger); font-weight:700;">DIV-201 Travado</span></td>
+                <td>SILO → INSP → <strong>DIV-203 (Bypass)</strong> → DESC-304</td>
+                <td>4.1 m</td>
                 <td><span class="tag-blue">0.051 ms</span></td>
               </tr>
             </tbody>
@@ -752,20 +797,22 @@
         subtitulo: "Varredura contínua de passarelas e esteiras sem repetição de trechos físicos",
         col1: `
           <div class="slide-math-box">
-            <strong>Teorema Fundamental de Euler (1736):</strong><br>
-            Um grafo conexo admite um Circuito Euleriano fechado se e somente se <strong>todos os seus vértices possuem grau par</strong>:
-            $$\\deg(v) \\equiv 0 \\pmod 2, \\quad \\forall v \\in V$$
-            O Algoritmo de Hierholzer (1873) reconstrói a trilha completa em tempo linear ótimo $O(|E|)$ utilizando pilha com remoção de arestas.
+            <span class="math-title">Teorema de Euler (1736):</span>
+            Existe um circuito euleriano se e somente se todos os vértices possuem grau par:
+            <div class="math-display">deg(v) ≡ 0 (mod 2),  ∀ v ∈ V</div>
+            <p class="math-desc">
+              O Algoritmo de Hierholzer (1873) constrói a trilha de inspeção completa em tempo linear ótimo O(|E|), garantindo cobertura total de esteiras sem percursos duplicados.
+            </p>
           </div>
         `,
         col2: `
           <div class="slide-math-box" style="border-left-color:var(--primary);">
-            <strong>Plano de Manutenção Preventiva da FMS:</strong><br>
-            O robô de inspeção/lubrificação parte da <code>BASE-MANUT</code> e percorre todas as 12 passarelas de serviço interligadas aos postos de esteira:
-            <ul style="margin-top:0.5rem; font-size:0.85rem;">
-              <li>Todos os postos balanceados com grau $2$ ou $4$.</li>
+            <span class="math-title" style="color:#34d399;">Ronda de Lubrificação e Manutenção:</span>
+            O robô parte da Base de Manutenção e inspeciona as 12 passarelas de esteira da fábrica:
+            <ul style="margin: 0.6rem 0; padding-left:1.2rem; font-size:0.85rem; color:#cbd5e1; line-height:1.6;">
+              <li>Todos os 9 postos balanceados com grau 2 ou 4.</li>
               <li>Arestas percorridas exatamente uma única vez.</li>
-              <li>Conexão com o <em>Problema do Carteiro Chinês</em> para contingências com vértices de grau ímpar.</li>
+              <li>Extensão para grafos com vértices ímpares via <em>Problema do Carteiro Chinês</em>.</li>
             </ul>
           </div>
         `
@@ -776,21 +823,24 @@
         subtitulo: "Heurística do Vizinho Mais Próximo e busca local 2-Opt para amostragem no chão de fábrica",
         col1: `
           <div class="slide-math-box">
-            <strong>Problema do Caixeiro-Viajante (NP-Hard):</strong>
-            $$\\min_{\\pi \\in S_n} \\sum_{i=0}^{n-1} d(v_{\\pi(i)}, v_{\\pi(i+1)})$$
-            O AGV deve partir da DOCA-00, abastecer o Silo, recolher amostras no Túnel Óptico, coletar as três caixas de lotes, retirar o descarte e retornar à base pelo menor percurso métrico total.
+            <span class="math-title">Problema do Caixeiro-Viajante (TSP):</span>
+            Busca o Ciclo Hamiltoniano de menor custo que visita todos os postos de parada:
+            <div class="math-display">min ∑ d(v<sub>π(i)</sub>, v<sub>π(i+1)</sub>)</div>
+            <p class="math-desc">
+              Por ser um problema NP-difícil, combinamos a heurística construtiva do Vizinho Mais Próximo com a busca local <strong>2-Opt</strong> para eliminar cruzamentos planares.
+            </p>
           </div>
         `,
         col2: `
           <table class="slide-table">
             <thead>
-              <tr><th>Método de Roteamento</th><th>Distância Total</th><th>Complexidade</th><th>Diagnóstico</th></tr>
+              <tr><th>Algoritmo</th><th>Distância Total</th><th>Complexidade</th><th>Diagnóstico</th></tr>
             </thead>
             <tbody>
-              <tr><td>Vizinho Mais Próximo (NN)</td><td>$98.0\\text{ m}$</td><td>$O(n^2)$</td><td>Armadilha do Salto Longo Final</td></tr>
-              <tr><td><strong>Refinamento 2-Opt (Croes)</strong></td><td><strong>$86.3\\text{ m}$</strong></td><td>$O(n^3)$</td><td><strong>Descruzamento Planar (-11.7m)</strong></td></tr>
-              <tr><td>Força Bruta (720 rotas)</td><td>$86.3\\text{ m}$</td><td>$O((n-1)!)$</td><td>Ótimo Global Confirmado</td></tr>
-              <tr><td>Cota Inferior MST (Prim)</td><td>$54.9\\text{ m}$</td><td>$O(|E|\\log |V|)$</td><td>Limite Mínimo Teórico Válido</td></tr>
+              <tr><td>Vizinho Mais Próximo (NN)</td><td>98.0 m</td><td>O(n²)</td><td>Salto Longo Final</td></tr>
+              <tr><td><strong>Refinamento 2-Opt (Croes)</strong></td><td><strong>86.3 m</strong></td><td>O(n³)</td><td><strong>Descruzamento (-11.7m)</strong></td></tr>
+              <tr><td>Força Bruta (720 permutações)</td><td>86.3 m</td><td>O((n-1)!)</td><td>Ótimo Global Confirmado</td></tr>
+              <tr><td>Cota Inferior MST (Prim)</td><td>54.9 m</td><td>O(|E| log |V|)</td><td>Limite Teórico Válido</td></tr>
             </tbody>
           </table>
         `
@@ -801,13 +851,13 @@
         subtitulo: "Segregação formal: Fluxo de Materiais (DAG) vs. Circulação Viária de Veículos",
         col1: `
           <div class="slide-math-box">
-            <strong>Arquitetura Multicamada (Multilayer):</strong>
-            $$\\mathcal{M} = (\\{G_M, G_V\\}, \\{V_M, V_V\\}, E_{MV})$$
-            Evita o erro clássico de acoplamento viário:
-            <ul>
-              <li><strong>$G_M$ (Materiais):</strong> Mapeia da portaria ao WMS ($25$ nós). É estritamente um <strong>DAG</strong> auditado pelo Algoritmo de Kahn (1962).</li>
-              <li><strong>$G_V$ (Veículos):</strong> Circulação viária de caminhões e empilhadeiras. Contém ciclos estruturais fechados de pátio.</li>
-            </ul>
+            <span class="math-title">Estrutura Multicamada (Multilayer):</span>
+            Evita o acoplamento errôneo entre esteiras e veículos viários:
+            <div class="math-display">M = ({G<sub>M</sub>, G<sub>V</sub>}, {V<sub>M</sub>, V<sub>V</sub>}, E<sub>MV</sub>)</div>
+            <p class="math-desc">
+              <strong>G<sub>M</sub> (Materiais):</strong> Mapeia da portaria ao estoque WMS (25 nós). É estritamente um DAG auditável pelo <strong>Algoritmo de Kahn</strong>.<br>
+              <strong>G<sub>V</sub> (Veículos):</strong> Circulação viária contendo ciclos fechados de tráfego.
+            </p>
           </div>
         `,
         col2: `
@@ -816,9 +866,9 @@
               <tr><th>Insumo / Fluxo</th><th>Origem → Destino</th><th>Distância</th><th>Classificação</th></tr>
             </thead>
             <tbody>
-              <tr><td>Tarugos Vermelhos</td><td>Box Galpão A → Docas Exp.</td><td>$134.0\\text{ m}$</td><td>Fluxo $G_M$ (Processamento FMS)</td></tr>
-              <tr><td>Embalagens / Caixas</td><td>Box Galpão A → Paletizadora</td><td>$74.0\\text{ m}$</td><td>Fluxo $G_M$ (Consumo Direto)</td></tr>
-              <tr><td>Caminhão de Carga</td><td>Portaria → Balança → Portaria</td><td>$85.0\\text{ m}$</td><td>Circulação $G_V$ (Anel Fechado)</td></tr>
+              <tr><td>Tarugos Vermelhos</td><td>Box Galpão A → Docas Exp.</td><td>134.0 m</td><td>Fluxo G<sub>M</sub> (Processo FMS)</td></tr>
+              <tr><td>Caixas e Embalagens</td><td>Box Galpão A → Paletizadora</td><td>74.0 m</td><td>Fluxo G<sub>M</sub> (Consumo Direto)</td></tr>
+              <tr><td>Caminhão Rodoviário</td><td>Portaria → Balança → Portaria</td><td>85.0 m</td><td>Circulação G<sub>V</sub> (Anel Fechado)</td></tr>
             </tbody>
           </table>
         `
@@ -829,20 +879,20 @@
         subtitulo: "Consolidação dos Algoritmos de Grafos aplicados à Célula de Manufatura Flexível",
         col1: `
           <div class="slide-math-box" style="border-left-color:var(--primary);">
-            <strong>Resultados Teóricos & Computacionais:</strong>
-            <ul>
-              <li><strong>Modelagem em Dígrafos:</strong> Representação unificada dos $9$ postos e $8$ esteiras da FMS com Lema do Aperto de Mãos comprovado.</li>
-              <li><strong>Balanço Discreto de Kirchhoff:</strong> Sistema linear $B \\cdot \\vec{Q} = \\vec{S}$ verificado com soma nula por coluna e ausência de acúmulo nos postos intermediários.</li>
-              <li><strong>Dijkstra em Milissegundos:</strong> Recálculo de rota sob falha com latência inferior a $0.05\\text{ ms}$, atendendo aos requisitos da norma IEC 61511.</li>
+            <span class="math-title" style="color:#34d399;">Resultados Teóricos & Computacionais:</span>
+            <ul style="margin-top:0.5rem; padding-left:1.2rem; font-size:0.88rem; color:#cbd5e1; line-height:1.6;">
+              <li><strong>Modelagem em Dígrafos:</strong> Representação unificada dos 9 postos e 8 esteiras com Lema do Aperto de Mãos comprovado.</li>
+              <li><strong>Balanço de Kirchhoff:</strong> Equação linear B · Q&#770; = S&#770; validada com soma nula por coluna e ausência de acúmulo intermediário.</li>
+              <li><strong>Dijkstra em Milissegundos:</strong> Recálculo dinâmico sob falha com latência &lt; 0.05 ms, atendendo aos requisitos da IEC 61511.</li>
             </ul>
           </div>
         `,
         col2: `
           <div class="slide-math-box" style="border-left-color:var(--secondary);">
-            <strong>Otimização Logística & Autonomia:</strong>
-            <ul>
-              <li><strong>Inspeção Euleriana (Hierholzer):</strong> Varredura de $100\\%$ das passarelas em tempo linear $O(|E|)$ sem repetição de trechos.</li>
-              <li><strong>Convergência ao Ótimo Global no TSP:</strong> O refinamento 2-Opt reduziu o percurso do AGV em $11{,}7\\text{ m}$ (atingindo $86{,}3\\text{ m}$, comprovado por força bruta).</li>
+            <span class="math-title" style="color:#38bdf8;">Otimização Logística & Autonomia:</span>
+            <ul style="margin-top:0.5rem; padding-left:1.2rem; font-size:0.88rem; color:#cbd5e1; line-height:1.6;">
+              <li><strong>Inspeção Euleriana (Hierholzer):</strong> Varredura de 100% das passarelas em tempo linear O(|E|) sem repetição de trechos.</li>
+              <li><strong>Convergência no TSP:</strong> O 2-Opt reduziu o trajeto do AGV em 11.7 m (atingindo 86.3 m, comprovado ótimo por força bruta).</li>
               <li><strong>Aciclicidade Estrutural:</strong> Algoritmo de Kahn comprovou formalmente que o fluxo de peças é um DAG estrito.</li>
             </ul>
           </div>
@@ -1092,157 +1142,3 @@
 
       const tCalc = (performance.now() - t0).toFixed(4);
       const kpiTime = document.getElementById("kpi-time");
-      if (kpiTime) kpiTime.innerText = `${tCalc} ms`;
-
-      if (dist[destino] === Infinity) {
-        document.getElementById("kpi-dist").innerText = "∞ m";
-        document.getElementById("kpi-path").innerText = "SEM ROTA SEGURA (INTERTRAVAMENTO TOTAL)";
-        document.getElementById("status-banner").innerText = `INTERTRAVAMENTO: Bloqueio isolou ${destino}. Infeed SILO-100 suspenso.`;
-        window.logSCADA(`ERRO SIS: Nenhum caminho conectando ${origem} a ${destino}. Trip de segurança ativado.`);
-        return;
-      }
-
-      const caminho = [];
-      const arestasAtivas = [];
-      let cur = destino;
-      while (cur !== origem) {
-        caminho.push(cur);
-        const a = arestaUsada[cur];
-        if (a) arestasAtivas.push(a);
-        cur = pred[cur];
-      }
-      caminho.push(origem);
-      caminho.reverse();
-      arestasAtivas.reverse();
-
-      const kpiDist = document.getElementById("kpi-dist");
-      const kpiPath = document.getElementById("kpi-path");
-      const banner = document.getElementById("status-banner");
-
-      if (kpiDist) kpiDist.innerText = `${dist[destino].toFixed(1)} m`;
-      if (kpiPath) kpiPath.innerText = caminho.join(" → ");
-      if (banner) banner.innerText = `ROTA CALCULADA: ${caminho.join(" → ")} (${dist[destino].toFixed(1)}m em ${tCalc}ms).`;
-
-      arestasAtivas.forEach(a => {
-        const elEdge = document.getElementById(a.id);
-        if (elEdge) {
-          elEdge.classList.add("active", "edge-flow");
-          elEdge.setAttribute("marker-end", `url(#${a.marker})`);
-        }
-
-        const elV = document.getElementById(a.valve);
-        if (elV) {
-          elV.className = "valve-pill open";
-          elV.innerText = `${a.actName}: OPEN / ON`;
-        }
-      });
-
-      animarPacoteAoLongoDaRota(caminho, false);
-      window.logSCADA(`Dijkstra executado: Rota ${caminho.join(" → ")} calculada em ${tCalc}ms (Custo: ${dist[destino].toFixed(1)}m).`, true);
-    };
-
-    window.injetarFalhaManual = function() {
-      window.alternarBloqueioNo("DIV-202");
-    };
-
-    window.executarTSP = function() {
-      resetarVisual();
-      const t0 = performance.now();
-      const rotaTSP = ["DOCA-00", "SILO-100", "INSP-200", "CX-301", "CX-302", "CX-303", "DESC-304", "DOCAS-EXP", "DOCA-00"];
-      const tCalc = (performance.now() - t0 + 0.082).toFixed(4);
-
-      ["edge-agv-1", "edge-agv-2", "edge-agv-3", "edge-agv-4", "edge-agv-loop"].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.style.stroke = "#38bdf8";
-          el.style.strokeWidth = "3.5";
-          el.classList.add("edge-flow");
-          el.setAttribute("marker-end", "url(#arrow-blue)");
-        }
-      });
-
-      document.getElementById("kpi-dist").innerText = "86.3 m";
-      document.getElementById("kpi-time").innerText = `${tCalc} ms`;
-      document.getElementById("kpi-path").innerText = rotaTSP.join(" → ");
-      document.getElementById("status-banner").innerText = "AGV TSP (2-Opt Otimizado): Ciclo ótimo global de 86.3m despachado com sucesso.";
-      
-      animarPacoteAoLongoDaRota(rotaTSP, true);
-      window.logSCADA(`TSP 2-Opt: Ciclo ótimo global convergido em ${tCalc}ms (86.3m). Cota Inferior MST comprovada: 54.9m <= 86.3m.`, true);
-    };
-
-    window.executarHierholzer = function() {
-      resetarVisual();
-      const t0 = performance.now();
-      const tCalc = (performance.now() - t0 + 0.045).toFixed(4);
-
-      const rotaEuler = [
-        "DOCA-00", "SILO-100", "INSP-200", "DIV-201", "CX-301",
-        "DIV-202", "CX-302", "DIV-203", "CX-303", "DESC-304", "DOCA-00"
-      ];
-
-      document.querySelectorAll(".edge-line").forEach(el => {
-        el.classList.add("active", "edge-flow");
-        el.setAttribute("marker-end", "url(#arrow-green)");
-      });
-
-      document.getElementById("kpi-dist").innerText = "24.5 m";
-      document.getElementById("kpi-time").innerText = `${tCalc} ms`;
-      document.getElementById("kpi-path").innerText = rotaEuler.join(" → ");
-      document.getElementById("status-banner").innerText = "Circuito Euleriano de Hierholzer ativo: 100% das passarelas inspecionadas sem repetição.";
-      
-      animarPacoteAoLongoDaRota(rotaEuler, false);
-      window.logSCADA(`Hierholzer: Circuito euleriano validado em ${tCalc}ms (12 passarelas com deg(v) par).`, true);
-    };
-
-    window.executarValidacaoDAG = function() {
-      const t0 = performance.now();
-      const tCalc = (performance.now() - t0 + 0.038).toFixed(4);
-      window.logSCADA("Algoritmo de Kahn: Grafo GM é estritamente um DAG acíclico. Ordenação linear topológica válida.", true);
-      document.getElementById("status-banner").innerText = "Algoritmo de Kahn executado: Aciclicidade comprovada. Malha linear sem ciclos de deadlock.";
-    };
-
-    window.resetarTudo = function() {
-      nosBloqueados.clear();
-      document.querySelectorAll(".node-rect").forEach(el => el.classList.remove("blocked", "highlighted"));
-      resetarVisual();
-      ["edge-agv-1", "edge-agv-2", "edge-agv-3", "edge-agv-4", "edge-agv-loop"].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.style.stroke = "#132742";
-          el.style.strokeWidth = "2";
-          el.classList.remove("edge-flow");
-          el.removeAttribute("marker-end");
-        }
-      });
-      document.getElementById("kpi-dist").innerText = "0.0 m";
-      document.getElementById("kpi-time").innerText = "0.00 ms";
-      document.getElementById("kpi-path").innerText = "Nenhuma rota ativa";
-      document.getElementById("status-banner").innerText = "Simulador reinicializado para estado de repouso. Topologia nominal carregada.";
-      window.logSCADA("Simulador reiniciado. Sistema restabelecido em estado nominal.");
-    };
-
-    window.carregarCenario = function(n) {
-      document.querySelectorAll(".scenario-btn").forEach((b, idx) => {
-        b.classList.toggle("active", idx === (n - 1));
-      });
-      window.resetarTudo();
-
-      if (n === 1) {
-        window.executarDijkstra("SILO-100", "CX-303");
-      } else if (n === 2) {
-        window.alternarBloqueioNo("DIV-202");
-      } else if (n === 3) {
-        window.alternarBloqueioNo("DIV-201");
-      } else if (n === 4) {
-        window.executarTSP();
-      } else if (n === 5) {
-        window.executarHierholzer();
-      }
-    };
-
-    // Execução síncrona garantida no final da leitura da DOM
-    window.renderizarSlide();
-    window.carregarCenario(1);
-  </script>
-</body>
-</html>
