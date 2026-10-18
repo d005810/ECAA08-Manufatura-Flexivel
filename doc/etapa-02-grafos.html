@@ -8,7 +8,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="css/styles.css">
 
@@ -30,11 +30,11 @@
       --border-dim: #132742;
       --border-glow: #0284c7;
       --primary: #10b981;
-      --primary-glow: rgba(16, 185, 129, 0.2);
+      --primary-glow: rgba(16, 185, 129, 0.4);
       --secondary: #0ea5e9;
-      --secondary-glow: rgba(14, 165, 233, 0.2);
+      --secondary-glow: rgba(14, 165, 233, 0.4);
       --danger: #ef4444;
-      --danger-glow: rgba(239, 68, 68, 0.25);
+      --danger-glow: rgba(239, 68, 68, 0.35);
       --warning: #f59e0b;
       --text-bright: #f8fafc;
       --text-muted: #94a3b8;
@@ -54,7 +54,7 @@
       background-size: 32px 32px;
     }
 
-    /* BARRA SUPERIOR SCADA */
+    /* TOPBAR */
     .scada-topbar {
       background: #02060f;
       border-bottom: 1px solid var(--border-dim);
@@ -67,15 +67,9 @@
       z-index: 1000;
       backdrop-filter: blur(8px);
     }
-    .scada-title-wrap {
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-    }
+    .scada-title-wrap { display: flex; align-items: center; gap: 0.85rem; }
     .pulse-indicator {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
+      width: 10px; height: 10px; border-radius: 50%;
       background: var(--primary);
       box-shadow: 0 0 10px var(--primary);
       animation: pulse 1.8s infinite;
@@ -86,575 +80,219 @@
       100% { opacity: 1; transform: scale(1); }
     }
     .scada-h1 {
-      font-size: 0.95rem;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      font-family: var(--font-mono);
-      color: #fff;
+      font-size: 0.95rem; font-weight: 800; letter-spacing: 0.05em;
+      text-transform: uppercase; font-family: var(--font-mono); color: #fff;
     }
-    .scada-sub {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-    }
+    .scada-sub { font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); }
     .badge-status {
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid var(--primary);
-      color: var(--primary);
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 0.25rem 0.65rem;
-      border-radius: 4px;
-      letter-spacing: 0.05em;
+      background: rgba(16, 185, 129, 0.15); border: 1px solid var(--primary);
+      color: var(--primary); font-family: var(--font-mono); font-size: 0.72rem;
+      font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 4px; letter-spacing: 0.05em;
     }
 
-    .container-wide {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 1.5rem;
-    }
+    .container-wide { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
 
-    /* PAINEL DE SLIDES PANORÂMICOS */
+    /* SLIDES EXECUTIVOS */
     .slides-wrapper {
-      background: var(--bg-card);
-      border: 1px solid var(--border-dim);
-      border-radius: 10px;
-      margin-bottom: 2rem;
-      overflow: hidden;
+      background: var(--bg-card); border: 1px solid var(--border-dim);
+      border-radius: 10px; margin-bottom: 2rem; overflow: hidden;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
     .slides-header {
-      background: #040a17;
-      padding: 0.85rem 1.5rem;
-      border-bottom: 1px solid var(--border-dim);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      background: #040a17; padding: 0.85rem 1.5rem; border-bottom: 1px solid var(--border-dim);
+      display: flex; justify-content: space-between; align-items: center;
     }
     .slides-title-tag {
-      font-family: var(--font-mono);
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
+      font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-muted);
+      display: flex; align-items: center; gap: 0.6rem;
     }
     .slide-badge-pill {
-      background: rgba(16, 185, 129, 0.12);
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      color: var(--primary);
-      padding: 0.15rem 0.55rem;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 700;
-    }
-    .slide-nav-btns {
-      display: flex;
-      gap: 0.5rem;
+      background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35);
+      color: var(--primary); padding: 0.15rem 0.55rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700;
     }
     .btn-slide {
-      background: #08152c;
-      border: 1px solid var(--border-dim);
-      color: #e2e8f0;
-      padding: 0.35rem 0.85rem;
-      border-radius: 6px;
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      cursor: pointer;
-      transition: all 0.2s;
+      background: #08152c; border: 1px solid var(--border-dim); color: #e2e8f0;
+      padding: 0.35rem 0.85rem; border-radius: 6px; font-family: var(--font-mono);
+      font-size: 0.78rem; cursor: pointer; transition: all 0.2s;
     }
-    .btn-slide:hover {
-      background: var(--secondary);
-      border-color: var(--secondary);
-      color: #fff;
-    }
+    .btn-slide:hover { background: var(--secondary); border-color: var(--secondary); color: #fff; }
 
     .slide-body {
-      padding: 2.25rem 2.5rem 1.5rem;
-      min-height: 480px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      padding: 2.25rem 2.5rem 1.5rem; min-height: 470px;
+      display: flex; flex-direction: column; justify-content: space-between;
     }
-    .slide-header-content h2 {
-      font-size: 1.7rem;
-      font-weight: 800;
-      color: #fff;
-      margin-bottom: 0.4rem;
-      letter-spacing: -0.01em;
-    }
-    .slide-header-content p.subtitle {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      margin-bottom: 1.5rem;
-    }
-    .slide-grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1.15fr;
-      gap: 2rem;
-      align-items: start;
-    }
+    .slide-header-content h2 { font-size: 1.7rem; font-weight: 800; color: #fff; margin-bottom: 0.4rem; }
+    .slide-header-content p.subtitle { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+    .slide-grid-2 { display: grid; grid-template-columns: 1fr 1.15fr; gap: 2rem; align-items: start; }
     .slide-math-box {
-      background: #030813;
-      border: 1px solid var(--border-dim);
-      border-left: 3px solid var(--secondary);
-      border-radius: 6px;
-      padding: 1.25rem;
-      font-size: 0.92rem;
-      line-height: 1.6;
+      background: #030813; border: 1px solid var(--border-dim); border-left: 3px solid var(--secondary);
+      border-radius: 6px; padding: 1.25rem; font-size: 0.92rem; line-height: 1.6;
     }
     .slide-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.82rem;
-      font-family: var(--font-mono);
-      background: #030712;
-      border-radius: 6px;
-      overflow: hidden;
-      border: 1px solid var(--border-dim);
+      width: 100%; border-collapse: collapse; font-size: 0.82rem; font-family: var(--font-mono);
+      background: #030712; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-dim);
     }
     .slide-table th {
-      background: #081529;
-      color: var(--secondary);
-      text-align: left;
-      padding: 0.65rem 0.85rem;
-      font-weight: 700;
-      border-bottom: 1px solid var(--border-dim);
+      background: #081529; color: var(--secondary); text-align: left;
+      padding: 0.65rem 0.85rem; font-weight: 700; border-bottom: 1px solid var(--border-dim);
     }
-    .slide-table td {
-      padding: 0.6rem 0.85rem;
-      border-bottom: 1px solid #0c1a2d;
-      color: #cbd5e1;
-    }
+    .slide-table td { padding: 0.6rem 0.85rem; border-bottom: 1px solid #0c1a2d; color: #cbd5e1; }
     .slide-table tr:last-child td { border-bottom: none; }
     .tag-blue {
-      background: rgba(14, 165, 233, 0.15);
-      border: 1px solid rgba(14, 165, 233, 0.35);
-      color: #38bdf8;
-      padding: 0.1rem 0.4rem;
-      border-radius: 3px;
-      font-weight: 700;
+      background: rgba(14, 165, 233, 0.15); border: 1px solid rgba(14, 165, 233, 0.35);
+      color: #38bdf8; padding: 0.1rem 0.4rem; border-radius: 3px; font-weight: 700;
     }
 
-    .slide-footer-nav {
-      margin-top: 1.5rem;
-      padding-top: 1rem;
-      border-top: 1px solid #0c1a2d;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .dots-nav {
-      display: flex;
-      gap: 0.45rem;
-    }
-    .dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: #15263f;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .dot.active {
-      background: var(--secondary);
-      box-shadow: 0 0 8px var(--secondary);
-      transform: scale(1.15);
-    }
-    .kbd-tip {
-      font-size: 0.72rem;
-      color: #64748b;
-      font-family: var(--font-mono);
-    }
+    .dots-nav { display: flex; gap: 0.45rem; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: #15263f; cursor: pointer; transition: all 0.2s; }
+    .dot.active { background: var(--secondary); box-shadow: 0 0 8px var(--secondary); transform: scale(1.15); }
+    .kbd-tip { font-size: 0.72rem; color: #64748b; font-family: var(--font-mono); }
 
-    /* CENÁRIOS RÁPIDOS */
-    .scenarios-strip {
-      margin-bottom: 1.5rem;
-    }
+    /* CENÁRIOS */
+    .scenarios-strip { margin-bottom: 1.5rem; }
     .strip-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #f59e0b;
-      font-family: var(--font-mono);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.65rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
+      font-size: 0.75rem; font-weight: 700; color: #f59e0b; font-family: var(--font-mono);
+      text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.65rem; display: flex; align-items: center; gap: 0.4rem;
     }
-    .scenarios-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.65rem;
-    }
+    .scenarios-grid { display: flex; flex-wrap: wrap; gap: 0.65rem; }
     .scenario-btn {
-      background: #061122;
-      border: 1px solid var(--border-dim);
-      color: #cbd5e1;
-      padding: 0.45rem 0.95rem;
-      border-radius: 6px;
-      font-size: 0.78rem;
-      font-family: var(--font-mono);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-      transition: all 0.2s;
+      background: #061122; border: 1px solid var(--border-dim); color: #cbd5e1;
+      padding: 0.45rem 0.95rem; border-radius: 6px; font-size: 0.78rem; font-family: var(--font-mono);
+      cursor: pointer; display: flex; align-items: center; gap: 0.45rem; transition: all 0.2s;
     }
-    .scenario-btn:hover {
-      background: #0c1d38;
-      border-color: var(--secondary);
-      color: #fff;
-    }
-    .scenario-btn.active {
-      border-color: var(--primary);
-      background: rgba(16, 185, 129, 0.1);
-      color: var(--primary);
-    }
+    .scenario-btn:hover { background: #0c1d38; border-color: var(--secondary); color: #fff; }
+    .scenario-btn.active { border-color: var(--primary); background: rgba(16, 185, 129, 0.1); color: var(--primary); }
 
-    /* BANNER DE STATUS INTERATIVO */
+    /* STATUS BANNER */
     .status-banner {
-      background: #020611;
-      border: 1px solid var(--border-dim);
-      border-left: 3px solid var(--secondary);
-      padding: 0.75rem 1.25rem;
-      border-radius: 4px;
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      color: #cbd5e1;
-      margin-bottom: 1.5rem;
+      background: #020611; border: 1px solid var(--border-dim); border-left: 3px solid var(--secondary);
+      padding: 0.75rem 1.25rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.85rem;
+      color: #cbd5e1; margin-bottom: 1.5rem;
     }
 
-    /* GRID DO EMULADOR: CANVAS + CONTROLES */
-    .emulador-layout {
-      display: grid;
-      grid-template-columns: 1.6fr 1fr;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    /* QUADRO TOPOLÓGICO SVG / MAPA */
+    /* EMULADOR LAYOUT */
+    .emulador-layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
     .canvas-panel {
-      background: var(--bg-card);
-      border: 1px solid var(--border-dim);
-      border-radius: 10px;
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
+      background: var(--bg-card); border: 1px solid var(--border-dim); border-radius: 10px;
+      padding: 1.25rem; display: flex; flex-direction: column;
     }
-    .panel-hdr {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.75rem;
-    }
-    .hdr-text {
-      font-size: 0.82rem;
-      font-family: var(--font-mono);
-      font-weight: 700;
-      color: var(--secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
+    .panel-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+    .hdr-text { font-size: 0.82rem; font-family: var(--font-mono); font-weight: 700; color: var(--secondary); text-transform: uppercase; }
     .canvas-box {
-      flex: 1;
-      min-height: 380px;
-      background: #02050c;
-      border: 1px solid #0f2038;
-      border-radius: 8px;
-      position: relative;
-      overflow: hidden;
+      flex: 1; min-height: 400px; background: #02050c; border: 1px solid #0f2038;
+      border-radius: 8px; position: relative; overflow: hidden;
     }
-    svg.circuit-svg {
-      width: 100%;
-      height: 100%;
-    }
-    /* Estilos dos elementos SVG */
-    .edge-line {
-      stroke: #1e3a5f;
-      stroke-width: 2.5;
-      stroke-linecap: round;
-      transition: all 0.3s;
-    }
+    svg.circuit-svg { width: 100%; height: 100%; }
+
+    /* ESTILOS DE LINHAS E ANIMAÇÃO */
+    .edge-line { stroke: #1e3a5f; stroke-width: 2.5; stroke-linecap: round; transition: stroke 0.3s, stroke-width 0.3s; }
     .edge-line.active {
-      stroke: var(--primary);
-      stroke-width: 3.5;
-      filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.7));
+      stroke: var(--primary); stroke-width: 3.5;
+      filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.8));
     }
-    .edge-line.bypass {
-      stroke: #f59e0b;
-      stroke-width: 2.5;
-      stroke-dasharray: 5 4;
-    }
+    .edge-line.bypass { stroke: #f59e0b; stroke-width: 2.5; stroke-dasharray: 5 4; }
     .edge-line.bypass.active {
-      stroke: #f59e0b;
-      stroke-width: 3.5;
-      stroke-dasharray: none;
-      filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.7));
+      stroke: #f59e0b; stroke-width: 3.5; stroke-dasharray: none;
+      filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.8));
     }
-    .edge-line.blocked {
-      stroke: var(--danger);
-      stroke-width: 3;
-      stroke-dasharray: 4 4;
+    .edge-line.blocked { stroke: var(--danger); stroke-width: 3; stroke-dasharray: 4 4; }
+
+    /* EFEITO DE CORRIDA DE LUZ NAS LINHAS */
+    .edge-flow {
+      stroke-dasharray: 8 6;
+      animation: dashMove 1s linear infinite;
     }
-    .node-group {
-      cursor: pointer;
-      transition: all 0.2s;
+    @keyframes dashMove {
+      from { stroke-dashoffset: 28; }
+      to { stroke-dashoffset: 0; }
     }
-    .node-rect {
-      fill: #091930;
-      stroke: var(--secondary);
-      stroke-width: 1.8;
-      rx: 5;
-      transition: all 0.2s;
+
+    /* ESFERA DE MOVIMENTO EM TEMPO REAL */
+    .packet-runner {
+      fill: #ffffff;
+      stroke: #10b981;
+      stroke-width: 2.5;
+      filter: drop-shadow(0 0 8px #10b981) drop-shadow(0 0 14px #34d399);
+      transition: opacity 0.2s;
     }
-    .node-group:hover .node-rect {
-      fill: #0f294e;
+    .packet-runner.agv-mode {
+      fill: #ffffff;
       stroke: #38bdf8;
+      filter: drop-shadow(0 0 8px #0ea5e9) drop-shadow(0 0 14px #38bdf8);
     }
-    .node-rect.source {
-      stroke: #a855f7;
-      fill: #191033;
-    }
-    .node-rect.sink {
-      stroke: var(--primary);
-      fill: #07261a;
+
+    .node-group { cursor: pointer; transition: all 0.2s; }
+    .node-rect { fill: #091930; stroke: var(--secondary); stroke-width: 1.8; rx: 5; transition: all 0.2s; }
+    .node-group:hover .node-rect { fill: #0f294e; stroke: #38bdf8; }
+    .node-rect.source { stroke: #a855f7; fill: #191033; }
+    .node-rect.sink { stroke: var(--primary); fill: #07261a; }
+    .node-rect.highlighted {
+      stroke: #34d399; fill: #0e3d29;
+      filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.7));
     }
     .node-rect.blocked {
-      stroke: var(--danger);
-      fill: #330b0b;
+      stroke: var(--danger); fill: #330b0b;
       animation: pulse-border 1.5s infinite;
     }
     @keyframes pulse-border {
       0%, 100% { stroke: var(--danger); }
       50% { stroke: #ff7878; }
     }
-    .node-text {
-      fill: #ffffff;
-      font-family: var(--font-mono);
-      font-size: 10px;
-      font-weight: 700;
-      text-anchor: middle;
-      pointer-events: none;
-    }
-    .node-subtext {
-      fill: #94a3b8;
-      font-family: var(--font-sans);
-      font-size: 8px;
-      text-anchor: middle;
-      pointer-events: none;
-    }
-    .valve-marker {
-      fill: #030812;
-      stroke: #38bdf8;
-      stroke-width: 1.2;
-      r: 6;
-      cursor: pointer;
-    }
-    .valve-text {
-      fill: #38bdf8;
-      font-family: var(--font-mono);
-      font-size: 7px;
-      text-anchor: middle;
-      pointer-events: none;
-    }
-    .canvas-legend {
-      display: flex;
-      gap: 1.5rem;
-      margin-top: 0.65rem;
-      font-size: 0.72rem;
-      font-family: var(--font-mono);
-      color: var(--text-muted);
-    }
-    .legend-item { display: flex; align-items: center; gap: 0.35rem; }
-    .legend-box { width: 10px; height: 10px; border-radius: 2px; }
+    .node-text { fill: #ffffff; font-family: var(--font-mono); font-size: 10px; font-weight: 700; text-anchor: middle; pointer-events: none; }
+    .node-subtext { fill: #94a3b8; font-family: var(--font-sans); font-size: 8px; text-anchor: middle; pointer-events: none; }
 
-    /* PAINEL LATERAL DE CONTROLE */
+    /* CONTROLE LATERAL */
     .ctrl-panel {
-      background: var(--bg-card);
-      border: 1px solid var(--border-dim);
-      border-radius: 10px;
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
+      background: var(--bg-card); border: 1px solid var(--border-dim); border-radius: 10px;
+      padding: 1.25rem; display: flex; flex-direction: column; gap: 1.2rem;
     }
-    .ctrl-actions-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.6rem;
-    }
+    .ctrl-actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
     .btn-act {
-      padding: 0.6rem 0.5rem;
-      border-radius: 6px;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      border: 1px solid transparent;
-      transition: all 0.2s;
+      padding: 0.6rem 0.5rem; border-radius: 6px; font-family: var(--font-mono);
+      font-size: 0.75rem; font-weight: 700; cursor: pointer; display: flex;
+      align-items: center; justify-content: center; gap: 0.4rem; border: 1px solid transparent; transition: all 0.2s;
     }
-    .btn-act.blue {
-      background: #0284c7;
-      color: #fff;
-    }
+    .btn-act.blue { background: #0284c7; color: #fff; }
     .btn-act.blue:hover { background: #0369a1; }
-    .btn-act.red {
-      background: #dc2626;
-      color: #fff;
-    }
+    .btn-act.red { background: #dc2626; color: #fff; }
     .btn-act.red:hover { background: #b91c1c; }
-    .btn-act.yellow {
-      background: #d97706;
-      color: #fff;
-    }
+    .btn-act.yellow { background: #d97706; color: #fff; }
     .btn-act.yellow:hover { background: #b45309; }
-    .btn-act.teal {
-      background: #0d9488;
-      color: #fff;
-    }
+    .btn-act.teal { background: #0d9488; color: #fff; }
     .btn-act.teal:hover { background: #0f766e; }
-    .btn-act.outline {
-      background: #061122;
-      border-color: var(--border-dim);
-      color: #cbd5e1;
-    }
+    .btn-act.outline { background: #061122; border-color: var(--border-dim); color: #cbd5e1; }
     .btn-act.outline:hover { background: #0c1d38; border-color: var(--secondary); }
 
-    /* KPI METRICS BOX */
-    .kpi-box {
-      background: #030611;
-      border: 1px solid var(--border-dim);
-      border-radius: 6px;
-      padding: 0.85rem 1rem;
-    }
-    .kpi-hdr {
-      font-size: 0.72rem;
-      font-family: var(--font-mono);
-      color: #94a3b8;
-      margin-bottom: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .kpi-values-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      margin-bottom: 0.65rem;
-    }
-    .kpi-item span.lbl {
-      display: block;
-      font-size: 0.68rem;
-      color: #64748b;
-      font-family: var(--font-mono);
-    }
-    .kpi-item span.val {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: var(--secondary);
-      font-family: var(--font-mono);
-    }
-    .kpi-path-box {
-      border-top: 1px solid #0f2038;
-      padding-top: 0.5rem;
-    }
-    .kpi-path-lbl {
-      font-size: 0.68rem;
-      color: #64748b;
-      font-family: var(--font-mono);
-      margin-bottom: 0.25rem;
-    }
+    /* KPIS */
+    .kpi-box { background: #030611; border: 1px solid var(--border-dim); border-radius: 6px; padding: 0.85rem 1rem; }
+    .kpi-hdr { font-size: 0.72rem; font-family: var(--font-mono); color: #94a3b8; margin-bottom: 0.65rem; text-transform: uppercase; }
+    .kpi-values-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.65rem; }
+    .kpi-item span.lbl { display: block; font-size: 0.68rem; color: #64748b; font-family: var(--font-mono); }
+    .kpi-item span.val { font-size: 1.35rem; font-weight: 800; color: var(--secondary); font-family: var(--font-mono); }
+    .kpi-path-box { border-top: 1px solid #0f2038; padding-top: 0.5rem; }
+    .kpi-path-lbl { font-size: 0.68rem; color: #64748b; font-family: var(--font-mono); margin-bottom: 0.25rem; }
     .kpi-path-val {
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      color: #38bdf8;
-      white-space: nowrap;
-      overflow-x: auto;
-      background: #020409;
-      padding: 0.35rem 0.5rem;
-      border-radius: 4px;
+      font-family: var(--font-mono); font-size: 0.78rem; color: #38bdf8;
+      white-space: nowrap; overflow-x: auto; background: #020409; padding: 0.35rem 0.5rem; border-radius: 4px;
     }
 
-    /* CONSOLE DE EVENTOS */
-    .console-box {
-      background: #020408;
-      border: 1px solid var(--border-dim);
-      border-radius: 6px;
-      padding: 0.85rem;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    .console-hdr {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.72rem;
-      font-family: var(--font-mono);
-      color: #64748b;
-      margin-bottom: 0.5rem;
-    }
-    .console-logs {
-      flex: 1;
-      height: 125px;
-      overflow-y: auto;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: #38bdf8;
-      line-height: 1.5;
-    }
+    /* CONSOLE */
+    .console-box { background: #020408; border: 1px solid var(--border-dim); border-radius: 6px; padding: 0.85rem; flex: 1; display: flex; flex-direction: column; }
+    .console-hdr { display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; font-family: var(--font-mono); color: #64748b; margin-bottom: 0.5rem; }
+    .console-logs { flex: 1; height: 125px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.75rem; color: #38bdf8; line-height: 1.5; }
     .console-line { margin-bottom: 0.25rem; }
     .ts { color: #64748b; }
 
-    /* ESTADO DAS VÁLVULAS SOLENOIDES ISA-5.1 */
-    .valves-bar {
-      background: #020610;
-      border: 1px solid var(--border-dim);
-      border-radius: 8px;
-      padding: 0.85rem 1.25rem;
-    }
-    .valves-hdr {
-      font-size: 0.75rem;
-      font-family: var(--font-mono);
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.65rem;
-    }
-    .valves-pills-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
+    /* VÁLVULAS */
+    .valves-bar { background: #020610; border: 1px solid var(--border-dim); border-radius: 8px; padding: 0.85rem 1.25rem; }
+    .valves-hdr { font-size: 0.75rem; font-family: var(--font-mono); color: #94a3b8; text-transform: uppercase; margin-bottom: 0.65rem; }
+    .valves-pills-wrap { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .valve-pill {
-      background: #061122;
-      border: 1px solid var(--border-dim);
-      border-radius: 4px;
-      padding: 0.25rem 0.6rem;
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: #94a3b8;
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
+      background: #061122; border: 1px solid var(--border-dim); border-radius: 4px;
+      padding: 0.25rem 0.6rem; font-family: var(--font-mono); font-size: 0.72rem; color: #94a3b8;
     }
-    .valve-pill.open {
-      border-color: var(--primary);
-      background: rgba(16, 185, 129, 0.15);
-      color: #34d399;
-      font-weight: 700;
-    }
-    .valve-pill.closed {
-      border-color: #334155;
-      color: #64748b;
-    }
+    .valve-pill.open { border-color: var(--primary); background: rgba(16, 185, 129, 0.15); color: #34d399; font-weight: 700; }
+    .valve-pill.closed { border-color: #334155; color: #64748b; }
   </style>
 </head>
 <body>
@@ -682,7 +320,7 @@
         <div class="slides-title-tag">
           <span style="font-size:1.1rem;">📽️</span>
           <span>SCADA-Core: Módulo 2 • Teoria dos Grafos</span>
-          <span id="slide-hdr-counter" class="slide-badge-pill">Slide 01 / 10 • Aula 11</span>
+          <span id="slide-hdr-counter" class="slide-badge-pill">Slide 01 / 10 • Introdução</span>
         </div>
         <div class="slide-nav-btns">
           <button class="btn-slide" onclick="trocarSlide(-1)">← Anterior</button>
@@ -690,9 +328,7 @@
         </div>
       </div>
 
-      <div class="slide-body" id="slide-body-viewport">
-        <!-- Injetado dinamicamente via JS -->
-      </div>
+      <div class="slide-body" id="slide-body-viewport"></div>
 
       <div style="background:#020610; padding:0.65rem 1.5rem; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-dim);">
         <div class="dots-nav" id="dots-container"></div>
@@ -720,7 +356,7 @@
     <!-- SEÇÃO 3: EMULADOR SCADA-GRAPH (MAPA INTERATIVO + PAINEL) -->
     <div class="emulador-layout">
       
-      <!-- MAPA TOPOLÓGICO INTERATIVO -->
+      <!-- MAPA TOPOLÓGICO INTERATIVO COM ANIMAÇÃO SVG -->
       <div class="canvas-panel">
         <div class="panel-hdr">
           <span class="hdr-text">🗺️ MAPA TOPOLÓGICO INTERATIVO (ESTEIRAS + CORREDOR AGV)</span>
@@ -729,102 +365,105 @@
 
         <div class="canvas-box">
           <svg class="circuit-svg" viewBox="0 0 760 380" id="svg-fms">
+            <defs>
+              <!-- Marcador de Seta de Fluxo -->
+              <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981" />
+              </marker>
+              <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+              </marker>
+              <marker id="arrow-orange" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#f59e0b" />
+              </marker>
+            </defs>
+
             <!-- Camada de Conexões (Arestas) -->
             <g id="svg-edges">
-              <!-- Malha de Processo e Esteiras (Setores 100/200/300) -->
-              <line id="edge-e1" x1="80" y1="90" x2="190" y2="90" class="edge-line" />
-              <line id="edge-e2" x1="190" y1="90" x2="300" y2="90" class="edge-line" />
-              <line id="edge-e3" x1="300" y1="90" x2="380" y2="40" class="edge-line" />
-              <line id="edge-e4" x1="300" y1="90" x2="430" y2="90" class="edge-line" />
-              <line id="edge-e5" x1="430" y1="90" x2="510" y2="40" class="edge-line" />
-              <line id="edge-e6" x1="430" y1="90" x2="560" y2="90" class="edge-line" />
-              <line id="edge-e7" x1="560" y1="90" x2="660" y2="90" class="edge-line" />
-              <line id="edge-e8" x1="560" y1="90" x2="660" y2="150" class="edge-line" />
+              <line id="edge-e1" x1="125" y1="90" x2="145" y2="90" class="edge-line" />
+              <line id="edge-e2" x1="240" y1="90" x2="260" y2="90" class="edge-line" />
+              <line id="edge-e3" x1="345" y1="75" x2="350" y2="50" class="edge-line" />
+              <line id="edge-e4" x1="345" y1="90" x2="390" y2="90" class="edge-line" />
+              <line id="edge-e5" x1="475" y1="75" x2="480" y2="50" class="edge-line" />
+              <line id="edge-e6" x1="475" y1="90" x2="520" y2="90" class="edge-line" />
+              <line id="edge-e7" x1="605" y1="90" x2="635" y2="90" class="edge-line" />
+              <line id="edge-e8" x1="605" y1="105" x2="635" y2="135" class="edge-line" />
 
               <!-- Rotas de Contingência e Bypass -->
-              <path id="edge-byp" d="M 190 90 Q 380 180 560 90" class="edge-line bypass" fill="none" />
-              <path id="edge-cont" d="M 300 90 Q 430 140 560 90" class="edge-line bypass" fill="none" />
+              <path id="edge-byp" d="M 240 90 Q 380 185 520 90" class="edge-line bypass" fill="none" />
+              <path id="edge-cont" d="M 345 90 Q 430 145 520 90" class="edge-line bypass" fill="none" />
 
               <!-- Corredor Viário Logístico Terrestre (AGV) -->
-              <line id="edge-agv-1" x1="90" y1="280" x2="230" y2="280" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" />
-              <line id="edge-agv-2" x1="230" y1="280" x2="380" y2="280" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" />
-              <line id="edge-agv-3" x1="380" y1="280" x2="530" y2="280" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" />
-              <line id="edge-agv-4" x1="530" y1="280" x2="670" y2="280" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" />
-              <path id="edge-agv-loop" d="M 670 280 C 720 340, 40 340, 90 280" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" fill="none" />
+              <line id="edge-agv-1" x1="135" y1="277" x2="185" y2="277" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" />
+              <line id="edge-agv-2" x1="280" y1="277" x2="335" y2="277" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" />
+              <line id="edge-agv-3" x1="430" y1="277" x2="485" y2="277" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" />
+              <line id="edge-agv-4" x1="580" y1="277" x2="625" y2="277" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" />
+              <path id="edge-agv-loop" d="M 672 300 C 730 360, 30 360, 87 300" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" fill="none" />
             </g>
 
             <!-- Rótulos de Distâncias e Válvulas nas Esteiras -->
             <g id="svg-labels" font-family="JetBrains Mono" font-size="8" fill="#64748b">
-              <text x="135" y="82" text-anchor="middle">0.8m (XV-101)</text>
-              <text x="245" y="82" text-anchor="middle">1.2m (M-101)</text>
-              <text x="330" y="55" text-anchor="middle">0.5m (XV-201)</text>
-              <text x="365" y="82" text-anchor="middle">1.0m (M-101)</text>
-              <text x="460" y="55" text-anchor="middle">0.5m (XV-202)</text>
-              <text x="495" y="82" text-anchor="middle">1.0m (M-101)</text>
-              <text x="610" y="82" text-anchor="middle">0.5m (XV-203)</text>
-              <text x="615" y="145" text-anchor="middle">0.8m (M-101)</text>
-              <text x="380" y="165" fill="#f59e0b" text-anchor="middle">Bypass Expresso: 2.5m (XV-200B)</text>
+              <text x="135" y="80" text-anchor="middle">0.8m (XV-101)</text>
+              <text x="250" y="80" text-anchor="middle">1.2m (M-101)</text>
+              <text x="325" y="55" text-anchor="middle">0.5m (XV-201)</text>
+              <text x="367" y="80" text-anchor="middle">1.0m (M-101)</text>
+              <text x="455" y="55" text-anchor="middle">0.5m (XV-202)</text>
+              <text x="497" y="80" text-anchor="middle">1.0m (M-101)</text>
+              <text x="620" y="80" text-anchor="middle">0.5m (XV-203)</text>
+              <text x="610" y="140" text-anchor="middle">0.8m (M-101)</text>
+              <text x="380" y="172" fill="#f59e0b" text-anchor="middle">Bypass Expresso: 2.5m (XV-200B)</text>
             </g>
 
             <!-- Vértices da Malha de Processo (Clicáveis) -->
             <g id="svg-nodes">
-              <!-- SILO-100 -->
               <g class="node-group" id="node-SILO-100" onclick="toggleNodeBlock('SILO-100')">
                 <rect x="30" y="65" width="95" height="50" class="node-rect source" />
                 <text x="77" y="88" class="node-text">SILO-100</text>
                 <text x="77" y="103" class="node-subtext">Alimentador Infeed</text>
               </g>
 
-              <!-- INSP-200 -->
               <g class="node-group" id="node-INSP-200" onclick="toggleNodeBlock('INSP-200')">
                 <rect x="145" y="65" width="95" height="50" class="node-rect" />
                 <text x="192" y="88" class="node-text">INSP-200</text>
                 <text x="192" y="103" class="node-subtext">Túnel Óptico</text>
               </g>
 
-              <!-- DIV-201 -->
               <g class="node-group" id="node-DIV-201" onclick="toggleNodeBlock('DIV-201')">
                 <rect x="260" y="65" width="85" height="50" class="node-rect" />
                 <text x="302" y="88" class="node-text">DIV-201</text>
                 <text x="302" y="103" class="node-subtext">Desvio 1 (Verm)</text>
               </g>
 
-              <!-- CX-301 -->
               <g class="node-group" id="node-CX-301">
                 <rect x="350" y="15" width="85" height="42" class="node-rect sink" />
                 <text x="392" y="34" class="node-text">CX-301</text>
                 <text x="392" y="48" class="node-subtext">Lote Vermelho</text>
               </g>
 
-              <!-- DIV-202 -->
               <g class="node-group" id="node-DIV-202" onclick="toggleNodeBlock('DIV-202')">
                 <rect x="390" y="65" width="85" height="50" class="node-rect" />
                 <text x="432" y="88" class="node-text">DIV-202</text>
                 <text x="432" y="103" class="node-subtext">Desvio 2 (Verde)</text>
               </g>
 
-              <!-- CX-302 -->
               <g class="node-group" id="node-CX-302">
                 <rect x="480" y="15" width="85" height="42" class="node-rect sink" />
                 <text x="522" y="34" class="node-text">CX-302</text>
                 <text x="522" y="48" class="node-subtext">Lote Verde</text>
               </g>
 
-              <!-- DIV-203 -->
               <g class="node-group" id="node-DIV-203" onclick="toggleNodeBlock('DIV-203')">
                 <rect x="520" y="65" width="85" height="50" class="node-rect" />
                 <text x="562" y="88" class="node-text">DIV-203</text>
                 <text x="562" y="103" class="node-subtext">Desvio 3 (Azul)</text>
               </g>
 
-              <!-- CX-303 -->
               <g class="node-group" id="node-CX-303">
                 <rect x="635" y="65" width="85" height="50" class="node-rect sink" />
                 <text x="677" y="88" class="node-text">CX-303</text>
                 <text x="677" y="103" class="node-subtext">Lote Azul</text>
               </g>
 
-              <!-- DESC-304 -->
               <g class="node-group" id="node-DESC-304">
                 <rect x="635" y="125" width="85" height="42" class="node-rect" style="stroke:var(--danger); fill:#260606;" />
                 <text x="677" y="144" class="node-text" fill="#ef4444">DESC-304</text>
@@ -860,6 +499,9 @@
                 <text x="672" y="291" class="node-subtext">Expedição Geral</text>
               </g>
             </g>
+
+            <!-- ESFERA DE MOVIMENTO EM TEMPO REAL (RUNNER) -->
+            <circle id="anim-runner" cx="-100" cy="-100" r="7" class="packet-runner" opacity="0"></circle>
           </svg>
         </div>
 
@@ -936,11 +578,9 @@
 
   </div>
 
-  <!-- SCRIPT INDUSTRIAL DO SCADA-GRAPH -->
   <script>
     /* =========================================================================
-       1. BANCO DE DADOS DOS SLIDES EXECUTIVOS (AULAS 11 A 18)
-       Estrutura em 2 Colunas com Fórmulas e Tabelas de Engenharia
+       1. SLIDES EXECUTIVOS (AULAS 11 A 18) - 10 SLIDES EM 2 COLUNAS
        ========================================================================= */
     const slidesData = [
       {
@@ -1239,7 +879,6 @@
         </div>
       `;
 
-      // Atualiza dots
       const dotsCont = document.getElementById("dots-container");
       dotsCont.innerHTML = "";
       slidesData.forEach((_, i) => {
@@ -1259,7 +898,6 @@
       renderizarSlide();
     }
 
-    // Atalhos de teclado
     document.addEventListener("keydown", (e) => {
       if (e.key === "ArrowLeft") trocarSlide(-1);
       if (e.key === "ArrowRight") trocarSlide(1);
@@ -1267,26 +905,45 @@
     renderizarSlide();
 
     /* =========================================================================
-       2. MOTOR TOPOLÓGICO DO EMULADOR SCADA-GRAPH (TEMPO REAL)
+       2. COORDENADAS DOS NÓS E ESTRUTURA TOPOLÓGICA (PARA ANIMAÇÃO)
        ========================================================================= */
+    const nodeCoords = {
+      "SILO-100": { x: 77, y: 90 },
+      "INSP-200": { x: 192, y: 90 },
+      "DIV-201":  { x: 302, y: 90 },
+      "CX-301":   { x: 392, y: 36 },
+      "DIV-202":  { x: 432, y: 90 },
+      "CX-302":   { x: 522, y: 36 },
+      "DIV-203":  { x: 562, y: 90 },
+      "CX-303":   { x: 677, y: 90 },
+      "DESC-304": { x: 677, y: 146 },
+      // Nós da camada viária de AGVs
+      "DOCA-00":  { x: 87, y: 277 },
+      "ALMOX-A":  { x: 232, y: 277 },
+      "PAV-FMS":  { x: 382, y: 277 },
+      "PALET-B":  { x: 532, y: 277 },
+      "DOCAS-EXP":{ x: 672, y: 277 }
+    };
+
     const fmsGrafo = {
-      nos: ["SILO-100", "INSP-200", "DIV-201", "DIV-202", "DIV-203", "CX-301", "CX-302", "CX-303", "DESC-304"],
+      nos: Object.keys(nodeCoords),
       arestas: [
-        { id: "edge-e1", u: "SILO-100", v: "INSP-200", w: 0.8, valve: "v-XV-101", actName: "XV-101" },
-        { id: "edge-e2", u: "INSP-200", v: "DIV-201", w: 1.2, valve: "v-M-101", actName: "M-101" },
-        { id: "edge-e3", u: "DIV-201", v: "CX-301", w: 0.5, valve: "v-XV-201", actName: "XV-201" },
-        { id: "edge-e4", u: "DIV-201", v: "DIV-202", w: 1.0, valve: "v-M-101", actName: "M-101" },
-        { id: "edge-e5", u: "DIV-202", v: "CX-302", w: 0.5, valve: "v-XV-202", actName: "XV-202" },
-        { id: "edge-e6", u: "DIV-202", v: "DIV-203", w: 1.0, valve: "v-M-101", actName: "M-101" },
-        { id: "edge-e7", u: "DIV-203", v: "CX-303", w: 0.5, valve: "v-XV-203", actName: "XV-203" },
-        { id: "edge-e8", u: "DIV-203", v: "DESC-304", w: 0.8, valve: "v-M-101", actName: "M-101" },
+        { id: "edge-e1", u: "SILO-100", v: "INSP-200", w: 0.8, valve: "v-XV-101", actName: "XV-101", marker: "arrow-green" },
+        { id: "edge-e2", u: "INSP-200", v: "DIV-201", w: 1.2, valve: "v-M-101", actName: "M-101", marker: "arrow-green" },
+        { id: "edge-e3", u: "DIV-201", v: "CX-301", w: 0.5, valve: "v-XV-201", actName: "XV-201", marker: "arrow-green" },
+        { id: "edge-e4", u: "DIV-201", v: "DIV-202", w: 1.0, valve: "v-M-101", actName: "M-101", marker: "arrow-green" },
+        { id: "edge-e5", u: "DIV-202", v: "CX-302", w: 0.5, valve: "v-XV-202", actName: "XV-202", marker: "arrow-green" },
+        { id: "edge-e6", u: "DIV-202", v: "DIV-203", w: 1.0, valve: "v-M-101", actName: "M-101", marker: "arrow-green" },
+        { id: "edge-e7", u: "DIV-203", v: "CX-303", w: 0.5, valve: "v-XV-203", actName: "XV-203", marker: "arrow-green" },
+        { id: "edge-e8", u: "DIV-203", v: "DESC-304", w: 0.8, valve: "v-M-101", actName: "M-101", marker: "arrow-green" },
         // Arestas de contingência
-        { id: "edge-byp", u: "INSP-200", v: "DIV-203", w: 2.5, valve: "v-XV-200B", actName: "XV-200B", isBypass: true },
-        { id: "edge-cont", u: "DIV-201", v: "DIV-203", w: 2.2, valve: "v-M-101B", actName: "M-101B", isBypass: true }
+        { id: "edge-byp", u: "INSP-200", v: "DIV-203", w: 2.5, valve: "v-XV-200B", actName: "XV-200B", marker: "arrow-orange", isBypass: true },
+        { id: "edge-cont", u: "DIV-201", v: "DIV-203", w: 2.2, valve: "v-M-101B", actName: "M-101B", marker: "arrow-orange", isBypass: true }
       ]
     };
 
     let nosBloqueados = new Set();
+    let animId = null;
 
     function logSCADA(msg, highlight = false) {
       const logs = document.getElementById("console-logs");
@@ -1313,9 +970,15 @@
     }
 
     function resetarVisual() {
+      pararAnimacao();
       document.querySelectorAll(".edge-line").forEach(el => {
         el.classList.remove("active");
         el.classList.remove("blocked");
+        el.classList.remove("edge-flow");
+        el.removeAttribute("marker-end");
+      });
+      document.querySelectorAll(".node-rect").forEach(el => {
+        el.classList.remove("highlighted");
       });
       document.querySelectorAll(".valve-pill").forEach(el => {
         el.className = "valve-pill closed";
@@ -1324,11 +987,84 @@
       });
     }
 
+    /* =========================================================================
+       3. MOTOR DE ANIMAÇÃO EM TEMPO REAL: ESFERA E SETAS DE FLUXO
+       ========================================================================= */
+    function pararAnimacao() {
+      if (animId) {
+        cancelAnimationFrame(animId);
+        animId = null;
+      }
+      const runner = document.getElementById("anim-runner");
+      runner.setAttribute("opacity", "0");
+      runner.setAttribute("cx", "-100");
+      runner.setAttribute("cy", "-100");
+    }
+
+    function animarPacoteAoLongoDaRota(sequenciaNos, isAGV = false) {
+      pararAnimacao();
+      if (!sequenciaNos || sequenciaNos.length < 2) return;
+
+      const runner = document.getElementById("anim-runner");
+      runner.setAttribute("opacity", "1");
+      if (isAGV) {
+        runner.classList.add("agv-mode");
+      } else {
+        runner.classList.remove("agv-mode");
+      }
+
+      // Pontos cardinais
+      const waypoints = sequenciaNos.map(nome => {
+        return nodeCoords[nome] || { x: 400, y: 200 };
+      });
+
+      let currentLeg = 0;
+      let progress = 0.0;
+      const speed = isAGV ? 0.014 : 0.022; // velocidade de translação
+
+      function passoAnimacao() {
+        if (currentLeg >= waypoints.length - 1) {
+          // Loop contínuo de demonstração
+          currentLeg = 0;
+          progress = 0.0;
+        }
+
+        const p1 = waypoints[currentLeg];
+        const p2 = waypoints[currentLeg + 1];
+
+        // Interpolação Linear de Coordenadas
+        const curX = p1.x + (p2.x - p1.x) * progress;
+        const curY = p1.y + (p2.y - p1.y) * progress;
+
+        runner.setAttribute("cx", curX);
+        runner.setAttribute("cy", curY);
+
+        // Realce luminoso do nó atingido
+        const noAtual = sequenciaNos[currentLeg];
+        const rectNo = document.querySelector(`#node-${noAtual} rect`);
+        if (rectNo && !rectNo.classList.contains("blocked")) {
+          rectNo.classList.add("highlighted");
+        }
+
+        progress += speed;
+        if (progress >= 1.0) {
+          progress = 0.0;
+          currentLeg++;
+        }
+
+        animId = requestAnimationFrame(passoAnimacao);
+      }
+
+      animId = requestAnimationFrame(passoAnimacao);
+    }
+
+    /* =========================================================================
+       4. ROTEAMENTO DIJKSTRA COM SETAS E RUNNER
+       ========================================================================= */
     function executarDijkstra(origem = "SILO-100", destino = "CX-303") {
       resetarVisual();
       const t0 = performance.now();
 
-      // Dijkstra em JS
       const dist = {};
       const pred = {};
       const arestaUsada = {};
@@ -1350,7 +1086,6 @@
         if (u === null || dist[u] === Infinity || u === destino) break;
         naoVisitados.delete(u);
 
-        // Vizinhos
         fmsGrafo.arestas.forEach(a => {
           if (a.u === u && !nosBloqueados.has(a.v)) {
             const alt = dist[u] + a.w;
@@ -1374,7 +1109,7 @@
         return;
       }
 
-      // Reconstitui caminho
+      // Reconstituição da Rota
       const caminho = [];
       const arestasAtivas = [];
       let cur = destino;
@@ -1388,15 +1123,19 @@
       caminho.reverse();
       arestasAtivas.reverse();
 
-      // Atualiza KPIs
+      // KPIs
       document.getElementById("kpi-dist").innerText = `${dist[destino].toFixed(1)} m`;
       document.getElementById("kpi-path").innerText = caminho.join(" → ");
       document.getElementById("status-banner").innerText = `ROTA CALCULADA: ${caminho.join(" → ")} (${dist[destino].toFixed(1)}m em ${tCalc}ms).`;
 
-      // Atualiza SVG e Válvulas
+      // Atualiza SVG com Setas e Corrida de Linha
       arestasAtivas.forEach(a => {
         const elEdge = document.getElementById(a.id);
-        if (elEdge) elEdge.classList.add("active");
+        if (elEdge) {
+          elEdge.classList.add("active");
+          elEdge.classList.add("edge-flow");
+          elEdge.setAttribute("marker-end", `url(#${a.marker})`);
+        }
 
         const elV = document.getElementById(a.valve);
         if (elV) {
@@ -1405,6 +1144,9 @@
         }
       });
 
+      // INICIA MOVIMENTO EM TEMPO REAL DA ESFERA PELA ROTA
+      animarPacoteAoLongoDaRota(caminho, false);
+
       logSCADA(`Dijkstra executado: Rota ${caminho.join(" → ")} calculada em ${tCalc}ms (Custo: ${dist[destino].toFixed(1)}m).`, true);
     }
 
@@ -1412,19 +1154,23 @@
       toggleNodeBlock("DIV-202");
     }
 
+    /* =========================================================================
+       5. ROTA DO AGV VIA TSP (COM ANIMAÇÃO NO CORREDOR VIÁRIO)
+       ========================================================================= */
     function executarTSP() {
       resetarVisual();
       const t0 = performance.now();
-      // Simulação do resultado formal da Aula 17 na malha AGV
-      const rotaTSP = ["DOCA-00", "SILO-100", "INSP-200", "CX-301", "CX-302", "CX-303", "DESC-304", "DOCA-00"];
+      const rotaTSP = ["DOCA-00", "SILO-100", "INSP-200", "CX-301", "CX-302", "CX-303", "DESC-304", "DOCAS-EXP", "DOCA-00"];
       const tCalc = (performance.now() - t0 + 0.082).toFixed(4);
 
-      // Ativa linhas viárias do AGV
+      // Ativa linhas viárias com cor ciano e setas
       ["edge-agv-1", "edge-agv-2", "edge-agv-3", "edge-agv-4", "edge-agv-loop"].forEach(id => {
         const el = document.getElementById(id);
         if (el) {
           el.style.stroke = "#38bdf8";
           el.style.strokeWidth = "3.5";
+          el.classList.add("edge-flow");
+          el.setAttribute("marker-end", "url(#arrow-blue)");
         }
       });
 
@@ -1432,19 +1178,40 @@
       document.getElementById("kpi-time").innerText = `${tCalc} ms`;
       document.getElementById("kpi-path").innerText = rotaTSP.join(" → ");
       document.getElementById("status-banner").innerText = "AGV TSP (2-Opt Otimizado): Ciclo ótimo global de 86.3m despachado com sucesso.";
+      
+      // Animação da esfera do AGV
+      animarPacoteAoLongoDaRota(rotaTSP, true);
+
       logSCADA(`TSP 2-Opt: Ciclo ótimo global convergido em ${tCalc}ms (86.3m). Cota Inferior MST comprovada: 54.9m <= 86.3m.`, true);
     }
 
+    /* =========================================================================
+       6. CIRCUITO EULERIANO DE HIERHOLZER COM ANIMAÇÃO
+       ========================================================================= */
     function executarHierholzer() {
       resetarVisual();
       const t0 = performance.now();
       const tCalc = (performance.now() - t0 + 0.045).toFixed(4);
 
+      const rotaEuler = [
+        "DOCA-00", "SILO-100", "INSP-200", "DIV-201", "CX-301",
+        "DIV-202", "CX-302", "DIV-203", "CX-303", "DESC-304", "DOCA-00"
+      ];
+
+      document.querySelectorAll(".edge-line").forEach(el => {
+        el.classList.add("active");
+        el.classList.add("edge-flow");
+        el.setAttribute("marker-end", "url(#arrow-green)");
+      });
+
       document.getElementById("kpi-dist").innerText = "24.5 m";
       document.getElementById("kpi-time").innerText = `${tCalc} ms`;
-      document.getElementById("kpi-path").innerText = "BASE → SILO → INSP → DIV1 → CX1 → CX2 → CX3 → DESC → BASE";
+      document.getElementById("kpi-path").innerText = rotaEuler.join(" → ");
       document.getElementById("status-banner").innerText = "Circuito Euleriano de Hierholzer ativo: 100% das passarelas inspecionadas sem repetição.";
-      logSCADA(`Hierholzer: Circuito euleriano validado em ${tCalc}ms (12 passarelas de manutenção com deg(v) par).`, true);
+      
+      animarPacoteAoLongoDaRota(rotaEuler, false);
+
+      logSCADA(`Hierholzer: Circuito euleriano validado em ${tCalc}ms (12 passarelas com deg(v) par).`, true);
     }
 
     function executarValidacaoDAG() {
@@ -1456,13 +1223,18 @@
 
     function resetarTudo() {
       nosBloqueados.clear();
-      document.querySelectorAll(".node-rect").forEach(el => el.classList.remove("blocked"));
+      document.querySelectorAll(".node-rect").forEach(el => {
+        el.classList.remove("blocked");
+        el.classList.remove("highlighted");
+      });
       resetarVisual();
       ["edge-agv-1", "edge-agv-2", "edge-agv-3", "edge-agv-4", "edge-agv-loop"].forEach(id => {
         const el = document.getElementById(id);
         if (el) {
           el.style.stroke = "#132742";
           el.style.strokeWidth = "2";
+          el.classList.remove("edge-flow");
+          el.removeAttribute("marker-end");
         }
       });
       document.getElementById("kpi-dist").innerText = "0.0 m";
@@ -1493,7 +1265,6 @@
       }
     }
 
-    // Inicialização automática
     window.addEventListener("load", () => {
       carregarCenario(1);
     });
