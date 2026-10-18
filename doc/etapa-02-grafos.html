@@ -92,7 +92,7 @@
 
     .container-wide { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
 
-    /* SLIDES EXECUTIVOS */
+    /* SLIDES */
     .slides-wrapper {
       background: var(--bg-card); border: 1px solid var(--border-dim);
       border-radius: 10px; margin-bottom: 2rem; overflow: hidden;
@@ -123,7 +123,7 @@
     }
     .slide-header-content h2 { font-size: 1.7rem; font-weight: 800; color: #fff; margin-bottom: 0.4rem; }
     .slide-header-content p.subtitle { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.5rem; }
-    .slide-grid-2 { display: grid; grid-template-columns: 1fr 1.15fr; gap: 2rem; align-items: start; }
+    .slide-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
     .slide-math-box {
       background: #030813; border: 1px solid var(--border-dim); border-left: 3px solid var(--secondary);
       border-radius: 6px; padding: 1.25rem; font-size: 0.92rem; line-height: 1.6;
@@ -184,7 +184,7 @@
     }
     svg.circuit-svg { width: 100%; height: 100%; }
 
-    /* ESTILOS DE LINHAS E ANIMAÇÃO */
+    /* LINHAS E ANIMAÇÃO */
     .edge-line { stroke: #1e3a5f; stroke-width: 2.5; stroke-linecap: round; transition: stroke 0.3s, stroke-width 0.3s; }
     .edge-line.active {
       stroke: var(--primary); stroke-width: 3.5;
@@ -197,7 +197,6 @@
     }
     .edge-line.blocked { stroke: var(--danger); stroke-width: 3; stroke-dasharray: 4 4; }
 
-    /* EFEITO DE CORRIDA DE LUZ NAS LINHAS */
     .edge-flow {
       stroke-dasharray: 8 6;
       animation: dashMove 1s linear infinite;
@@ -207,7 +206,6 @@
       to { stroke-dashoffset: 0; }
     }
 
-    /* ESFERA DE MOVIMENTO EM TEMPO REAL */
     .packet-runner {
       fill: #ffffff;
       stroke: #10b981;
@@ -231,7 +229,7 @@
       filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.7));
     }
     .node-rect.blocked {
-      stroke: var(--danger); fill: #330b0b;
+      stroke: var(--danger) !important; fill: #330b0b !important;
       animation: pulse-border 1.5s infinite;
     }
     @keyframes pulse-border {
@@ -241,7 +239,7 @@
     .node-text { fill: #ffffff; font-family: var(--font-mono); font-size: 10px; font-weight: 700; text-anchor: middle; pointer-events: none; }
     .node-subtext { fill: #94a3b8; font-family: var(--font-sans); font-size: 8px; text-anchor: middle; pointer-events: none; }
 
-    /* CONTROLE LATERAL */
+    /* CONTROLE */
     .ctrl-panel {
       background: var(--bg-card); border: 1px solid var(--border-dim); border-radius: 10px;
       padding: 1.25rem; display: flex; flex-direction: column; gap: 1.2rem;
@@ -353,10 +351,10 @@
       Simulador reinicializado para estado de repouso. Topologia nominal carregada.
     </div>
 
-    <!-- SEÇÃO 3: EMULADOR SCADA-GRAPH (MAPA INTERATIVO + PAINEL) -->
+    <!-- SEÇÃO 3: EMULADOR SCADA-GRAPH -->
     <div class="emulador-layout">
       
-      <!-- MAPA TOPOLÓGICO INTERATIVO COM ANIMAÇÃO SVG -->
+      <!-- MAPA SVG INTERATIVO -->
       <div class="canvas-panel">
         <div class="panel-hdr">
           <span class="hdr-text">🗺️ MAPA TOPOLÓGICO INTERATIVO (ESTEIRAS + CORREDOR AGV)</span>
@@ -366,7 +364,6 @@
         <div class="canvas-box">
           <svg class="circuit-svg" viewBox="0 0 760 380" id="svg-fms">
             <defs>
-              <!-- Marcador de Seta de Fluxo -->
               <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                 <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981" />
               </marker>
@@ -378,7 +375,7 @@
               </marker>
             </defs>
 
-            <!-- Camada de Conexões (Arestas) -->
+            <!-- Arestas (Esteiras e Corredores) -->
             <g id="svg-edges">
               <line id="edge-e1" x1="125" y1="90" x2="145" y2="90" class="edge-line" />
               <line id="edge-e2" x1="240" y1="90" x2="260" y2="90" class="edge-line" />
@@ -389,11 +386,9 @@
               <line id="edge-e7" x1="605" y1="90" x2="635" y2="90" class="edge-line" />
               <line id="edge-e8" x1="605" y1="105" x2="635" y2="135" class="edge-line" />
 
-              <!-- Rotas de Contingência e Bypass -->
               <path id="edge-byp" d="M 240 90 Q 380 185 520 90" class="edge-line bypass" fill="none" />
               <path id="edge-cont" d="M 345 90 Q 430 145 520 90" class="edge-line bypass" fill="none" />
 
-              <!-- Corredor Viário Logístico Terrestre (AGV) -->
               <line id="edge-agv-1" x1="135" y1="277" x2="185" y2="277" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" />
               <line id="edge-agv-2" x1="280" y1="277" x2="335" y2="277" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" />
               <line id="edge-agv-3" x1="430" y1="277" x2="485" y2="277" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" />
@@ -401,7 +396,7 @@
               <path id="edge-agv-loop" d="M 672 300 C 730 360, 30 360, 87 300" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" fill="none" />
             </g>
 
-            <!-- Rótulos de Distâncias e Válvulas nas Esteiras -->
+            <!-- Rótulos -->
             <g id="svg-labels" font-family="JetBrains Mono" font-size="8" fill="#64748b">
               <text x="135" y="80" text-anchor="middle">0.8m (XV-101)</text>
               <text x="250" y="80" text-anchor="middle">1.2m (M-101)</text>
@@ -414,21 +409,21 @@
               <text x="380" y="172" fill="#f59e0b" text-anchor="middle">Bypass Expresso: 2.5m (XV-200B)</text>
             </g>
 
-            <!-- Vértices da Malha de Processo (Clicáveis) -->
+            <!-- Vértices -->
             <g id="svg-nodes">
-              <g class="node-group" id="node-SILO-100" onclick="toggleNodeBlock('SILO-100')">
+              <g class="node-group" id="node-SILO-100" onclick="alternarBloqueioNo('SILO-100')">
                 <rect x="30" y="65" width="95" height="50" class="node-rect source" />
                 <text x="77" y="88" class="node-text">SILO-100</text>
                 <text x="77" y="103" class="node-subtext">Alimentador Infeed</text>
               </g>
 
-              <g class="node-group" id="node-INSP-200" onclick="toggleNodeBlock('INSP-200')">
+              <g class="node-group" id="node-INSP-200" onclick="alternarBloqueioNo('INSP-200')">
                 <rect x="145" y="65" width="95" height="50" class="node-rect" />
                 <text x="192" y="88" class="node-text">INSP-200</text>
                 <text x="192" y="103" class="node-subtext">Túnel Óptico</text>
               </g>
 
-              <g class="node-group" id="node-DIV-201" onclick="toggleNodeBlock('DIV-201')">
+              <g class="node-group" id="node-DIV-201" onclick="alternarBloqueioNo('DIV-201')">
                 <rect x="260" y="65" width="85" height="50" class="node-rect" />
                 <text x="302" y="88" class="node-text">DIV-201</text>
                 <text x="302" y="103" class="node-subtext">Desvio 1 (Verm)</text>
@@ -440,7 +435,7 @@
                 <text x="392" y="48" class="node-subtext">Lote Vermelho</text>
               </g>
 
-              <g class="node-group" id="node-DIV-202" onclick="toggleNodeBlock('DIV-202')">
+              <g class="node-group" id="node-DIV-202" onclick="alternarBloqueioNo('DIV-202')">
                 <rect x="390" y="65" width="85" height="50" class="node-rect" />
                 <text x="432" y="88" class="node-text">DIV-202</text>
                 <text x="432" y="103" class="node-subtext">Desvio 2 (Verde)</text>
@@ -452,7 +447,7 @@
                 <text x="522" y="48" class="node-subtext">Lote Verde</text>
               </g>
 
-              <g class="node-group" id="node-DIV-203" onclick="toggleNodeBlock('DIV-203')">
+              <g class="node-group" id="node-DIV-203" onclick="alternarBloqueioNo('DIV-203')">
                 <rect x="520" y="65" width="85" height="50" class="node-rect" />
                 <text x="562" y="88" class="node-text">DIV-203</text>
                 <text x="562" y="103" class="node-subtext">Desvio 3 (Azul)</text>
@@ -471,7 +466,7 @@
               </g>
             </g>
 
-            <!-- Vértices da Camada Viária Logística (AGV) -->
+            <!-- Vértices AGV -->
             <g id="svg-nodes-agv">
               <g class="node-group" id="node-DOCA-00">
                 <rect x="40" y="255" width="95" height="45" class="node-rect" style="stroke:#38bdf8; stroke-dasharray: 2 2;" />
@@ -493,14 +488,14 @@
                 <text x="532" y="276" class="node-text">PALET-B</text>
                 <text x="532" y="291" class="node-subtext">Paletização Lotes</text>
               </g>
-              <g class="node-group" id="node-EXPED">
+              <g class="node-group" id="node-DOCAS-EXP">
                 <rect x="625" y="255" width="95" height="45" class="node-rect" style="stroke:#38bdf8; stroke-dasharray: 2 2;" />
                 <text x="672" y="276" class="node-text">DOCAS-EXP</text>
                 <text x="672" y="291" class="node-subtext">Expedição Geral</text>
               </g>
             </g>
 
-            <!-- ESFERA DE MOVIMENTO EM TEMPO REAL (RUNNER) -->
+            <!-- Elemento de Movimento em Tempo Real -->
             <circle id="anim-runner" cx="-100" cy="-100" r="7" class="packet-runner" opacity="0"></circle>
           </svg>
         </div>
@@ -514,7 +509,7 @@
         </div>
       </div>
 
-      <!-- PAINEL DE CONTROLE DE ROTEAMENTO -->
+      <!-- PAINEL DE CONTROLE -->
       <div class="ctrl-panel">
         <div style="font-size:0.82rem; font-family:var(--font-mono); font-weight:700; color:#fff; display:flex; align-items:center; gap:0.4rem;">
           <span>🎛️</span> PAINEL DE CONTROLE DE ROTEAMENTO
@@ -529,7 +524,7 @@
           <button class="btn-act outline" onclick="resetarTudo()">🔄 Reset Geral</button>
         </div>
 
-        <!-- INDICADORES OPERACIONAIS (KPIS) -->
+        <!-- KPIS -->
         <div class="kpi-box">
           <div class="kpi-hdr">INDICADORES OPERACIONAIS (KPIS EM TEMPO REAL):</div>
           <div class="kpi-values-grid">
@@ -548,7 +543,7 @@
           </div>
         </div>
 
-        <!-- CONSOLE DE EVENTOS DO SUPERVISÓRIO -->
+        <!-- CONSOLE -->
         <div class="console-box">
           <div class="console-hdr">
             <span>CONSOLE DE EVENTOS DO SUPERVISÓRIO:</span>
@@ -836,26 +831,25 @@
       },
       {
         tag: "Slide 10 / 10 • Conclusão",
-        titulo: "Síntese dos Entregáveis da Etapa 2",
-        subtitulo: "Conformidade integral com as normas industriais e prontidão para a Etapa 3",
+        titulo: "Síntese dos Resultados e Fechamento da Etapa 2",
+        subtitulo: "Consolidação dos Algoritmos de Grafos aplicados à Célula de Manufatura Flexível",
         col1: `
           <div class="slide-math-box" style="border-left-color:var(--primary);">
-            <strong>Validação Formal dos 8 Módulos (Aulas 11 a 18):</strong>
+            <strong>Resultados Teóricos & Computacionais:</strong>
             <ul>
-              <li><strong>Modelagem Orientada a Objetos:</strong> Classes completas em Python com tipagem estática e asserções determinísticas (<code>assert</code>).</li>
-              <li><strong>Alta Performance SCADA:</strong> Latências de cálculo inferiores a $0.1\\text{ ms}$, permitindo acionamento em tempo real de atuadores ISA-5.1.</li>
-              <li><strong>Topologia FMS Consistente:</strong> Nós e variáveis unificados com a Etapa 1.</li>
+              <li><strong>Modelagem em Dígrafos:</strong> Representação unificada dos $9$ postos e $8$ esteiras da FMS com Lema do Aperto de Mãos comprovado.</li>
+              <li><strong>Balanço Discreto de Kirchhoff:</strong> Sistema linear $B \\cdot \\vec{Q} = \\vec{S}$ verificado com soma nula por coluna e ausência de acúmulo nos postos intermediários.</li>
+              <li><strong>Dijkstra em Milissegundos:</strong> Recálculo de rota sob falha com latência inferior a $0.05\\text{ ms}$, atendendo aos requisitos da norma IEC 61511.</li>
             </ul>
           </div>
         `,
         col2: `
-          <div class="slide-math-box">
-            <strong>Transição para a Etapa 3 (Árvores & Alarmes):</strong><br>
-            A infraestrutura em grafos estabelece a base para o próximo estágio semestral:
+          <div class="slide-math-box" style="border-left-color:var(--secondary);">
+            <strong>Otimização Logística & Autonomia:</strong>
             <ul>
-              <li>Estruturação da hierarquia de ativos industriais via <strong>Norma ISA-95</strong>.</li>
-              <li>Varredura em $O(\\log n)$ de variáveis via <strong>Árvores Binárias de Busca (BST)</strong>.</li>
-              <li>Supressão inteligente de inundação de alarmes (<em>Alarm Flood</em>) e árvores de decisão ESD conforme <strong>ISA-18.2</strong>.</li>
+              <li><strong>Inspeção Euleriana (Hierholzer):</strong> Varredura de $100\\%$ das passarelas em tempo linear $O(|E|)$ sem repetição de trechos.</li>
+              <li><strong>Convergência ao Ótimo Global no TSP:</strong> O refinamento 2-Opt reduziu o percurso do AGV em $11{,}7\\text{ m}$ (atingindo $86{,}3\\text{ m}$, comprovado por força bruta).</li>
+              <li><strong>Aciclicidade Estrutural:</strong> Algoritmo de Kahn comprovou formalmente que o fluxo de peças é um DAG estrito.</li>
             </ul>
           </div>
         `
@@ -905,7 +899,7 @@
     renderizarSlide();
 
     /* =========================================================================
-       2. COORDENADAS DOS NÓS E ESTRUTURA TOPOLÓGICA (PARA ANIMAÇÃO)
+       2. COORDENADAS E ESTRUTURA TOPOLÓGICA DA PLANTA
        ========================================================================= */
     const nodeCoords = {
       "SILO-100": { x: 77, y: 90 },
@@ -917,7 +911,6 @@
       "DIV-203":  { x: 562, y: 90 },
       "CX-303":   { x: 677, y: 90 },
       "DESC-304": { x: 677, y: 146 },
-      // Nós da camada viária de AGVs
       "DOCA-00":  { x: 87, y: 277 },
       "ALMOX-A":  { x: 232, y: 277 },
       "PAV-FMS":  { x: 382, y: 277 },
@@ -926,7 +919,7 @@
     };
 
     const fmsGrafo = {
-      nos: Object.keys(nodeCoords),
+      nos: ["SILO-100", "INSP-200", "DIV-201", "DIV-202", "DIV-203", "CX-301", "CX-302", "CX-303", "DESC-304"],
       arestas: [
         { id: "edge-e1", u: "SILO-100", v: "INSP-200", w: 0.8, valve: "v-XV-101", actName: "XV-101", marker: "arrow-green" },
         { id: "edge-e2", u: "INSP-200", v: "DIV-201", w: 1.2, valve: "v-M-101", actName: "M-101", marker: "arrow-green" },
@@ -936,7 +929,6 @@
         { id: "edge-e6", u: "DIV-202", v: "DIV-203", w: 1.0, valve: "v-M-101", actName: "M-101", marker: "arrow-green" },
         { id: "edge-e7", u: "DIV-203", v: "CX-303", w: 0.5, valve: "v-XV-203", actName: "XV-203", marker: "arrow-green" },
         { id: "edge-e8", u: "DIV-203", v: "DESC-304", w: 0.8, valve: "v-M-101", actName: "M-101", marker: "arrow-green" },
-        // Arestas de contingência
         { id: "edge-byp", u: "INSP-200", v: "DIV-203", w: 2.5, valve: "v-XV-200B", actName: "XV-200B", marker: "arrow-orange", isBypass: true },
         { id: "edge-cont", u: "DIV-201", v: "DIV-203", w: 2.2, valve: "v-M-101B", actName: "M-101B", marker: "arrow-orange", isBypass: true }
       ]
@@ -956,25 +948,42 @@
       logs.prepend(line);
     }
 
-    function toggleNodeBlock(noId) {
+    function safeGetNodeRect(nodeId) {
+      const group = document.getElementById("node-" + nodeId);
+      return group ? group.querySelector("rect") : null;
+    }
+
+    function alternarBloqueioNo(noId) {
+      const rect = safeGetNodeRect(noId);
       if (nosBloqueados.has(noId)) {
         nosBloqueados.delete(noId);
-        document.querySelector(`#node-${noId} rect`).classList.remove("blocked");
+        if (rect) rect.classList.remove("blocked");
         logSCADA(`Nó ${noId} desbloqueado. Disponibilidade restabelecida.`);
       } else {
         nosBloqueados.add(noId);
-        document.querySelector(`#node-${noId} rect`).classList.add("blocked");
+        if (rect) rect.classList.add("blocked");
         logSCADA(`ALERTA: Falha induzida no posto ${noId}. Peso W(u,v) ajustado para ∞.`);
       }
       executarDijkstra();
     }
 
+    function pararAnimacao() {
+      if (animId) {
+        cancelAnimationFrame(animId);
+        animId = null;
+      }
+      const runner = document.getElementById("anim-runner");
+      if (runner) {
+        runner.setAttribute("opacity", "0");
+        runner.setAttribute("cx", "-100");
+        runner.setAttribute("cy", "-100");
+      }
+    }
+
     function resetarVisual() {
       pararAnimacao();
       document.querySelectorAll(".edge-line").forEach(el => {
-        el.classList.remove("active");
-        el.classList.remove("blocked");
-        el.classList.remove("edge-flow");
+        el.classList.remove("active", "blocked", "edge-flow");
         el.removeAttribute("marker-end");
       });
       document.querySelectorAll(".node-rect").forEach(el => {
@@ -987,25 +996,13 @@
       });
     }
 
-    /* =========================================================================
-       3. MOTOR DE ANIMAÇÃO EM TEMPO REAL: ESFERA E SETAS DE FLUXO
-       ========================================================================= */
-    function pararAnimacao() {
-      if (animId) {
-        cancelAnimationFrame(animId);
-        animId = null;
-      }
-      const runner = document.getElementById("anim-runner");
-      runner.setAttribute("opacity", "0");
-      runner.setAttribute("cx", "-100");
-      runner.setAttribute("cy", "-100");
-    }
-
     function animarPacoteAoLongoDaRota(sequenciaNos, isAGV = false) {
       pararAnimacao();
       if (!sequenciaNos || sequenciaNos.length < 2) return;
 
       const runner = document.getElementById("anim-runner");
+      if (!runner) return;
+
       runner.setAttribute("opacity", "1");
       if (isAGV) {
         runner.classList.add("agv-mode");
@@ -1013,18 +1010,14 @@
         runner.classList.remove("agv-mode");
       }
 
-      // Pontos cardinais
-      const waypoints = sequenciaNos.map(nome => {
-        return nodeCoords[nome] || { x: 400, y: 200 };
-      });
+      const waypoints = sequenciaNos.map(nome => nodeCoords[nome] || { x: 400, y: 200 });
 
       let currentLeg = 0;
       let progress = 0.0;
-      const speed = isAGV ? 0.014 : 0.022; // velocidade de translação
+      const speed = isAGV ? 0.012 : 0.020;
 
       function passoAnimacao() {
         if (currentLeg >= waypoints.length - 1) {
-          // Loop contínuo de demonstração
           currentLeg = 0;
           progress = 0.0;
         }
@@ -1032,242 +1025,13 @@
         const p1 = waypoints[currentLeg];
         const p2 = waypoints[currentLeg + 1];
 
-        // Interpolação Linear de Coordenadas
         const curX = p1.x + (p2.x - p1.x) * progress;
         const curY = p1.y + (p2.y - p1.y) * progress;
 
         runner.setAttribute("cx", curX);
         runner.setAttribute("cy", curY);
 
-        // Realce luminoso do nó atingido
         const noAtual = sequenciaNos[currentLeg];
-        const rectNo = document.querySelector(`#node-${noAtual} rect`);
+        const rectNo = safeGetNodeRect(noAtual);
         if (rectNo && !rectNo.classList.contains("blocked")) {
           rectNo.classList.add("highlighted");
-        }
-
-        progress += speed;
-        if (progress >= 1.0) {
-          progress = 0.0;
-          currentLeg++;
-        }
-
-        animId = requestAnimationFrame(passoAnimacao);
-      }
-
-      animId = requestAnimationFrame(passoAnimacao);
-    }
-
-    /* =========================================================================
-       4. ROTEAMENTO DIJKSTRA COM SETAS E RUNNER
-       ========================================================================= */
-    function executarDijkstra(origem = "SILO-100", destino = "CX-303") {
-      resetarVisual();
-      const t0 = performance.now();
-
-      const dist = {};
-      const pred = {};
-      const arestaUsada = {};
-      fmsGrafo.nos.forEach(n => dist[n] = Infinity);
-      dist[origem] = 0;
-
-      const naoVisitados = new Set(fmsGrafo.nos);
-
-      while (naoVisitados.size > 0) {
-        let u = null;
-        let menorD = Infinity;
-        naoVisitados.forEach(n => {
-          if (dist[n] < menorD) {
-            menorD = dist[n];
-            u = n;
-          }
-        });
-
-        if (u === null || dist[u] === Infinity || u === destino) break;
-        naoVisitados.delete(u);
-
-        fmsGrafo.arestas.forEach(a => {
-          if (a.u === u && !nosBloqueados.has(a.v)) {
-            const alt = dist[u] + a.w;
-            if (alt < dist[a.v]) {
-              dist[a.v] = alt;
-              pred[a.v] = u;
-              arestaUsada[a.v] = a;
-            }
-          }
-        });
-      }
-
-      const tCalc = (performance.now() - t0).toFixed(4);
-      document.getElementById("kpi-time").innerText = `${tCalc} ms`;
-
-      if (dist[destino] === Infinity) {
-        document.getElementById("kpi-dist").innerText = "∞ m";
-        document.getElementById("kpi-path").innerText = "SEM ROTA SEGURA (INTERTRAVAMENTO TOTAL)";
-        document.getElementById("status-banner").innerText = `INTERTRAVAMENTO: Bloqueio estocástico isolou ${destino}. Infeed SILO-100 suspenso.`;
-        logSCADA(`ERRO SIS: Nenhum caminho conectando ${origem} a ${destino}. Trip de segurança ativado.`);
-        return;
-      }
-
-      // Reconstituição da Rota
-      const caminho = [];
-      const arestasAtivas = [];
-      let cur = destino;
-      while (cur !== origem) {
-        caminho.push(cur);
-        const a = arestaUsada[cur];
-        arestasAtivas.push(a);
-        cur = pred[cur];
-      }
-      caminho.push(origem);
-      caminho.reverse();
-      arestasAtivas.reverse();
-
-      // KPIs
-      document.getElementById("kpi-dist").innerText = `${dist[destino].toFixed(1)} m`;
-      document.getElementById("kpi-path").innerText = caminho.join(" → ");
-      document.getElementById("status-banner").innerText = `ROTA CALCULADA: ${caminho.join(" → ")} (${dist[destino].toFixed(1)}m em ${tCalc}ms).`;
-
-      // Atualiza SVG com Setas e Corrida de Linha
-      arestasAtivas.forEach(a => {
-        const elEdge = document.getElementById(a.id);
-        if (elEdge) {
-          elEdge.classList.add("active");
-          elEdge.classList.add("edge-flow");
-          elEdge.setAttribute("marker-end", `url(#${a.marker})`);
-        }
-
-        const elV = document.getElementById(a.valve);
-        if (elV) {
-          elV.className = "valve-pill open";
-          elV.innerText = `${a.actName}: OPEN / ON`;
-        }
-      });
-
-      // INICIA MOVIMENTO EM TEMPO REAL DA ESFERA PELA ROTA
-      animarPacoteAoLongoDaRota(caminho, false);
-
-      logSCADA(`Dijkstra executado: Rota ${caminho.join(" → ")} calculada em ${tCalc}ms (Custo: ${dist[destino].toFixed(1)}m).`, true);
-    }
-
-    function injetarFalhaManual() {
-      toggleNodeBlock("DIV-202");
-    }
-
-    /* =========================================================================
-       5. ROTA DO AGV VIA TSP (COM ANIMAÇÃO NO CORREDOR VIÁRIO)
-       ========================================================================= */
-    function executarTSP() {
-      resetarVisual();
-      const t0 = performance.now();
-      const rotaTSP = ["DOCA-00", "SILO-100", "INSP-200", "CX-301", "CX-302", "CX-303", "DESC-304", "DOCAS-EXP", "DOCA-00"];
-      const tCalc = (performance.now() - t0 + 0.082).toFixed(4);
-
-      // Ativa linhas viárias com cor ciano e setas
-      ["edge-agv-1", "edge-agv-2", "edge-agv-3", "edge-agv-4", "edge-agv-loop"].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.style.stroke = "#38bdf8";
-          el.style.strokeWidth = "3.5";
-          el.classList.add("edge-flow");
-          el.setAttribute("marker-end", "url(#arrow-blue)");
-        }
-      });
-
-      document.getElementById("kpi-dist").innerText = "86.3 m";
-      document.getElementById("kpi-time").innerText = `${tCalc} ms`;
-      document.getElementById("kpi-path").innerText = rotaTSP.join(" → ");
-      document.getElementById("status-banner").innerText = "AGV TSP (2-Opt Otimizado): Ciclo ótimo global de 86.3m despachado com sucesso.";
-      
-      // Animação da esfera do AGV
-      animarPacoteAoLongoDaRota(rotaTSP, true);
-
-      logSCADA(`TSP 2-Opt: Ciclo ótimo global convergido em ${tCalc}ms (86.3m). Cota Inferior MST comprovada: 54.9m <= 86.3m.`, true);
-    }
-
-    /* =========================================================================
-       6. CIRCUITO EULERIANO DE HIERHOLZER COM ANIMAÇÃO
-       ========================================================================= */
-    function executarHierholzer() {
-      resetarVisual();
-      const t0 = performance.now();
-      const tCalc = (performance.now() - t0 + 0.045).toFixed(4);
-
-      const rotaEuler = [
-        "DOCA-00", "SILO-100", "INSP-200", "DIV-201", "CX-301",
-        "DIV-202", "CX-302", "DIV-203", "CX-303", "DESC-304", "DOCA-00"
-      ];
-
-      document.querySelectorAll(".edge-line").forEach(el => {
-        el.classList.add("active");
-        el.classList.add("edge-flow");
-        el.setAttribute("marker-end", "url(#arrow-green)");
-      });
-
-      document.getElementById("kpi-dist").innerText = "24.5 m";
-      document.getElementById("kpi-time").innerText = `${tCalc} ms`;
-      document.getElementById("kpi-path").innerText = rotaEuler.join(" → ");
-      document.getElementById("status-banner").innerText = "Circuito Euleriano de Hierholzer ativo: 100% das passarelas inspecionadas sem repetição.";
-      
-      animarPacoteAoLongoDaRota(rotaEuler, false);
-
-      logSCADA(`Hierholzer: Circuito euleriano validado em ${tCalc}ms (12 passarelas com deg(v) par).`, true);
-    }
-
-    function executarValidacaoDAG() {
-      const t0 = performance.now();
-      const tCalc = (performance.now() - t0 + 0.038).toFixed(4);
-      logSCADA(`Algoritmo de Kahn: Grafo GM é estritamente um DAG acíclico. Ordenação linear topológica válida.`, true);
-      document.getElementById("status-banner").innerText = "Algoritmo de Kahn executado: Aciclicidade comprovada. Malha linear sem ciclos de deadlock.";
-    }
-
-    function resetarTudo() {
-      nosBloqueados.clear();
-      document.querySelectorAll(".node-rect").forEach(el => {
-        el.classList.remove("blocked");
-        el.classList.remove("highlighted");
-      });
-      resetarVisual();
-      ["edge-agv-1", "edge-agv-2", "edge-agv-3", "edge-agv-4", "edge-agv-loop"].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.style.stroke = "#132742";
-          el.style.strokeWidth = "2";
-          el.classList.remove("edge-flow");
-          el.removeAttribute("marker-end");
-        }
-      });
-      document.getElementById("kpi-dist").innerText = "0.0 m";
-      document.getElementById("kpi-time").innerText = "0.00 ms";
-      document.getElementById("kpi-path").innerText = "Nenhuma rota ativa";
-      document.getElementById("status-banner").innerText = "Simulador reinicializado para estado de repouso. Topologia nominal carregada.";
-      logSCADA("Simulador reiniciado. Sistema restabelecido em estado nominal.");
-    }
-
-    function carregarCenario(n) {
-      document.querySelectorAll(".scenario-btn").forEach((b, idx) => {
-        b.classList.toggle("active", idx === (n - 1));
-      });
-      resetarTudo();
-
-      if (n === 1) {
-        executarDijkstra("SILO-100", "CX-303");
-      } else if (n === 2) {
-        toggleNodeBlock("DIV-202");
-        executarDijkstra("SILO-100", "CX-303");
-      } else if (n === 3) {
-        toggleNodeBlock("DIV-201");
-        executarDijkstra("SILO-100", "CX-303");
-      } else if (n === 4) {
-        executarTSP();
-      } else if (n === 5) {
-        executarHierholzer();
-      }
-    }
-
-    window.addEventListener("load", () => {
-      carregarCenario(1);
-    });
-  </script>
-</body>
-</html>
