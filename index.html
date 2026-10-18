@@ -10,20 +10,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- MathJax Configurado com Carregamento Seguro e Delimitadores Claros -->
-  <script>
-    window.MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$', '$$'], ['\\[', '\\]']]
-      },
-      options: {
-        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      }
-    };
-  </script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
   <style>
     :root {
       --bg-dark: #030812;
@@ -92,7 +78,7 @@
 
     .container-wide { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
 
-    /* SLIDES WRAPPER */
+    /* SLIDES */
     .slides-wrapper {
       background: var(--bg-card); border: 1px solid var(--border-dim);
       border-radius: 10px; margin-bottom: 2rem; overflow: hidden;
@@ -141,7 +127,8 @@
       padding: 0.6rem 0.5rem;
       background: rgba(16, 185, 129, 0.05);
       border-radius: 4px;
-      border: 1px dashed rgba(16, 185, 129, 0.2);
+      border: 1px dashed rgba(16, 185, 129, 0.25);
+      letter-spacing: 0.02em;
     }
     .math-desc {
       font-size: 0.88rem; color: #cbd5e1; line-height: 1.55; margin-top: 0.5rem;
@@ -214,7 +201,7 @@
       stroke: #f59e0b !important; stroke-width: 3.5 !important; stroke-dasharray: none;
       filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.8));
     }
-    .edge-line.blocked { stroke: var(--danger); stroke-width: 3; stroke-dasharray: 4 4; }
+    .edge-line.blocked { stroke: var(--danger) !important; stroke-width: 3 !important; stroke-dasharray: 4 4; }
 
     .edge-flow {
       stroke-dasharray: 8 6;
@@ -351,7 +338,9 @@
         </div>
       </div>
 
-      <div class="slide-body" id="slide-body-viewport"></div>
+      <div class="slide-body" id="slide-body-viewport">
+        <!-- Renderizado de forma síncrona sem falha -->
+      </div>
 
       <div style="background:#020610; padding:0.65rem 1.5rem; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-dim);">
         <div class="dots-nav" id="dots-container"></div>
@@ -824,321 +813,4 @@
         col1: `
           <div class="slide-math-box">
             <span class="math-title">Problema do Caixeiro-Viajante (TSP):</span>
-            Busca o Ciclo Hamiltoniano de menor custo que visita todos os postos de parada:
-            <div class="math-display">min ∑ d(v<sub>π(i)</sub>, v<sub>π(i+1)</sub>)</div>
-            <p class="math-desc">
-              Por ser um problema NP-difícil, combinamos a heurística construtiva do Vizinho Mais Próximo com a busca local <strong>2-Opt</strong> para eliminar cruzamentos planares.
-            </p>
-          </div>
-        `,
-        col2: `
-          <table class="slide-table">
-            <thead>
-              <tr><th>Algoritmo</th><th>Distância Total</th><th>Complexidade</th><th>Diagnóstico</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>Vizinho Mais Próximo (NN)</td><td>98.0 m</td><td>O(n²)</td><td>Salto Longo Final</td></tr>
-              <tr><td><strong>Refinamento 2-Opt (Croes)</strong></td><td><strong>86.3 m</strong></td><td>O(n³)</td><td><strong>Descruzamento (-11.7m)</strong></td></tr>
-              <tr><td>Força Bruta (720 permutações)</td><td>86.3 m</td><td>O((n-1)!)</td><td>Ótimo Global Confirmado</td></tr>
-              <tr><td>Cota Inferior MST (Prim)</td><td>54.9 m</td><td>O(|E| log |V|)</td><td>Limite Teórico Válido</td></tr>
-            </tbody>
-          </table>
-        `
-      },
-      {
-        tag: "Slide 09 / 10 • Aula 18",
-        titulo: "Redes Multicamada e Logística de Suprimentos",
-        subtitulo: "Segregação formal: Fluxo de Materiais (DAG) vs. Circulação Viária de Veículos",
-        col1: `
-          <div class="slide-math-box">
-            <span class="math-title">Estrutura Multicamada (Multilayer):</span>
-            Evita o acoplamento errôneo entre esteiras e veículos viários:
-            <div class="math-display">M = ({G<sub>M</sub>, G<sub>V</sub>}, {V<sub>M</sub>, V<sub>V</sub>}, E<sub>MV</sub>)</div>
-            <p class="math-desc">
-              <strong>G<sub>M</sub> (Materiais):</strong> Mapeia da portaria ao estoque WMS (25 nós). É estritamente um DAG auditável pelo <strong>Algoritmo de Kahn</strong>.<br>
-              <strong>G<sub>V</sub> (Veículos):</strong> Circulação viária contendo ciclos fechados de tráfego.
-            </p>
-          </div>
-        `,
-        col2: `
-          <table class="slide-table">
-            <thead>
-              <tr><th>Insumo / Fluxo</th><th>Origem → Destino</th><th>Distância</th><th>Classificação</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>Tarugos Vermelhos</td><td>Box Galpão A → Docas Exp.</td><td>134.0 m</td><td>Fluxo G<sub>M</sub> (Processo FMS)</td></tr>
-              <tr><td>Caixas e Embalagens</td><td>Box Galpão A → Paletizadora</td><td>74.0 m</td><td>Fluxo G<sub>M</sub> (Consumo Direto)</td></tr>
-              <tr><td>Caminhão Rodoviário</td><td>Portaria → Balança → Portaria</td><td>85.0 m</td><td>Circulação G<sub>V</sub> (Anel Fechado)</td></tr>
-            </tbody>
-          </table>
-        `
-      },
-      {
-        tag: "Slide 10 / 10 • Conclusão",
-        titulo: "Síntese dos Resultados e Fechamento da Etapa 2",
-        subtitulo: "Consolidação dos Algoritmos de Grafos aplicados à Célula de Manufatura Flexível",
-        col1: `
-          <div class="slide-math-box" style="border-left-color:var(--primary);">
-            <span class="math-title" style="color:#34d399;">Resultados Teóricos & Computacionais:</span>
-            <ul style="margin-top:0.5rem; padding-left:1.2rem; font-size:0.88rem; color:#cbd5e1; line-height:1.6;">
-              <li><strong>Modelagem em Dígrafos:</strong> Representação unificada dos 9 postos e 8 esteiras com Lema do Aperto de Mãos comprovado.</li>
-              <li><strong>Balanço de Kirchhoff:</strong> Equação linear B · Q&#770; = S&#770; validada com soma nula por coluna e ausência de acúmulo intermediário.</li>
-              <li><strong>Dijkstra em Milissegundos:</strong> Recálculo dinâmico sob falha com latência &lt; 0.05 ms, atendendo aos requisitos da IEC 61511.</li>
-            </ul>
-          </div>
-        `,
-        col2: `
-          <div class="slide-math-box" style="border-left-color:var(--secondary);">
-            <span class="math-title" style="color:#38bdf8;">Otimização Logística & Autonomia:</span>
-            <ul style="margin-top:0.5rem; padding-left:1.2rem; font-size:0.88rem; color:#cbd5e1; line-height:1.6;">
-              <li><strong>Inspeção Euleriana (Hierholzer):</strong> Varredura de 100% das passarelas em tempo linear O(|E|) sem repetição de trechos.</li>
-              <li><strong>Convergência no TSP:</strong> O 2-Opt reduziu o trajeto do AGV em 11.7 m (atingindo 86.3 m, comprovado ótimo por força bruta).</li>
-              <li><strong>Aciclicidade Estrutural:</strong> Algoritmo de Kahn comprovou formalmente que o fluxo de peças é um DAG estrito.</li>
-            </ul>
-          </div>
-        `
-      }
-    ];
-
-    let slideIdx = 0;
-
-    window.renderizarSlide = function() {
-      const data = slidesData[slideIdx];
-      const view = document.getElementById("slide-body-viewport");
-      const counter = document.getElementById("slide-hdr-counter");
-      if (counter) counter.innerText = data.tag;
-
-      if (view) {
-        view.innerHTML = `
-          <div class="slide-header-content">
-            <h2>${data.titulo}</h2>
-            <p class="subtitle">${data.subtitulo}</p>
-          </div>
-          <div class="slide-grid-2">
-            <div>${data.col1}</div>
-            <div>${data.col2}</div>
-          </div>
-        `;
-      }
-
-      const dotsCont = document.getElementById("dots-container");
-      if (dotsCont) {
-        dotsCont.innerHTML = "";
-        slidesData.forEach((_, i) => {
-          const d = document.createElement("div");
-          d.className = "dot" + (i === slideIdx ? " active" : "");
-          d.onclick = () => { slideIdx = i; window.renderizarSlide(); };
-          dotsCont.appendChild(d);
-        });
-      }
-
-      try {
-        if (window.MathJax && typeof MathJax.typesetPromise === "function") {
-          MathJax.typesetPromise();
-        }
-      } catch (e) {}
-    };
-
-    window.trocarSlide = function(delta) {
-      slideIdx += delta;
-      if (slideIdx < 0) slideIdx = 0;
-      if (slideIdx >= slidesData.length) slideIdx = slidesData.length - 1;
-      window.renderizarSlide();
-    };
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") window.trocarSlide(-1);
-      if (e.key === "ArrowRight") window.trocarSlide(1);
-    });
-
-    /* =========================================================================
-       2. COORDENADAS E ESTRUTURA TOPOLÓGICA DA PLANTA
-       ========================================================================= */
-    const nodeCoords = {
-      "SILO-100": { x: 77, y: 90 },
-      "INSP-200": { x: 192, y: 90 },
-      "DIV-201":  { x: 302, y: 90 },
-      "CX-301":   { x: 392, y: 36 },
-      "DIV-202":  { x: 432, y: 90 },
-      "CX-302":   { x: 522, y: 36 },
-      "DIV-203":  { x: 562, y: 90 },
-      "CX-303":   { x: 677, y: 90 },
-      "DESC-304": { x: 677, y: 146 },
-      "DOCA-00":  { x: 87, y: 277 },
-      "ALMOX-A":  { x: 232, y: 277 },
-      "PAV-FMS":  { x: 382, y: 277 },
-      "PALET-B":  { x: 532, y: 277 },
-      "DOCAS-EXP":{ x: 672, y: 277 }
-    };
-
-    const fmsGrafo = {
-      nos: ["SILO-100", "INSP-200", "DIV-201", "DIV-202", "DIV-203", "CX-301", "CX-302", "CX-303", "DESC-304"],
-      arestas: [
-        { id: "edge-e1", u: "SILO-100", v: "INSP-200", w: 0.8, valve: "v-XV-101", actName: "XV-101", marker: "arrow-green" },
-        { id: "edge-e2", u: "INSP-200", v: "DIV-201", w: 1.2, valve: "v-M-101", actName: "M-101", marker: "arrow-green" },
-        { id: "edge-e3", u: "DIV-201", v: "CX-301", w: 0.5, valve: "v-XV-201", actName: "XV-201", marker: "arrow-green" },
-        { id: "edge-e4", u: "DIV-201", v: "DIV-202", w: 1.0, valve: "v-M-101", actName: "M-101", marker: "arrow-green" },
-        { id: "edge-e5", u: "DIV-202", v: "CX-302", w: 0.5, valve: "v-XV-202", actName: "XV-202", marker: "arrow-green" },
-        { id: "edge-e6", u: "DIV-202", v: "DIV-203", w: 1.0, valve: "v-M-101", actName: "M-101", marker: "arrow-green" },
-        { id: "edge-e7", u: "DIV-203", v: "CX-303", w: 0.5, valve: "v-XV-203", actName: "XV-203", marker: "arrow-green" },
-        { id: "edge-e8", u: "DIV-203", v: "DESC-304", w: 0.8, valve: "v-M-101", actName: "M-101", marker: "arrow-green" },
-        { id: "edge-byp", u: "INSP-200", v: "DIV-203", w: 2.5, valve: "v-XV-200B", actName: "XV-200B", marker: "arrow-orange", isBypass: true },
-        { id: "edge-cont", u: "DIV-201", v: "DIV-203", w: 2.2, valve: "v-M-101B", actName: "M-101B", marker: "arrow-orange", isBypass: true }
-      ]
-    };
-
-    let nosBloqueados = new Set();
-    let animId = null;
-
-    window.logSCADA = function(msg, highlight = false) {
-      const logs = document.getElementById("console-logs");
-      if (!logs) return;
-      const d = new Date();
-      const ts = `[${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}]`;
-      const line = document.createElement("div");
-      line.className = "console-line";
-      line.innerHTML = `<span class="ts">${ts}</span> ${msg}`;
-      if (highlight) line.style.color = "#34d399";
-      logs.prepend(line);
-    };
-
-    function safeGetNodeRect(nodeId) {
-      const group = document.getElementById("node-" + nodeId);
-      return group ? group.querySelector("rect") : null;
-    }
-
-    window.alternarBloqueioNo = function(noId) {
-      const rect = safeGetNodeRect(noId);
-      if (nosBloqueados.has(noId)) {
-        nosBloqueados.delete(noId);
-        if (rect) rect.classList.remove("blocked");
-        window.logSCADA(`Nó ${noId} desbloqueado. Disponibilidade restabelecida.`);
-      } else {
-        nosBloqueados.add(noId);
-        if (rect) rect.classList.add("blocked");
-        window.logSCADA(`ALERTA: Falha induzida no posto ${noId}. Peso W(u,v) ajustado para ∞.`);
-      }
-      window.executarDijkstra();
-    };
-
-    function pararAnimacao() {
-      if (animId) {
-        cancelAnimationFrame(animId);
-        animId = null;
-      }
-      const runner = document.getElementById("anim-runner");
-      if (runner) {
-        runner.setAttribute("opacity", "0");
-        runner.setAttribute("cx", "-100");
-        runner.setAttribute("cy", "-100");
-      }
-    }
-
-    function resetarVisual() {
-      pararAnimacao();
-      document.querySelectorAll(".edge-line").forEach(el => {
-        el.classList.remove("active", "blocked", "edge-flow");
-        el.removeAttribute("marker-end");
-      });
-      document.querySelectorAll(".node-rect").forEach(el => {
-        el.classList.remove("highlighted");
-      });
-      document.querySelectorAll(".valve-pill").forEach(el => {
-        el.className = "valve-pill closed";
-        const txt = el.innerText.split(":")[0];
-        el.innerText = `${txt}: CLOSED`;
-      });
-    }
-
-    function animarPacoteAoLongoDaRota(sequenciaNos, isAGV = false) {
-      pararAnimacao();
-      if (!sequenciaNos || sequenciaNos.length < 2) return;
-
-      const runner = document.getElementById("anim-runner");
-      if (!runner) return;
-
-      runner.setAttribute("opacity", "1");
-      if (isAGV) {
-        runner.classList.add("agv-mode");
-      } else {
-        runner.classList.remove("agv-mode");
-      }
-
-      const waypoints = sequenciaNos.map(nome => nodeCoords[nome] || { x: 400, y: 200 });
-
-      let currentLeg = 0;
-      let progress = 0.0;
-      const speed = isAGV ? 0.012 : 0.020;
-
-      function passoAnimacao() {
-        if (currentLeg >= waypoints.length - 1) {
-          currentLeg = 0;
-          progress = 0.0;
-        }
-
-        const p1 = waypoints[currentLeg];
-        const p2 = waypoints[currentLeg + 1];
-
-        const curX = p1.x + (p2.x - p1.x) * progress;
-        const curY = p1.y + (p2.y - p1.y) * progress;
-
-        runner.setAttribute("cx", curX);
-        runner.setAttribute("cy", curY);
-
-        const noAtual = sequenciaNos[currentLeg];
-        const rectNo = safeGetNodeRect(noAtual);
-        if (rectNo && !rectNo.classList.contains("blocked")) {
-          rectNo.classList.add("highlighted");
-        }
-
-        progress += speed;
-        if (progress >= 1.0) {
-          progress = 0.0;
-          currentLeg++;
-        }
-
-        animId = requestAnimationFrame(passoAnimacao);
-      }
-
-      animId = requestAnimationFrame(passoAnimacao);
-    }
-
-    window.executarDijkstra = function(origem = "SILO-100", destino = "CX-303") {
-      resetarVisual();
-      const t0 = performance.now();
-
-      const dist = {};
-      const pred = {};
-      const arestaUsada = {};
-      fmsGrafo.nos.forEach(n => dist[n] = Infinity);
-      dist[origem] = 0;
-
-      const naoVisitados = new Set(fmsGrafo.nos);
-
-      while (naoVisitados.size > 0) {
-        let u = null;
-        let menorD = Infinity;
-        naoVisitados.forEach(n => {
-          if (dist[n] < menorD) {
-            menorD = dist[n];
-            u = n;
-          }
-        });
-
-        if (u === null || dist[u] === Infinity || u === destino) break;
-        naoVisitados.delete(u);
-
-        fmsGrafo.arestas.forEach(a => {
-          if (a.u === u && !nosBloqueados.has(a.v) && !nosBloqueados.has(a.u)) {
-            const alt = dist[u] + a.w;
-            if (alt < dist[a.v]) {
-              dist[a.v] = alt;
-              pred[a.v] = u;
-              arestaUsada[a.v] = a;
-            }
-          }
-        });
-      }
-
-      const tCalc = (performance.now() - t0).toFixed(4);
-      const kpiTime = document.getElementById("kpi-time");
+            Busca o Ciclo Hamiltoniano de menor custo que
