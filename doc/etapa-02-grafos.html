@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Etapa 02: Teoria dos Grafos & Roteamento Logístico | FMS</title>
+  <link rel="icon" type="image/x-icon" href="https://transparencia.unifei.edu.br/wp-content/uploads/2023/09/cropped-simbolo_RGB-32x32.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/styles.css">
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['[', ']']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div style="display:flex; align-items:center; gap:0.75rem;">
+        <span class="badge-etapa" style="line-height:1.1;">ETAPA<br>02</span>
+        <div style="color:#ffffff; font-weight:700; font-size:1rem; line-height:1.2;">SCADA-Core<br><span style="font-weight:400; font-size:0.8rem; color:var(--text-muted);">Automática</span></div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Início</a></li>
+        <li><a href="etapa-01-logica.html">⚡ Etapa 01: Lógica</a></li>
+        <li><a href="etapa-02-grafos.html" class="active">🕸️ Etapa 02: Grafos</a></li>
+        <li><a href="#apresentacao">📽️ Apresentação (10 Slides)</a></li>
+        <li><a href="#emulador">🎛️ Emulador Logístico</a></li>
+        <li><a href="https://github.com/d005810/ECAA08-Manufatura-Flexivel" target="_blank">🐙 GitHub & 5W2H</a></li>
+      </ul>
+      <div class="nav-controls">
+        <button id="theme-toggle" class="theme-toggle-btn" title="Alternar Tema">☀️</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <span class="tagline">ENGENHARIA DE CONTROLE & AUTOMAÇÃO • ECAA08 2026.2</span>
+    <h1>Etapa 02: Teoria dos Grafos & Roteamento Logístico</h1>
+    <p>
+      Memorial descritivo das Aulas 11 a 18, apresentação executiva interativa em 10 slides e emulador SCADA-Graph com GUI em tempo real para modelagem de esteiras transportadoras, desvio dinâmico de falhas pneumáticas, inspeção autônoma e logística de suprimentos na Célula de Manufatura Flexível (FMS).
+    </p>
+
+    <div class="meta-grid">
+      <div>🧑‍🏫 <strong>Docente:</strong> Controle & Automação</div>
+      <div>📐 <strong>Fundamentos:</strong> Dígrafos Ponderados, Matrizes $B$, $A$, Dijkstra, Euler, Hamilton/TSP e DAGs</div>
+      <div>🏭 <strong>Planta Modelo:</strong> Célula de Manufatura Flexível (FMS) • Setores 100, 200 e 300</div>
+      <div>🎯 <strong>Escopo:</strong> Aulas 11 a 18 (Módulo 2)</div>
+    </div>
+
+    <div class="btn-group">
+      <a href="#apresentacao" class="btn btn-green">📽️ Ver Apresentação (10 Slides)</a>
+      <a href="#emulador" class="btn btn-blue">🎛️ Abrir Emulador SCADA-Graph</a>
+      <a href="https://github.com/d005810/ECAA08-Manufatura-Flexivel/tree/main/etapa-02-grafos" target="_blank" class="btn btn-dark">📖 Consultar Memorial Aulas 11 a 18</a>
+    </div>
+  </header>
+
+  <!-- MENSAGEM PEDAGÓGICA -->
+  <div class="callout" style="max-width:1250px; margin:1.5rem auto 3rem; padding:0 1.5rem;">
+    <div class="callout-box">
+      <div class="callout-title">👨‍🏫 Mensagem Pedagógica: Por que Teoria dos Grafos no Controle & Automação?</div>
+      <p>
+        "Caros engenheiros em formação: na operação de uma célula de manufatura automatizada de alta cadência, não basta apenas tratar sensores e atuadores discretos de forma isolada. A malha física de transporte — composta por esteiras motorizadas, desvios pneumáticos rápidos (cilindros de duplo efeito) e frotas de robôs autônomos (AGVs) — forma uma rede intrincada de fluxos e decisões. A Teoria dos Grafos fornece o rigor matemático necessário para modelar essa infraestrutura: com ela, resolvemos desde o <strong>balanço de fluxo contínuo ($B \cdot \vec{Q} = \vec{S}$)</strong> e o <strong>desvio autônomo sob falha mecânica em milissegundos via Algoritmo de Dijkstra</strong>, até a <strong>inspeção preventiva sem repetição (Circuitos Eulerianos)</strong> e a <strong>coordenação logística global por Grafos Acíclicos Dirigidos (DAGs)</strong>."
+      </p>
+    </div>
+  </div>
+
+  <!-- WORKSPACE -->
+  <main class="workspace">
+
+    <!-- SEÇÃO SLIDES -->
+    <section id="apresentacao" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">📽️ Apresentação Executiva da Etapa 2</div>
+        <span id="slide-counter" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--primary);">Slide 1 de 10</span>
+      </div>
+
+      <div class="slide-viewer" id="slide-content"></div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <button class="btn btn-dark" onclick="mudarSlide(-1)">◀ Anterior</button>
+        <button class="btn btn-green" onclick="mudarSlide(1)">Próximo ▶</button>
+      </div>
+    </section>
+
+    <!-- EMULADOR SCADA-GRAPH -->
+    <section id="emulador" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">🎛️ Emulador SCADA-Graph da FMS (Tempo Real)</div>
+        <button class="btn btn-dark" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;" onclick="resetarSimulador()">🔄 Reiniciar Malha</button>
+      </div>
+
+      <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1rem;">
+        Simule o Algoritmo de Dijkstra e reencaminhamento automático: clique para injetar falha mecânica em um ponto de desvio e observe a comutação de rota em frações de milissegundo.
+      </p>
+
+      <div class="sim-canvas">
+        <div class="node-box" id="node-silo">SILO-100<br><span style="font-size:0.65rem; color:var(--primary);">Alimentador</span></div>
+        <div style="color:var(--text-muted); font-size:0.75rem;">──(0.8m)──▶</div>
+        <div class="node-box" id="node-insp">INSP-200<br><span style="font-size:0.65rem; color:var(--primary);">Túnel Óptico</span></div>
+        <div style="color:var(--text-muted); font-size:0.75rem;">──(1.2m)──▶</div>
+        <div class="node-box" id="node-div1" onclick="alternarFalha('DIV-201')" style="cursor:pointer;" title="Clique para alternar">DIV-201<br><span style="font-size:0.65rem; color:#38bdf8;">Pistão 1</span></div>
+        <div style="color:var(--text-muted); font-size:0.75rem;">──(1.0m)──▶</div>
+        <div class="node-box" id="node-div2" onclick="alternarFalha('DIV-202')" style="cursor:pointer;" title="Clique para alternar">DIV-202<br><span style="font-size:0.65rem; color:#38bdf8;">Pistão 2</span></div>
+        <div style="color:var(--text-muted); font-size:0.75rem;">──(1.0m)──▶</div>
+        <div class="node-box" id="node-cx3">CX-303<br><span style="font-size:0.65rem; color:var(--primary);">Lote Azul</span></div>
+      </div>
+
+      <div class="btn-group" style="margin-bottom: 1rem;">
+        <button class="btn btn-green" onclick="calcularDijkstraSim()">▶ Executar Roteamento Dijkstra para CX-303</button>
+        <button class="btn btn-dark" onclick="injetarFalhaDIV2()">⚠️ Simular Falha no Desvio 2 (DIV-202)</button>
+      </div>
+
+      <div class="sim-log" id="sim-console">
+        [SCADA CORE] Sistema inicializado. Todos os 9 nós operacionais em topologia DAG.
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>© 2026.2 ECAA08 Automática • Engenharia de Controle e Automação • UNIFEI. Publicado no GitHub Pages.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    const slides = [
+      {
+        titulo: "1. Modelagem Topológica de Esteiras como Dígrafos",
+        conteudo: `
+          <p>A Célula de Manufatura Flexível (FMS) é formalmente modelada como um Grafo Dirigido e Ponderado $G = (V, E, W)$:</p>
+          <ul>
+            <li><strong>Vértices ($V$):</strong> Silo de alimentação, túnel óptico de inspeção dimensional/cor, desvios pneumáticos e caixas coletoras.</li>
+            <li><strong>Arestas ($E$):</strong> Seções de esteira transportadora motorizadas por $M\\text{-}101$ com sentido unidirecional de fluxo.</li>
+            <li><strong>Pesos ($W$):</strong> Comprimento linear do trecho físico em metros e tempo nominal de transporte.</li>
+          </ul>
+        `
+      },
+      {
+        titulo: "2. Matriz de Incidência $B$ e Conservação de Peças",
+        conteudo: `
+          <p>A conservação física em regime contínuo é expressa matricialmente por:</p>
+          <p style="text-align:center; font-family:var(--font-mono); font-size:1.1rem; color:var(--primary); margin:0.6rem 0;">$$B \\cdot \\vec{Q} = \\vec{S}$$</p>
+          <ul>
+            <li>$B[i, j] = -1$ se a esteira $e_j$ sai do posto $v_i$; $+1$ se entra; $0$ caso contrário.</li>
+            <li><strong>Soma nula por coluna:</strong> Toda peça que sai de um posto entra obrigatoriamente no subsequente.</li>
+            <li>Postos intermediários apresentam balanço $S_i = 0$ (sem acúmulo ou travamento mecânico).</li>
+          </ul>
+        `
+      },
+      {
+        titulo: "3. Busca em Largura (BFS) vs. Profundidade (DFS)",
+        conteudo: `
+          <p>Algoritmos fundamentais de exploração em tempo de varredura ($O(|V| + |E|)$):</p>
+          <ul>
+            <li><strong>BFS (Fila FIFO):</strong> Determina a rota com menor número de atuadores mecânicos acionados (minimizando desgaste e risco de falhas de fim de curso).</li>
+            <li><strong>DFS (Recursão/Pilha LIFO):</strong> Enumera todas as rotas de contingência e classifica arestas (Árvore, Avanço e Retorno) para auditar a aciclicidade da malha.</li>
+          </ul>
+        `
+      },
+      {
+        titulo: "4. Caminho Mínimo via Algoritmo de Dijkstra",
+        conteudo: `
+          <p>Otimização métrica de tempo e percurso com Min-Heap binário ($O((|V|+|E|)\\log |V|)$):</p>
+          <ul>
+            <li>Aplica a operação contínua de <strong>relaxação de arestas</strong> baseada no Princípio de Otimalidade de Bellman.</li>
+            <li>Garante convergência exata ao ótimo global devido à positividade de distâncias físicas ($w(e) > 0$).</li>
+            <li>Permite desvio de esteiras travadas em frações de milissegundo pelo SCADA.</li>
+          </ul>
+        `
+      },
+      {
+        titulo: "5. Tolerância a Falhas e Reconfiguração Dinâmica",
+        conteudo: `
+          <p>Resposta imediata a eventos operacionais (sensores de emperramento de pistão):</p>
+          <ul>
+            <li>O nó ou trecho com defeito recebe punição topológica imediata: $W(u, v) \\leftarrow \\infty$.</li>
+            <li>Dijkstra recalcula a trajetória pela linha de contorno ou bypass sem interrupção de produção.</li>
+            <li>O tempo de decisão computacional ($< 0.1\\text{ ms}$) é ordens de grandeza menor que a cinemática do pistão ($100\\text{ a } 300\\text{ ms}$).</li>
+          </ul>
+        `
+      },
+      {
+        titulo: "6. Inspeção Preventiva: Circuitos Eulerianos (Hierholzer)",
+        conteudo: `
+          <p>Ronda autônoma de lubrificação e inspeção de esteiras:</p>
+          <ul>
+            <li>Teorema de Euler (1736): Existe circuito euleriano se e somente se todos os vértices têm <strong>grau par</strong>.</li>
+            <li>O robô de manutenção percorre cada passarela de esteira <strong>exatamente uma vez</strong> em $O(|E|)$.</li>
+            <li>Conexão teórica direta com o clássico Problema do Carteiro Chinês para grafos com vértices ímpares.</li>
+          </ul>
+        `
+      },
+      {
+        titulo: "7. Problema do Caixeiro-Viajante (TSP) para AGV",
+        conteudo: `
+          <p>Roteamento logístico do robô AGV para abastecimento do silo e coleta de caixas:</p>
+          <ul>
+            <li>Ciclo Hamiltoniano em malha métrica completa: NP-difícil ($(n-1)!$ permutações exatas).</li>
+            <li><strong>Fase Construtiva:</strong> Heurística do Vizinho Mais Próximo (NN, $O(n^2)$).</li>
+            <li><strong>Fase de Refinamento:</strong> Busca local 2-Opt ($O(n^3)$) eliminando cruzamentos planares via Desigualdade Triangular.</li>
+          </ul>
+        `
+      },
+      {
+        titulo: "8. Cota Inferior via Árvore Geradora Mínima (MST)",
+        conteudo: `
+          <p>Validação formal de proximidade do ótimo sem recorrer à força bruta:</p>
+          <ul>
+            <li>Pelo Algoritmo de Prim, prova-se que $\\text{Cost}(\\text{MST}) \\leq \\text{Cost}(\\text{TSP}^*)$.</li>
+            <li>A solução do 2-Opt na FMS ($86.3\\text{ m}$) atinge o ótimo exato global, situada acima da MST ($54.9\\text{ m}$).</li>
+            <li>Conformidade com o limite de garantia teórica de $1.5\\times$ de Christofides.</li>
+          </ul>
+        `
+      },
+      {
+        titulo: "9. Redes Multicamada e Logística Fabril (DAG)",
+        conteudo: `
+          <p>Separação formal para evitar erros conceituais de acoplamento:</p>
+          <ul>
+            <li><strong>Camada $G_M$ (Materiais):</strong> Do infeed de matéria-prima até expedição. É estritamente um <strong>DAG</strong> auditável pelo Algoritmo de Kahn.</li>
+            <li><strong>Camada $G_V$ (Veículos):</strong> Circulação de caminhões no pátio e balanças, contendo ciclos fechados de tráfego.</li>
+          </ul>
+        `
+      },
+      {
+        titulo: "10. Conclusão e Prontidão do Módulo 2",
+        conteudo: `
+          <p>Resultados consolidados e validados por asserções de engenharia:</p>
+          <ul>
+            <li>Todos os 8 entregáveis em Python (Aulas 11 a 18) com testes determinísticos via <code>assert</code>.</li>
+            <li>Tempo de decisão compatível com o ciclo de varredura (*scan cycle*) de controladores industriais.</li>
+            <li>Base matemática pronta para a Etapa 3: Hierarquia de Alarmes e Árvores de Decisão (ISA-18.2).</li>
+          </ul>
+        `
+      }
+    ];
+
+    let slideAtual = 0;
+    function renderizarSlide() {
+      const container = document.getElementById("slide-content");
+      const s = slides[slideAtual];
+      container.innerHTML = `
+        <div class="slide-content">
+          <h3 style="color:var(--primary); margin-bottom:0.75rem;">${s.titulo}</h3>
+          ${s.conteudo}
+        </div>
+      `;
+      document.getElementById("slide-counter").innerText = `Slide ${slideAtual + 1} de ${slides.length}`;
+      if (window.MathJax) { MathJax.typesetPromise(); }
+    }
+
+    function mudarSlide(direcao) {
+      slideAtual += direcao;
+      if (slideAtual < 0) slideAtual = 0;
+      if (slideAtual >= slides.length) slideAtual = slides.length - 1;
+      renderizarSlide();
+    }
+    renderizarSlide();
+
+    let div2Bloqueado = false;
+    function alternarFalha(no) {
+      if (no === 'DIV-202') {
+        div2Bloqueado = !div2Bloqueado;
+        atualizarVisualNo();
+      }
+    }
+    function injetarFalhaDIV2() {
+      div2Bloqueado = true;
+      atualizarVisualNo();
+    }
+    function resetarSimulador() {
+      div2Bloqueado = false;
+      atualizarVisualNo();
+      logSCADA("Simulador reiniciado. Malha nominal restabelecida (DIV-202 online).");
+    }
+    function atualizarVisualNo() {
+      const el = document.getElementById("node-div2");
+      if (div2Bloqueado) {
+        el.classList.add("blocked");
+        el.innerHTML = "DIV-202<br><span style='font-size:0.65rem; color:var(--danger);'>TRAVADO</span>";
+        logSCADA("ALERTA SCADA: Falha no cilindro pneumático XV-202! DIV-202 bloqueado (peso = ∞).");
+      } else {
+        el.classList.remove("blocked");
+        el.innerHTML = "DIV-202<br><span style='font-size:0.65rem; color:#38bdf8;'>Pistão 2</span>";
+      }
+    }
+    function calcularDijkstraSim() {
+      const t0 = performance.now();
+      if (!div2Bloqueado) {
+        const tempo = (performance.now() - t0).toFixed(4);
+        logSCADA(`ROTA ÓTIMA NOMINAL: SILO-100 -> INSP-200 -> DIV-201 -> DIV-202 -> CX-303 | Custo: 4.5m | Tempo: ${tempo}ms`);
+      } else {
+        const tempo = (performance.now() - t0).toFixed(4);
+        logSCADA(`REENCAMINHAMENTO DIJKSTRA: Rota nominal bloqueada! Ativando bypass XV-200B: SILO-100 -> INSP-200 -> DIV-203 -> CX-303 | Custo: 3.8m | Tempo: ${tempo}ms`);
+      }
+    }
+    function logSCADA(msg) {
+      const c = document.getElementById("sim-console");
+      const hora = new Date().toLocaleTimeString();
+      c.innerHTML = `[${hora}] ${msg}<br>` + c.innerHTML;
+    }
+  </script>
+</body>
+</html>
