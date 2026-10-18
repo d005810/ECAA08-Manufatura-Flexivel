@@ -1,613 +1,229 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCADA-Core: Célula de Manufatura Flexível | ECAA08</title>
-    <style>
-        :root {
-            --bg-dark: #0f172a;
-            --panel-bg: #1e293b;
-            --border-color: #334155;
-            --primary: #38bdf8;
-            --danger: #ef4444;
-            --success: #22c55e;
-            --warning: #f59e0b;
-            --text-light: #f8fafc;
-            --text-muted: #94a3b8;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            padding: 20px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 25px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 15px;
-        }
-
-        header h1 {
-            color: var(--primary);
-            font-size: 1.8rem;
-            margin-bottom: 5px;
-        }
-
-        header p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .nav-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .tab-btn {
-            background: var(--panel-bg);
-            color: var(--text-light);
-            border: 1px solid var(--border-color);
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-
-        .tab-btn.active, .tab-btn:hover {
-            background: var(--primary);
-            color: var(--bg-dark);
-            border-color: var(--primary);
-        }
-
-        .tab-content {
-            display: none;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* --- SEÇÃO 1: SLIDES --- */
-        .slide-container {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            min-height: 480px;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-        }
-
-        .slide-body h2 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            font-size: 1.5rem;
-        }
-
-        .slide-body ul {
-            list-style-type: none;
-            margin-top: 15px;
-        }
-
-        .slide-body li {
-            margin-bottom: 12px;
-            padding-left: 20px;
-            position: relative;
-            color: #cbd5e1;
-            line-height: 1.5;
-        }
-
-        .slide-body li::before {
-            content: "•";
-            color: var(--primary);
-            font-weight: bold;
-            font-size: 1.4rem;
-            position: absolute;
-            left: 0;
-            top: -2px;
-        }
-
-        .slide-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 25px;
-            border-top: 1px solid var(--border-color);
-            padding-top: 15px;
-        }
-
-        .slide-btn {
-            background: var(--primary);
-            color: var(--bg-dark);
-            border: none;
-            padding: 8px 18px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .slide-btn:disabled {
-            background: var(--border-color);
-            color: var(--text-muted);
-            cursor: not-allowed;
-        }
-
-        /* --- SEÇÃO 2: SIMULAÇÃO VISUAL --- */
-        .sim-layout {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-        }
-
-        .canvas-card {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        canvas {
-            background: #090d16;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            width: 100%;
-            max-width: 750px;
-            height: 380px;
-        }
-
-        .controls-card {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .controls-card h3 {
-            color: var(--primary);
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
-        }
-
-        .btn-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .act-btn {
-            background: #334155;
-            color: var(--text-light);
-            border: 1px solid var(--border-color);
-            padding: 10px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .act-btn:hover {
-            filter: brightness(1.2);
-        }
-
-        .act-btn.red { background: #b91c1c; }
-        .act-btn.green { background: #15803d; }
-        .act-btn.blue { background: #1d4ed8; }
-        .act-btn.warn { background: #d97706; }
-        .act-btn.estop { background: var(--danger); grid-column: span 2; }
-
-        .status-box {
-            background: #0f172a;
-            border: 1px solid var(--border-color);
-            padding: 12px;
-            border-radius: 6px;
-            font-family: monospace;
-            font-size: 0.85rem;
-            min-height: 90px;
-            max-height: 120px;
-            overflow-y: auto;
-        }
-
-        /* --- SEÇÃO 3: EXPLICAÇÃO LÓGICA --- */
-        .doc-card {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 20px;
-        }
-
-        .doc-card h3 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 5px;
-        }
-
-        .doc-card p, .doc-card ul {
-            color: #cbd5e1;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        .doc-card ul { margin-left: 20px; }
-
-        .tag {
-            background: #334155;
-            color: var(--primary);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCADA-Core FMS | ECAA08 2026.2 - Célula de Manufatura Flexível</title>
+  <link rel="icon" type="image/x-icon" href="https://transparencia.unifei.edu.br/wp-content/uploads/2023/09/cropped-simbolo_RGB-32x32.png" />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="doc/css/styles.css">
+  
+  <!-- MathJax 3 -->
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
 
-    <header>
-        <h1>Célula de Manufatura Flexível (FMS) — SCADA-Core</h1>
-        <p>ECAA08: Automação / Matemática Discreta | Módulo 1: Lógica Formal & Sistemas Especialistas</p>
-    </header>
-
-    <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('simulacao')">🕹️ Simulação Visual</button>
-        <button class="tab-btn" onclick="switchTab('slides')">📊 Apresentação (Slides)</button>
-        <button class="tab-btn" onclick="switchTab('explicacao')">📖 Explicação da Etapa 1</button>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <span class="scada-badge">SCADA-CORE</span>
+        <span>ECAA08 • Manufatura Flexível</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">🏠 Início</a></li>
+        <li><a href="doc/etapa-01-logica.html">⚡ Etapa 01 (Lógica)</a></li>
+        <li><a href="doc/etapa-02-grafos.html">🕸️ Etapa 02 (Grafos & AGV)</a></li>
+        <li><a href="doc/planta-quimica.html">🏭 Planta FMS</a></li>
+        <li><a href="doc/diretrizes-github.html">🐙 GitHub & 5W2H</a></li>
+      </ul>
+      <div class="nav-controls">
+        <button id="theme-toggle" class="theme-toggle-btn" title="Alternar Modo Escuro/Claro">☀️</button>
+        <button id="mobile-menu-btn" class="mobile-menu-btn">☰</button>
+      </div>
     </div>
+  </nav>
 
-    <!-- TAB 1: SIMULAÇÃO VISUAL -->
-    <div id="simulacao" class="tab-content active">
-        <div class="sim-layout">
-            <div class="canvas-card">
-                <canvas id="plantCanvas" width="750" height="380"></canvas>
-            </div>
-            <div class="controls-card">
-                <h3>Painel de Telemetria e I/O</h3>
-                
-                <p style="font-size:0.85rem; color:var(--text-muted);">Alimentação de Peças (Infeed):</p>
-                <div class="btn-grid">
-                    <button class="act-btn red" onclick="spawnPiece('RED', 'LARGE')">Grande Vermelha</button>
-                    <button class="act-btn green" onclick="spawnPiece('GREEN', 'LARGE')">Grande Verde</button>
-                    <button class="act-btn blue" onclick="spawnPiece('BLUE', 'SMALL')">Pequena Azul</button>
-                    <button class="act-btn warn" onclick="spawnPiece('FAULT_GEO', 'LARGE')">Falha Geometria</button>
-                </div>
-
-                <p style="font-size:0.85rem; color:var(--text-muted);">Comandos de Supervisão:</p>
-                <div class="btn-grid">
-                    <button class="act-btn estop" id="btnEstop" onclick="toggleEstop()">PARADA DE EMERGÊNCIA (HS-301)</button>
-                    <button class="act-btn" onclick="resetSystem()">Reset Geral / Caixas</button>
-                </div>
-
-                <div class="status-box" id="scadaConsole">
-                    [SCADA] Sistema em operação contínua.<br>
-                    [SCAN] Motor M-101: LIGADO | Permissivo: OK
-                </div>
-            </div>
+  <!-- HERO SECTION -->
+  <header class="hero-section">
+    <div class="hero-container">
+      <span class="hero-tagline">Engenharia de Controle & Automação • UNIFEI</span>
+      <h1 class="hero-title">SCADA-Core Manufatura Flexível</h1>
+      <p class="hero-subtitle">
+        Aplicação rigorosa de <strong>Matemática Discreta</strong> (Lógica Booleana, Teoria dos Grafos, Matrizes de Incidência e Otimização Combinatória) ao controle, triagem pneumática e roteamento autônomo de AGVs em uma Célula de Manufatura Flexível (FMS).
+      </p>
+      
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <span>📘 <strong>Disciplina:</strong> ECAA08 Automática (2026.2)</span>
         </div>
-    </div>
-
-    <!-- TAB 2: SLIDES DE APRESENTAÇÃO -->
-    <div id="slides" class="tab-content">
-        <div class="slide-container">
-            <div class="slide-body" id="slideContent">
-                <!-- Conteúdo dinâmico via JS -->
-            </div>
-            <div class="slide-controls">
-                <button class="slide-btn" id="prevSlide" onclick="changeSlide(-1)">Anterior</button>
-                <span id="slideIndicator" style="color:var(--text-muted); font-size:0.9rem;">Slide 1 de 5</span>
-                <button class="slide-btn" id="nextSlide" onclick="changeSlide(1)">Próximo</button>
-            </div>
+        <div class="hero-meta-item">
+          <span>🎯 <strong>Metodologia:</strong> Problem-Based Learning (PBL)</span>
         </div>
-    </div>
-
-    <!-- TAB 3: EXPLICAÇÃO LÓGICA -->
-    <div id="explicacao" class="tab-content">
-        <div class="doc-card">
-            <h3>Arquitetura Lógica da Etapa 1</h3>
-            <p>O Módulo 1 implementa uma cadeia lógica formal em 4 estágios construtivos:</p>
-            <ul>
-                <li><strong>Mapeamento ISA-5.1 e Proposições (Aulas 00 e 02):</strong> Discretização das grandezas físicas dos setores 100 (alimentação), 200 (inspeção de cor/formato e triagem) e 300 (loteamento e emergência) em variáveis booleanas atômicas (<span class="tag">s_a</span>, <span class="tag">s_b</span>, <span class="tag">c_r</span>, <span class="tag">cnt_1..3</span>).</li>
-                <li><strong>Tautologias e Formas Normais (Aulas 03 a 05):</strong> Modelagem das equações mínimas de intertravamento (<span class="tag">P_M-101</span>) via Quine-McCluskey e prova formal de segurança (<span class="tag">f_canonica ↔ f_otimizada ≡ 1</span>).</li>
-                <li><strong>Lógica de Predicados e Quantificadores (Aula 06):</strong> Varredura global sobre conjuntos finitos de instrumentos via operadores <span class="tag">FORALL (∀)</span> e <span class="tag">EXISTS (∃)</span>.</li>
-                <li><strong>Sistemas Especialistas e Forward Chaining (Aulas 08 a 10):</strong> Dedução em tempo real de diagnósticos de causa-raiz em Cláusulas de Horn com catálogo de procedimentos operacionais padrão (POP).</li>
-            </ul>
+        <div class="hero-meta-item">
+          <span>🏭 <strong>Estudo de Caso:</strong> Linha de Triagem Óptica e Loteamento FMS</span>
         </div>
+      </div>
+
+      <div class="hero-actions">
+        <a href="doc/etapa-02-grafos.html" class="btn btn-primary" style="font-size: 1rem; padding: 0.85rem 1.8rem; background: linear-gradient(135deg, #059669, #10b981);">
+          🕸️ Acessar Etapa 02: Grafos, Dijkstra & AGV (Disponível) →
+        </a>
+        <a href="doc/etapa-01-logica.html" class="btn btn-outline">
+          ⚡ Ver Etapa 01: Lógica Formal
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-container">
+
+    <!-- MENSAGEM DO PROJETO -->
+    <div class="callout callout-info" style="margin-bottom: 3.5rem;">
+      <div class="callout-title">🏭 Status do Projeto SCADA-Core • Célula FMS</div>
+      <p>
+        "O portal da Célula de Manufatura Flexível (FMS) agora integra os <strong>Módulos 1 e 2</strong>. A <strong>Etapa 02: Teoria dos Grafos & Roteamento Logístico</strong> está totalmente implementada e documentada, contendo a modelagem das esteiras como dígrafos ponderados $G=(V, E, W)$, balanceamento matricial de peças $B \cdot \vec{Q} = \vec{S}$, caminhos mínimos de triagem com <strong>Dijkstra</strong> sob falha pneumática, inspeção com o <strong>Algoritmo de Hierholzer</strong> e roteamento do robô móvel AGV via <strong>TSP (Nearest Neighbor + 2-Opt)</strong>."
+      </p>
     </div>
 
-    <script>
-        // --- NAVEGAÇÃO DE TABS ---
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            event.target.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
-        }
+    <!-- SEÇÃO DOS MÓDULOS / ETAPAS -->
+    <section style="margin-bottom: 4rem;">
+      <div class="section-header">
+        <span class="section-tag">Roteiro de Desenvolvimento</span>
+        <h2 class="section-title">Status das Etapas do Projeto</h2>
+        <p class="section-subtitle">Acompanhe a disponibilidade dos módulos do motor algorítmico do SCADA-Core da FMS.</p>
+      </div>
 
-        // --- SISTEMA DE SLIDES ---
-        const slidesData = [
-            {
-                title: "1. Visão Geral da Planta de Manufatura Flexível",
-                bullets: [
-                    "Linha automatizada de classificação e loteamento inteligente com 3 setores funcionais.",
-                    "Setor 100: Silo de peças com chave de nível LS-101, atuador XV-101 e esteira M-101.",
-                    "Setor 200: Túnel de inspeção de formato (ZS-201/202), cor (AS-201..203) e triagem pneumática (XV-201..203).",
-                    "Setor 300: Loteamento em caixas (US-301..303) com limite de 10 peças por lote."
-                ]
-            },
-            {
-                title: "2. Discretização e Intertravamentos de Segurança",
-                bullets: [
-                    "Equação do Permissivo do Motor M-101: P = ¬e1 ∧ ¬a1 ∧ ¬batch_full ∧ (auto ⊕ man).",
-                    "Condição contínua de Trip: Desarme imediato sob emergência (HS-301), sobrecarga ou transbordo geral.",
-                    "Otimização booleana via Quine-McCluskey: redução drástica de termos com equivalência lógica tautológica (100%)."
-                ]
-            },
-            {
-                title: "3. Lógica de Predicados em Redes de Sensores",
-                bullets: [
-                    "Operadores de Primeira Ordem implementados sobre domínios finitos de instrumentos industriais.",
-                    "Quantificador Existencial: ∃x ∈ Sensores, Falha(x) → Disparo de Alarme Geral HS-302 (a1).",
-                    "Quantificador Universal: ∀s ∈ Saídas, CaixaCheia(s) → Transbordo Geral e bloqueio de infeed."
-                ]
-            },
-            {
-                title: "4. Base de Conhecimento e Sistema Especialista",
-                bullets: [
-                    "Regras de produção modeladas em Cláusulas de Horn com severidade, prioridade e POP.",
-                    "Diagnóstico de Inconsistência Geométrica: (ZS-202 ∧ ¬ZS-201) → Peça tombada ou desalinhada.",
-                    "Diagnóstico de Ambiguidade de Cor: Múltiplos canais de cor ativos simultaneamente → Falha óptica."
-                ]
-            },
-            {
-                title: "5. Motor de Inferência Integrado (Módulo 1)",
-                bullets: [
-                    "Forward Chaining avalia os fatos da telemetria de campo em tempo real até atingir ponto fixo.",
-                    "Backward Chaining reconstrói a árvore causal para auditoria de alarmes e desarmes de atuadores.",
-                    "Pipeline completo executando em ciclo de scan contínuo com validação formal via asserts."
-                ]
-            }
-        ];
+      <div class="grid-2">
+        
+        <!-- CARD ETAPA 01: DISPONÍVEL -->
+        <div class="card" style="border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);">
+          <div class="card-header">
+            <span class="module-badge badge-mod1">Módulo 1 • Aulas 00 a 10</span>
+            <span style="background: #10b981; color: #ffffff; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; font-family: var(--font-mono);">✅ CONCLUÍDO</span>
+          </div>
+          <h3 class="card-title" style="color: #60a5fa;">⚡ Etapa 01: Lógica Formal & Intertravamento</h3>
+          <p class="card-description">
+            Classificação dimensional e colorimétrica de peças, quantificadores $\forall$ e $\exists$ em malhas de sensores, otimização booleana por Quine-McCluskey, formas normais (FNC/FND) e motor de intertravamento para parada segura do alimentador XV-101 e esteira M-101.
+          </p>
+          <ul style="padding-left: 1.25rem; font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+            <li>📽️ <strong>Apresentação:</strong> Slides com tabelas-verdade, lógica de predicados e diagramas.</li>
+            <li>🎛️ <strong>Simulador:</strong> SCADA em JavaScript da bancada com injeção de falhas e desvio de peças.</li>
+            <li>📖 <strong>Aulas 00 a 10:</strong> Memoriais teóricos e cadernos Jupyter com asserções determinísticas.</li>
+          </ul>
+          <div class="card-footer">
+            <a href="doc/etapa-01-logica.html" class="btn btn-outline" style="width: 100%; justify-content: center;">
+              Acessar Documentação da Etapa 01 →
+            </a>
+          </div>
+        </div>
 
-        let currentSlide = 0;
+        <!-- CARD ETAPA 02: DISPONÍVEL AGORA -->
+        <div class="card" style="border-color: #10b981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.25);">
+          <div class="card-header">
+            <span class="module-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">Módulo 2 • Aulas 11 a 18</span>
+            <span style="background: #10b981; color: #ffffff; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; font-family: var(--font-mono);">✅ DISPONÍVEL AGORA</span>
+          </div>
+          <h3 class="card-title" style="color: #34d399;">🕸️ Etapa 02: Teoria dos Grafos & Roteamento Logístico</h3>
+          <p class="card-description">
+            Modelagem das esteiras como dígrafos dirigidos $G=(V, E, W)$, balanço de fluxo de peças $B \cdot \vec{Q} = \vec{S}$, caminhos mínimos com **Dijkstra** para contorno de pistões emperrados, manutenção preventiva com **Hierholzer**, roteamento ótimo do AGV via **TSP (NN + 2-Opt)** e logística fabril multicamada (**DAG**).
+          </p>
+          <ul style="padding-left: 1.25rem; font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+            <li>📽️ <strong>Apresentação:</strong> Slides da Etapa 2 com provas de otimalidade e topologia FMS.</li>
+            <li>🎛️ <strong>Emulador SCADA-Graph:</strong> Simulador interativo com nós de esteira, desvio pneumático e robô AGV.</li>
+            <li>📖 <strong>Aulas 11 a 18:</strong> Roteamento BFS/DFS, relaxação de arestas, ciclos e redes multicamada.</li>
+          </ul>
+          <div class="card-footer">
+            <a href="doc/etapa-02-grafos.html" class="btn btn-primary" style="width: 100%; justify-content: center; background: linear-gradient(135deg, #059669, #10b981);">
+              Acessar Documentação da Etapa 02 →
+            </a>
+          </div>
+        </div>
 
-        function renderSlide() {
-            const slide = slidesData[currentSlide];
-            const container = document.getElementById('slideContent');
-            let html = `<h2>${slide.title}</h2><ul>`;
-            slide.bullets.forEach(b => html += `<li>${b}</li>`);
-            html += `</ul>`;
-            container.innerHTML = html;
+        <!-- CARD ETAPA 03: EM BREVE -->
+        <div class="card" style="opacity: 0.85;">
+          <div class="card-header">
+            <span class="module-badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);">Módulo 3 • Aulas 19 a 28</span>
+            <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; font-family: var(--font-mono);">⏳ EM BREVE</span>
+          </div>
+          <h3 class="card-title">🌲 Etapa 03: Árvores & Gestão de Alarmes (ISA-18.2)</h3>
+          <p class="card-description">
+            Hierarquização de ativos da célula conforme ISA-95, Árvores Binárias de Busca (BST) $O(\log n)$ para varredura de tags de sensores, algoritmo de supressão inteligente de inundação de alarmes (*Alarm Flood*) e árvores de decisão para Parada de Emergência (ESD).
+          </p>
+          <div class="callout callout-warning" style="margin: 0.75rem 0; padding: 0.6rem 0.9rem; font-size: 0.82rem;">
+            <strong>Previsão de Liberação:</strong> Aulas 19 a 28 conforme cronograma semestral.
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-outline" style="width: 100%; justify-content: center; opacity: 0.6; cursor: not-allowed;" disabled>
+              Disponível em Breve
+            </button>
+          </div>
+        </div>
 
-            document.getElementById('slideIndicator').innerText = `Slide ${currentSlide + 1} de ${slidesData.length}`;
-            document.getElementById('prevSlide').disabled = (currentSlide === 0);
-            document.getElementById('nextSlide').disabled = (currentSlide === slidesData.length - 1);
-        }
+        <!-- CARD ETAPA 04: EM BREVE -->
+        <div class="card" style="opacity: 0.85;">
+          <div class="card-header">
+            <span class="module-badge" style="background: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3);">Módulo 4 • Aulas 29 a 32</span>
+            <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; font-family: var(--font-mono);">⏳ EM BREVE</span>
+          </div>
+          <h3 class="card-title">🔄 Etapa 04: Relações, Permissões RBAC & Grafcet</h3>
+          <p class="card-description">
+            Matrizes booleanas de permissões de operadores, Diagramas de Hasse (POSETs), relações de equivalência para lotes de fabricação e sequenciamento de passos em Grafcet/SFC (IEC 61131-3) para a operação automatizada da linha.
+          </p>
+          <div class="callout callout-warning" style="margin: 0.75rem 0; padding: 0.6rem 0.9rem; font-size: 0.82rem;">
+            <strong>Previsão de Liberação:</strong> Aulas 29 a 32 na reta final do semestre.
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-outline" style="width: 100%; justify-content: center; opacity: 0.6; cursor: not-allowed;" disabled>
+              Disponível em Breve
+            </button>
+          </div>
+        </div>
 
-        function changeSlide(direction) {
-            currentSlide += direction;
-            if (currentSlide < 0) currentSlide = 0;
-            if (currentSlide >= slidesData.length) currentSlide = slidesData.length - 1;
-            renderSlide();
-        }
+      </div>
+    </section>
 
-        renderSlide();
+    <!-- GOVERNANÇA E MODELO FMS -->
+    <section style="margin-bottom: 2rem;">
+      <div class="card" style="background: #091224; border-color: #1e3a5f;">
+        <div class="grid-2">
+          <div>
+            <h3 style="color: #38bdf8; margin-bottom: 0.5rem;">🐙 Avaliação e Governança no GitHub</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+              As entregas das Aulas 11 a 18 são auditadas individualmente pelas métricas de contribuição do Git (<em>Contributors</em>, <em>Insights</em> e <em>Pull Requests</em>). Os testes unitários determinísticos em Python comprovam a consistência dos grafos da planta.
+            </p>
+            <a href="doc/diretrizes-github.html" class="btn btn-outline" style="padding: 0.4rem 0.9rem; font-size: 0.85rem;">
+              Ver Guia de Git & Matriz 5W2H →
+            </a>
+          </div>
 
-        // --- SIMULAÇÃO VISUAL EM CANVAS (FMS) ---
-        const canvas = document.getElementById('plantCanvas');
-        const ctx = canvas.getContext('2d');
-        const consoleEl = document.getElementById('scadaConsole');
+          <div>
+            <h3 style="color: #10b981; margin-bottom: 0.5rem;">🏭 Célula de Manufatura Flexível (FMS)</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+              Conheça o layout físico com os postos de trabalho (SILO-100, INSP-200, DIV-201..203, CX-301..303 e DESC-304), instrumentos de sensoriamento óptico e atuadores pneumáticos padronizados pela norma ISA-5.1.
+            </p>
+            <a href="doc/planta-quimica.html" class="btn btn-outline" style="padding: 0.4rem 0.9rem; font-size: 0.85rem;">
+              Ver Memorial da Planta FMS →
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        let estopActive = false;
-        let pieces = [];
-        let boxCounts = [0, 0, 0];
-        let pistons = [
-            { x: 340, y: 155, active: false, targetY: 155 },
-            { x: 470, y: 155, active: false, targetY: 155 },
-            { x: 600, y: 155, active: false, targetY: 155 }
-        ];
+  </main>
 
-        function logScada(msg) {
-            consoleEl.innerHTML = `[${new Date().toLocaleTimeString()}] ${msg}<br>` + consoleEl.innerHTML;
-        }
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>© 2026.2 ECAA08 Automática • Engenharia de Controle e Automação • UNIFEI. Publicado no GitHub Pages.</p>
+    </div>
+  </footer>
 
-        function toggleEstop() {
-            estopActive = !estopActive;
-            const btn = document.getElementById('btnEstop');
-            if (estopActive) {
-                btn.style.background = '#7f1d1d';
-                btn.innerText = 'EMERGÊNCIA ACIONADA (TRIP M-101)';
-                logScada("<span style='color:#ef4444;'>[TRIP] Parada de Emergência HS-301 acionada! Motor M-101 parado.</span>");
-            } else {
-                btn.style.background = '#ef4444';
-                btn.innerText = 'PARADA DE EMERGÊNCIA (HS-301)';
-                logScada("<span style='color:#22c55e;'>[RESET] Emergência desarmada. Sistema restabelecido.</span>");
-            }
-        }
-
-        function resetSystem() {
-            pieces = [];
-            boxCounts = [0, 0, 0];
-            estopActive = false;
-            document.getElementById('btnEstop').style.background = '#ef4444';
-            document.getElementById('btnEstop').innerText = 'PARADA DE EMERGÊNCIA (HS-301)';
-            logScada("[RESET] Caixas zeradas e esteira limpa.");
-        }
-
-        function spawnPiece(type, size) {
-            if (estopActive) {
-                logScada("<span style='color:#f59e0b;'>[AVISO] Infeed bloqueado: Sistema em Trip de Emergência!</span>");
-                return;
-            }
-            pieces.push({
-                x: 40,
-                y: 190,
-                type: type,
-                size: size,
-                diverted: false,
-                divertPath: null,
-                divertProgress: 0
-            });
-            logScada(`[INFEED] Pistão XV-101 alimentou peça: ${type} (${size})`);
-        }
-
-        function update() {
-            if (!estopActive) {
-                // Atualiza peças
-                for (let i = pieces.length - 1; i >= 0; i--) {
-                    let p = pieces[i];
-
-                    if (!p.diverted) {
-                        p.x += 1.8; // Velocidade da esteira principal M-101
-
-                        // Sensor de Inspeção (Túnel x: 190 a 250)
-                        if (p.x > 210 && p.x < 214) {
-                            if (p.type === 'FAULT_GEO') {
-                                logScada("<span style='color:#ef4444;'>[ALARME a1] Inconsistência Geométrica: ZS-202 ativo s/ ZS-201!</span>");
-                            }
-                        }
-
-                        // Triagem Braço 1 (Vermelho Grande -> x: 340)
-                        if (p.x >= 340 && p.type === 'RED' && p.size === 'LARGE' && boxCounts[0] < 10) {
-                            p.diverted = true;
-                            p.divertPath = 0;
-                            pistons[0].active = true;
-                            setTimeout(() => pistons[0].active = false, 400);
-                        }
-                        // Triagem Braço 2 (Verde Grande -> x: 470)
-                        else if (p.x >= 470 && p.type === 'GREEN' && p.size === 'LARGE' && boxCounts[1] < 10) {
-                            p.diverted = true;
-                            p.divertPath = 1;
-                            pistons[1].active = true;
-                            setTimeout(() => pistons[1].active = false, 400);
-                        }
-                        // Triagem Braço 3 (Azul Pequeno -> x: 600)
-                        else if (p.x >= 600 && p.type === 'BLUE' && p.size === 'SMALL' && boxCounts[2] < 10) {
-                            p.diverted = true;
-                            p.divertPath = 2;
-                            pistons[2].active = true;
-                            setTimeout(() => pistons[2].active = false, 400);
-                        }
-                        // Fim da esteira principal (peça não classificada / descarte)
-                        else if (p.x > 710) {
-                            pieces.splice(i, 1);
-                        }
-                    } else {
-                        // Movimento na esteira secundária
-                        p.y += 2.0;
-                        if (p.y >= 310) {
-                            boxCounts[p.divertPath]++;
-                            logScada(`[CONTAGEM] Sensor US-30${p.divertPath + 1}: Caixa ${p.divertPath + 1} (${boxCounts[p.divertPath]}/10)`);
-                            if (boxCounts[p.divertPath] === 10) {
-                                logScada(`<span style='color:#f59e0b;'>[LOT] Caixa ${p.divertPath + 1} CHEIA! Intervenção necessária.</span>`);
-                            }
-                            pieces.splice(i, 1);
-                        }
-                    }
-                }
-            }
-        }
-
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // 1. Silo de Alimentação (Setor 100)
-            ctx.fillStyle = '#475569';
-            ctx.fillRect(20, 90, 50, 80);
-            ctx.fillStyle = '#94a3b8';
-            ctx.font = '10px monospace';
-            ctx.fillText('SILO 100', 24, 130);
-
-            // 2. Esteira Principal M-101
-            ctx.fillStyle = estopActive ? '#450a0a' : '#1e293b';
-            ctx.fillRect(20, 200, 710, 22);
-            ctx.strokeStyle = estopActive ? '#ef4444' : '#38bdf8';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(20, 200, 710, 22);
-
-            ctx.fillStyle = '#f8fafc';
-            ctx.font = '11px monospace';
-            ctx.fillText(`ESTEIRA PRINCIPAL M-101 [${estopActive ? 'TRIP' : 'RUNNING'}]`, 250, 215);
-
-            // 3. Túnel de Inspeção (Setor 200)
-            ctx.fillStyle = '#334155';
-            ctx.fillRect(180, 160, 80, 70);
-            ctx.strokeStyle = '#f59e0b';
-            ctx.strokeRect(180, 160, 80, 70);
-            ctx.fillStyle = '#f59e0b';
-            ctx.fillText('INSPEÇÃO', 195, 185);
-            ctx.fillText('ZS/AS-200', 193, 200);
-
-            // 4. Pistões de Triagem e Esteiras Secundárias (Setor 200 & 300)
-            const sortX = [340, 470, 600];
-            for (let k = 0; k < 3; k++) {
-                const sx = sortX[k];
-
-                // Braço Empurrador (Pistão XV-201..203)
-                ctx.fillStyle = pistons[k].active ? '#ef4444' : '#64748b';
-                const py = pistons[k].active ? 180 : 155;
-                ctx.fillRect(sx - 8, py, 16, 25);
-                ctx.fillStyle = '#94a3b8';
-                ctx.fillText(`XV-20${k+1}`, sx - 18, 150);
-
-                // Esteira Secundária M-301..303
-                ctx.fillStyle = '#1e293b';
-                ctx.fillRect(sx - 15, 222, 30, 90);
-                ctx.strokeStyle = '#64748b';
-                ctx.strokeRect(sx - 15, 222, 30, 90);
-
-                // Caixa de Loteamento (Setor 300)
-                const isFull = boxCounts[k] >= 10;
-                ctx.fillStyle = isFull ? '#7f1d1d' : '#1e3a8a';
-                ctx.fillRect(sx - 25, 315, 50, 45);
-                ctx.strokeStyle = isFull ? '#ef4444' : '#38bdf8';
-                ctx.strokeRect(sx - 25, 315, 50, 45);
-
-                ctx.fillStyle = '#f8fafc';
-                ctx.font = '10px monospace';
-                ctx.fillText(`CX ${k+1}`, sx - 12, 332);
-                ctx.fillText(`${boxCounts[k]}/10`, sx - 12, 347);
-            }
-
-            // 5. Renderização das Peças
-            pieces.forEach(p => {
-                ctx.fillStyle = (p.type === 'RED' || p.type === 'FAULT_GEO') ? '#ef4444' : (p.type === 'GREEN' ? '#22c55e' : '#3b82f6');
-                const pSize = p.size === 'LARGE' ? 18 : 12;
-                ctx.fillRect(p.x - pSize/2, p.y - pSize/2, pSize, pSize);
-                ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = 1;
-                ctx.strokeRect(p.x - pSize/2, p.y - pSize/2, pSize, pSize);
-            });
-        }
-
-        function loop() {
-            update();
-            draw();
-            requestAnimationFrame(loop);
-        }
-
-        loop();
-    </script>
+  <!-- Scripts -->
+  <script src="doc/js/main.js"></script>
 </body>
 </html>
