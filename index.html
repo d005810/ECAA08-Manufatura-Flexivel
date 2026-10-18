@@ -3,17 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SCADA-Core FMS | ECAA08 2026.2 - Célula de Manufatura Flexível</title>
+  <title>SCADA-Core Automática | ECAA08 2026.2 - Manufatura Flexível</title>
   <link rel="icon" type="image/x-icon" href="https://transparencia.unifei.edu.br/wp-content/uploads/2023/09/cropped-simbolo_RGB-32x32.png" />
-  <!-- Fonts -->
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   
-  <!-- Stylesheet -->
   <link rel="stylesheet" href="doc/css/styles.css">
   
-  <!-- MathJax 3 -->
   <script>
     MathJax = {
       tex: {
@@ -31,18 +29,17 @@
     <div class="nav-container">
       <a href="index.html" class="nav-brand">
         <span class="scada-badge">SCADA-CORE</span>
-        <span>ECAA08 • Manufatura Flexível</span>
+        <span>ECAA08 Automática</span>
       </a>
       <ul class="nav-links">
         <li><a href="index.html" class="active">🏠 Início</a></li>
-        <li><a href="doc/etapa-01-logica.html">⚡ Etapa 01 (Lógica)</a></li>
-        <li><a href="doc/etapa-02-grafos.html">🕸️ Etapa 02 (Grafos & AGV)</a></li>
-        <li><a href="doc/planta-quimica.html">🏭 Planta FMS</a></li>
-        <li><a href="doc/diretrizes-github.html">🐙 GitHub & 5W2H</a></li>
+        <li><a href="doc/etapa-01-logica.html">⚡ Etapa 01 (Disponível)</a></li>
+        <li><a href="doc/etapa-02-grafos.html">🕸️ Etapa 02 (Disponível)</a></li>
+        <li><a href="doc/planta-quimica.html">🏭 Planta Modelo</a></li>
+        <li><a href="https://github.com/d005810/ECAA08-Manufatura-Flexivel" target="_blank">🐙 GitHub & 5W2H</a></li>
       </ul>
       <div class="nav-controls">
         <button id="theme-toggle" class="theme-toggle-btn" title="Alternar Modo Escuro/Claro">☀️</button>
-        <button id="mobile-menu-btn" class="mobile-menu-btn">☰</button>
       </div>
     </div>
   </nav>
@@ -51,21 +48,15 @@
   <header class="hero-section">
     <div class="hero-container">
       <span class="hero-tagline">Engenharia de Controle & Automação • UNIFEI</span>
-      <h1 class="hero-title">SCADA-Core Manufatura Flexível</h1>
+      <h1 class="hero-title">SCADA-Core Automática</h1>
       <p class="hero-subtitle">
-        Aplicação rigorosa de <strong>Matemática Discreta</strong> (Lógica Booleana, Teoria dos Grafos, Matrizes de Incidência e Otimização Combinatória) ao controle, triagem pneumática e roteamento autônomo de AGVs em uma Célula de Manufatura Flexível (FMS).
+        Integração rigorosa de <strong>Matemática Discreta</strong> (Lógica Formal, Grafos, Árvores e Relações) aos motores algorítmicos de supervisão e controle em células de manufatura flexível de missão crítica.
       </p>
       
       <div class="hero-meta">
-        <div class="hero-meta-item">
-          <span>📘 <strong>Disciplina:</strong> ECAA08 Automática (2026.2)</span>
-        </div>
-        <div class="hero-meta-item">
-          <span>🎯 <strong>Metodologia:</strong> Problem-Based Learning (PBL)</span>
-        </div>
-        <div class="hero-meta-item">
-          <span>🏭 <strong>Estudo de Caso:</strong> Linha de Triagem Óptica e Loteamento FMS</span>
-        </div>
+        <div><span>📘 <strong>Disciplina:</strong> ECAA08 Automática (2026.2)</span></div>
+        <div><span>🎯 <strong>Metodologia:</strong> Problem-Based Learning (PBL)</span></div>
+        <div><span>🏭 <strong>Estudo de Caso:</strong> Célula de Manufatura Flexível (FMS)</span></div>
       </div>
 
       <div class="hero-actions">
@@ -73,7 +64,7 @@
           🕸️ Acessar Etapa 02: Grafos, Dijkstra & AGV (Disponível) →
         </a>
         <a href="doc/etapa-01-logica.html" class="btn btn-outline">
-          ⚡ Ver Etapa 01: Lógica Formal
+          ⚡ Acessar Etapa 01: Lógica Formal
         </a>
       </div>
     </div>
@@ -84,18 +75,18 @@
 
     <!-- MENSAGEM DO PROJETO -->
     <div class="callout callout-info" style="margin-bottom: 3.5rem;">
-      <div class="callout-title">🏭 Status do Projeto SCADA-Core • Célula FMS</div>
+      <div class="callout-title">👨‍🏫 Mensagem do Projeto SCADA-Core • FMS</div>
       <p>
-        "O portal da Célula de Manufatura Flexível (FMS) agora integra os <strong>Módulos 1 e 2</strong>. A <strong>Etapa 02: Teoria dos Grafos & Roteamento Logístico</strong> está totalmente implementada e documentada, contendo a modelagem das esteiras como dígrafos ponderados $G=(V, E, W)$, balanceamento matricial de peças $B \cdot \vec{Q} = \vec{S}$, caminhos mínimos de triagem com <strong>Dijkstra</strong> sob falha pneumática, inspeção com o <strong>Algoritmo de Hierholzer</strong> e roteamento do robô móvel AGV via <strong>TSP (Nearest Neighbor + 2-Opt)</strong>."
+        "Bem-vindos ao portal do projeto <strong>SCADA-Core Automática</strong>. As documentações completas da <strong>Etapa 01 (Lógica Formal)</strong> e da <strong>Etapa 02 (Teoria dos Grafos & Roteamento Logístico)</strong> já estão totalmente disponíveis, contemplando as apresentações executivas com slides interativos, os memoriais detalhados das Aulas 00 a 18 e os simuladores SCADA interativos com injeção de falhas em tempo real. As demais etapas (Árvores e Relações) estão em preparação conforme o cronograma semestral."
       </p>
     </div>
 
-    <!-- SEÇÃO DOS MÓDULOS / ETAPAS -->
+    <!-- SEÇÃO DOS MÓDULOS -->
     <section style="margin-bottom: 4rem;">
-      <div class="section-header">
-        <span class="section-tag">Roteiro de Desenvolvimento</span>
-        <h2 class="section-title">Status das Etapas do Projeto</h2>
-        <p class="section-subtitle">Acompanhe a disponibilidade dos módulos do motor algorítmico do SCADA-Core da FMS.</p>
+      <div style="margin-bottom: 2rem;">
+        <span class="hero-tagline" style="font-size:0.75rem;">Roteiro de Desenvolvimento</span>
+        <h2 style="font-size:1.8rem; font-weight:800; color:#fff; margin-bottom:0.5rem;">Status das Etapas do Projeto</h2>
+        <p style="color:var(--text-muted); font-size:0.95rem;">Acompanhe a disponibilidade dos módulos do motor algorítmico do SCADA-Core.</p>
       </div>
 
       <div class="grid-2">
@@ -103,41 +94,41 @@
         <!-- CARD ETAPA 01: DISPONÍVEL -->
         <div class="card" style="border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);">
           <div class="card-header">
-            <span class="module-badge badge-mod1">Módulo 1 • Aulas 00 a 10</span>
-            <span style="background: #10b981; color: #ffffff; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; font-family: var(--font-mono);">✅ CONCLUÍDO</span>
+            <span class="scada-badge" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4);">Módulo 1 • Aulas 00 a 10</span>
+            <span style="background: #10b981; color: #ffffff; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; font-family: var(--font-mono);">✅ DISPONÍVEL</span>
           </div>
           <h3 class="card-title" style="color: #60a5fa;">⚡ Etapa 01: Lógica Formal & Intertravamento</h3>
           <p class="card-description">
-            Classificação dimensional e colorimétrica de peças, quantificadores $\forall$ e $\exists$ em malhas de sensores, otimização booleana por Quine-McCluskey, formas normais (FNC/FND) e motor de intertravamento para parada segura do alimentador XV-101 e esteira M-101.
+            Classificação dimensional e colorimétrica de peças, quantificadores $\forall$ e $\exists$ em malhas de sensores, otimização booleana por Quine-McCluskey, formas normais (FNC/FND) e motor de intertravamento para parada segura.
           </p>
           <ul style="padding-left: 1.25rem; font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem;">
-            <li>📽️ <strong>Apresentação:</strong> Slides com tabelas-verdade, lógica de predicados e diagramas.</li>
-            <li>🎛️ <strong>Simulador:</strong> SCADA em JavaScript da bancada com injeção de falhas e desvio de peças.</li>
-            <li>📖 <strong>Aulas 00 a 10:</strong> Memoriais teóricos e cadernos Jupyter com asserções determinísticas.</li>
+            <li>📽️ <strong>Apresentação:</strong> 15 slides interativos com fórmulas e diagramas.</li>
+            <li>🎛️ <strong>Simulador:</strong> SCADA em JavaScript da bancada com injeção de falhas.</li>
+            <li>📖 <strong>Aulas 00 a 10:</strong> Memorial de conceitos, ISA-5.1 e entregáveis em Python.</li>
           </ul>
-          <div class="card-footer">
+          <div style="margin-top:auto;">
             <a href="doc/etapa-01-logica.html" class="btn btn-outline" style="width: 100%; justify-content: center;">
               Acessar Documentação da Etapa 01 →
             </a>
           </div>
         </div>
 
-        <!-- CARD ETAPA 02: DISPONÍVEL AGORA -->
+        <!-- CARD ETAPA 02: DISPONÍVEL -->
         <div class="card" style="border-color: #10b981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.25);">
           <div class="card-header">
-            <span class="module-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">Módulo 2 • Aulas 11 a 18</span>
-            <span style="background: #10b981; color: #ffffff; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; font-family: var(--font-mono);">✅ DISPONÍVEL AGORA</span>
+            <span class="scada-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">Módulo 2 • Aulas 11 a 18</span>
+            <span style="background: #10b981; color: #ffffff; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; font-family: var(--font-mono);">✅ DISPONÍVEL AGORA</span>
           </div>
           <h3 class="card-title" style="color: #34d399;">🕸️ Etapa 02: Teoria dos Grafos & Roteamento Logístico</h3>
           <p class="card-description">
-            Modelagem das esteiras como dígrafos dirigidos $G=(V, E, W)$, balanço de fluxo de peças $B \cdot \vec{Q} = \vec{S}$, caminhos mínimos com **Dijkstra** para contorno de pistões emperrados, manutenção preventiva com **Hierholzer**, roteamento ótimo do AGV via **TSP (NN + 2-Opt)** e logística fabril multicamada (**DAG**).
+            Modelagem das esteiras como dígrafos $G=(V, E, W)$, matrizes de incidência/adjacência, menor caminho com **Algoritmo de Dijkstra** para desvio autônomo sob falha pneumática, inspeção euleriana com **Hierholzer**, roteamento de AGVs via **TSP (NN + 2-Opt)** e logística integrada como **DAG**.
           </p>
           <ul style="padding-left: 1.25rem; font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem;">
-            <li>📽️ <strong>Apresentação:</strong> Slides da Etapa 2 com provas de otimalidade e topologia FMS.</li>
-            <li>🎛️ <strong>Emulador SCADA-Graph:</strong> Simulador interativo com nós de esteira, desvio pneumático e robô AGV.</li>
-            <li>📖 <strong>Aulas 11 a 18:</strong> Roteamento BFS/DFS, relaxação de arestas, ciclos e redes multicamada.</li>
+            <li>📽️ <strong>Apresentação:</strong> 10 slides interativos com fórmulas e diagramas de rede.</li>
+            <li>🎛️ <strong>Emulador Logístico:</strong> Simulador SCADA-Graph com esteiras animadas, desvios e AGVs em JS.</li>
+            <li>📖 <strong>Aulas 11 a 18:</strong> Memorial completo de modelagem, balanceamento de peças $B \cdot \vec{Q} = \vec{S}$ e algoritmos.</li>
           </ul>
-          <div class="card-footer">
+          <div style="margin-top:auto;">
             <a href="doc/etapa-02-grafos.html" class="btn btn-primary" style="width: 100%; justify-content: center; background: linear-gradient(135deg, #059669, #10b981);">
               Acessar Documentação da Etapa 02 →
             </a>
@@ -147,67 +138,63 @@
         <!-- CARD ETAPA 03: EM BREVE -->
         <div class="card" style="opacity: 0.85;">
           <div class="card-header">
-            <span class="module-badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);">Módulo 3 • Aulas 19 a 28</span>
-            <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; font-family: var(--font-mono);">⏳ EM BREVE</span>
+            <span class="scada-badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);">Módulo 3 • Aulas 19 a 28</span>
+            <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; font-family: var(--font-mono);">⏳ EM BREVE</span>
           </div>
           <h3 class="card-title">🌲 Etapa 03: Árvores & Gestão de Alarmes (ISA-18.2)</h3>
           <p class="card-description">
-            Hierarquização de ativos da célula conforme ISA-95, Árvores Binárias de Busca (BST) $O(\log n)$ para varredura de tags de sensores, algoritmo de supressão inteligente de inundação de alarmes (*Alarm Flood*) e árvores de decisão para Parada de Emergência (ESD).
+            Hierarquia de ativos industriais ISA-95, Árvores Binárias de Busca (BST) $O(\log n)$ para varredura de tags, algoritmo de supressão inteligente de inundação de alarmes (*Alarm Flood*) e árvores de decisão para parada de emergência.
           </p>
-          <div class="callout callout-warning" style="margin: 0.75rem 0; padding: 0.6rem 0.9rem; font-size: 0.82rem;">
+          <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); padding: 0.6rem 0.9rem; font-size: 0.82rem; border-radius: 6px; margin-bottom: 1.2rem; color:#fde68a;">
             <strong>Previsão de Liberação:</strong> Aulas 19 a 28 conforme cronograma semestral.
           </div>
-          <div class="card-footer">
-            <button class="btn btn-outline" style="width: 100%; justify-content: center; opacity: 0.6; cursor: not-allowed;" disabled>
-              Disponível em Breve
-            </button>
+          <div style="margin-top:auto;">
+            <button class="btn btn-dark" style="width: 100%; justify-content: center; opacity: 0.6; cursor: not-allowed;" disabled>Disponível em Breve</button>
           </div>
         </div>
 
         <!-- CARD ETAPA 04: EM BREVE -->
         <div class="card" style="opacity: 0.85;">
           <div class="card-header">
-            <span class="module-badge" style="background: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3);">Módulo 4 • Aulas 29 a 32</span>
-            <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; font-family: var(--font-mono);">⏳ EM BREVE</span>
+            <span class="scada-badge" style="background: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3);">Módulo 4 • Aulas 29 a 32</span>
+            <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; font-family: var(--font-mono);">⏳ EM BREVE</span>
           </div>
           <h3 class="card-title">🔄 Etapa 04: Relações, Permissões RBAC & Grafcet</h3>
           <p class="card-description">
-            Matrizes booleanas de permissões de operadores, Diagramas de Hasse (POSETs), relações de equivalência para lotes de fabricação e sequenciamento de passos em Grafcet/SFC (IEC 61131-3) para a operação automatizada da linha.
+            Matrizes booleanas de permissões, conjuntos parcialmente ordenados (POSETs com Diagramas de Hasse), relações de equivalência e sequenciamento de passos em Grafcet/SFC (IEC 61131-3).
           </p>
-          <div class="callout callout-warning" style="margin: 0.75rem 0; padding: 0.6rem 0.9rem; font-size: 0.82rem;">
+          <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); padding: 0.6rem 0.9rem; font-size: 0.82rem; border-radius: 6px; margin-bottom: 1.2rem; color:#fde68a;">
             <strong>Previsão de Liberação:</strong> Aulas 29 a 32 na reta final do semestre.
           </div>
-          <div class="card-footer">
-            <button class="btn btn-outline" style="width: 100%; justify-content: center; opacity: 0.6; cursor: not-allowed;" disabled>
-              Disponível em Breve
-            </button>
+          <div style="margin-top:auto;">
+            <button class="btn btn-dark" style="width: 100%; justify-content: center; opacity: 0.6; cursor: not-allowed;" disabled>Disponível em Breve</button>
           </div>
         </div>
 
       </div>
     </section>
 
-    <!-- GOVERNANÇA E MODELO FMS -->
+    <!-- METODOLOGIA E MEMORIAL -->
     <section style="margin-bottom: 2rem;">
       <div class="card" style="background: #091224; border-color: #1e3a5f;">
         <div class="grid-2">
           <div>
             <h3 style="color: #38bdf8; margin-bottom: 0.5rem;">🐙 Avaliação e Governança no GitHub</h3>
             <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
-              As entregas das Aulas 11 a 18 são auditadas individualmente pelas métricas de contribuição do Git (<em>Contributors</em>, <em>Insights</em> e <em>Pull Requests</em>). Os testes unitários determinísticos em Python comprovam a consistência dos grafos da planta.
+              As entregas de código de cada etapa são auditadas individualmente através das métricas de contribuição do Git (<em>Contributors</em>, <em>Insights</em> e <em>Pull Requests</em>). É obrigatório que cada aluno realize seus próprios commits atômicos com testes determinísticos.
             </p>
-            <a href="doc/diretrizes-github.html" class="btn btn-outline" style="padding: 0.4rem 0.9rem; font-size: 0.85rem;">
-              Ver Guia de Git & Matriz 5W2H →
+            <a href="https://github.com/d005810/ECAA08-Manufatura-Flexivel" target="_blank" class="btn btn-outline" style="padding: 0.45rem 0.9rem; font-size: 0.85rem;">
+              Ver Repositório do Projeto →
             </a>
           </div>
 
           <div>
             <h3 style="color: #10b981; margin-bottom: 0.5rem;">🏭 Célula de Manufatura Flexível (FMS)</h3>
             <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
-              Conheça o layout físico com os postos de trabalho (SILO-100, INSP-200, DIV-201..203, CX-301..303 e DESC-304), instrumentos de sensoriamento óptico e atuadores pneumáticos padronizados pela norma ISA-5.1.
+              Conheça os postos de triagem da planta (SILO-100, INSP-200, DIV-201..203, CX-301..303 e DESC-304), instrumentos de sensoriamento óptico e atuadores pneumáticos padronizados pela norma ISA-5.1.
             </p>
-            <a href="doc/planta-quimica.html" class="btn btn-outline" style="padding: 0.4rem 0.9rem; font-size: 0.85rem;">
-              Ver Memorial da Planta FMS →
+            <a href="doc/etapa-02-grafos.html" class="btn btn-outline" style="padding: 0.45rem 0.9rem; font-size: 0.85rem;">
+              Ver Topologia da Planta FMS →
             </a>
           </div>
         </div>
@@ -218,12 +205,9 @@
 
   <!-- FOOTER -->
   <footer class="footer">
-    <div class="footer-bottom">
-      <p>© 2026.2 ECAA08 Automática • Engenharia de Controle e Automação • UNIFEI. Publicado no GitHub Pages.</p>
-    </div>
+    <p>© 2026.2 ECAA08 Automática • Engenharia de Controle e Automação • UNIFEI. Publicado no GitHub Pages.</p>
   </footer>
 
-  <!-- Scripts -->
   <script src="doc/js/main.js"></script>
 </body>
 </html>
