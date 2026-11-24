@@ -16,12 +16,14 @@
 
 ## 1. Contextualização e Desafio de Engenharia de Automação
 
-Na **Célula de Manufatura Flexível (FMS)**, a integração logística entre os postos fixos de trabalho e a expedição de fábrica é realizada por um Veículo Guiado Automaticamente (**AGV-300**) ou robô móvel de transporte autônomo (*Autonomous Mobile Robot* — AMR). As missões do AGV incluem:
-1. **Coleta de Lotes Prontos:** Recolher as caixas preenchidas com 10 peças nas saídas das canaletas `CX-301` (peças vermelhas), `CX-302` (peças verdes) ou `CX-303` (peças azuis) e transportá-las até o posto de expedição e paletização final `EXP-400`.
+Na **Célula de Manufatura Flexível (FMS)**, a integração logística entre os postos fixos de trabalho e a expedição de fábrica é realizada por um Veículo Guiado Automaticamente (**AGV-300**) ou robô móvel de transporte autônomo (*Autonomous Mobile Robot* — AMR). As missões prioritárias do AGV incluem:
+
+1. **Coleta de Lotes Concluídos:** Recolher as caixas preenchidas com 10 peças nas saídas das canaletas `CX-301` (peças grandes vermelhas), `CX-302` (peças grandes verdes) ou `CX-303` (peças pequenas azuis) e transportá-las até o posto de expedição e paletização final `EXP-400`.
 2. **Reabastecimento de Insumos:** Transportar novos tarugos e peças brutas do estoque até o silo de alimentação de entrada (`SILO-100`).
 3. **Descarte de Sucata:** Recolher periodicamente a caçamba de refugo `DESC-304`.
 
 ### O Problema Físico de Colisão no Chão de Fábrica
+
 O layout da célula de manufatura possui severas restrições geométricas e estruturais:
 * **Esteira Principal `M-101`:** Estrutura longitudinal elevada de $3{,}4\text{ m}$ de extensão com motoredutor e cabeamento.
 * **Túnel de Visão `INSP-200`:** Estrutura rígida de iluminação e câmeras ópticas.
@@ -32,16 +34,17 @@ Métodos clássicos baseados em grade fixa (*Grid-based* como $A^*$ ou Dijkstra 
 
 ---
 
-## 2. Formulação Matemática do Espaço de Configurações ($\mathcal{C}\text{-Space}$)
+## 2. Formulação Matemática do Espaço de Configurações (C-Space)
 
 O ambiente de movimentação da célula é modelado no espaço de configurações bidimensional $\mathcal{C} \subset \mathbb{R}^2$:
 
 $$\mathcal{C} = [0, X_{\max}] \times [0, Y_{\max}] = [0, 5{,}0\text{ m}] \times [0, 4{,}0\text{ m}]$$
 
 ### 2.1. Espaço de Obstáculos ($\mathcal{C}_{\text{obs}}$)
+
 Os obstáculos físicos são formalizados pelo conjunto $\mathcal{C}_{\text{obs}} = \bigcup_{k=1}^{M} \mathcal{O}_k$, onde cada obstáculo retangular $\mathcal{O}_k$ é dilatado (*Minkowski Sum*) pelo raio de segurança do AGV ($r_{\text{seg}} = 0{,}20\text{ m}$):
 
-| Obstáculo | Equipamento Físico Representado | Dimensões Reais $[X_{\min}, X_{\max}] \times [Y_{\min}, Y_{\max}]$ | Papel Operacional |
+| Obstáculo | Equipamento Físico Representado | Dimensões Reais $[X_{\min}, X_{\max}] \times [Y_{\min}, Y_{\max}]$ | Papel Operacional na FMS |
 | :---: | :--- | :---: | :--- |
 | $\mathcal{O}_1$ | `CLP-00` (Painel Central SCADA) | $[0{,}20, 0{,}80] \times [3{,}00, 3{,}80]\text{ m}$ | Painel de controle e sala técnica |
 | $\mathcal{O}_2$ | `SILO-100` (Alimentador Infeed) | $[0{,}40, 1{,}00] \times [1{,}70, 2{,}30]\text{ m}$ | Silo e pistão pneumático $XV\text{-}101$ |
@@ -53,6 +56,7 @@ Os obstáculos físicos são formalizados pelo conjunto $\mathcal{C}_{\text{obs}
 | $\mathcal{O}_8$ | `DESC-304` (Caçamba de Sucata) | $[4{,}20, 4{,}80] \times [1{,}70, 2{,}30]\text{ m}$ | Caixa de descarte na ponta da esteira |
 
 O **Espaço Livre** onde o AGV pode transitar livre de colisões é definido por:
+
 $$\mathcal{C}_{\text{livre}} = \mathcal{C} \setminus \mathcal{C}_{\text{obs}}$$
 
 ---
@@ -61,39 +65,71 @@ $$\mathcal{C}_{\text{livre}} = \mathcal{C} \setminus \mathcal{C}_{\text{obs}}$$
 
 O RRT constrói iterativamente uma árvore direcionada enraizada $\mathcal{T} = (V, E)$, iniciando com $V = \{q_{\text{start}}\}$ e $E = \emptyset$.
 
-### 3.1. Propriedade do Viés de Voronoi (*Voronoi Bias*)
-A força motriz da rápida exploração do RRT reside na partição de Voronoi induzida pelos nós já existentes em $\mathcal{T}$. A probabilidade de um vértice $q_{\text{near}} \in V$ ser selecionado para extensão é proporcional à área de sua célula de Voronoi:
-$$\text{Área}(\text{Voronoi}(q_{\text{near}}))$$
-Nós situados na fronteira externa da árvore possuem células de Voronoi ordens de grandeza maiores do que os nós internos aglomerados. Assim, a amostragem aleatória uniforme "puxa" naturalmente os novos ramos para as regiões vazias e inexploradas do chão de fábrica, evitando ciclos e redundâncias.
+### 3.1. Propriedade do Viés de Voronoi (Voronoi Bias)
 
-### 3.2. As Primitivas Fundamentais do Algoritmo
+A força motriz da rápida exploração do RRT decorre da partição de Voronoi induzida pelos nós já existentes em $\mathcal{T}$. A probabilidade de um vértice $q_{\text{near}} \in V$ ser selecionado para extensão é proporcional à área de sua célula de Voronoi:
 
-1. **`SAMPLE` com *Goal Bias* ($p_{\text{goal}} = 0{,}10$):**
-   Gera um ponto de teste $q_{\text{rand}} \in \mathcal{C}$:
-   $$q_{\text{rand}} = \begin{cases} q_{\text{goal}}, & \text{com probabilidade } p_{\text{goal}} \\ \mathcal{U}(\mathcal{C}), & \text{com probabilidade } 1 - p_{\text{goal}} \end{cases}$$
-   O viés direcionado (*Goal Bias*) acelera expressivamente a convergência quando o AGV atinge o corredor de aproximação do destino.
+$$P(\text{seleção de } q_{\text{near}}) \propto \text{Area}(\text{Voronoi}(q_{\text{near}}))$$
 
-2. **`NEAREST`:**
-   Encontra o nó da árvore mais próximo de $q_{\text{rand}}$ sob a métrica da distância euclidiana:
-   $$q_{\text{near}} = \arg\min_{v \in V} \|v - q_{\text{rand}}\|_2$$
+Nós situados na fronteira externa da árvore possuem células de Voronoi ordens de grandeza maiores do que os nós internos aglomerados. Assim, a amostragem aleatória uniforme atrai naturalmente os novos ramos para as regiões vazias e inexploradas do chão de fábrica, evitando ciclos e redundâncias.
 
-3. **`STEER`:**
-   Estende a árvore a partir de $q_{\text{near}}$ na direção de $q_{\text{rand}}$ por uma distância incremental fixa $\Delta q = 0{,}20\text{ m}$:
-   $$q_{\text{new}} = q_{\text{near}} + \Delta q \cdot \frac{q_{\text{rand}} - q_{\text{near}}}{\|q_{\text{rand}} - q_{\text{near}}\|_2}$$
-   Se $\|q_{\text{rand}} - q_{\text{near}}\|_2 < \Delta q$, então $q_{\text{new}} = q_{\text{rand}}$.
+---
 
-4. **`COLLISION-FREE`:**
-   Verifica analiticamente se o segmento de reta $\overline{q_{\text{near}} q_{\text{new}}}$ intercepta qualquer obstáculo de $\mathcal{C}_{\text{obs}}$. Para garantir segurança operacional, o segmento é subdividido em micro-passos $\delta s \le 0{,}02\text{ m}$:
-   $$\forall \lambda \in [0, 1], \quad \big( (1-\lambda) q_{\text{near}} + \lambda q_{\text{new}} \big) \in \mathcal{C}_{\text{livre}}$$
-   Se houver colisão com a esteira ou caixas, $q_{\text{new}}$ é rejeitado. Caso contrário, $V \leftarrow V \cup \{q_{\text{new}}\}$ e $E \leftarrow E \cup \{(q_{\text{near}}, q_{\text{new}})\}$.
+### 3.2. Correspondência entre Primitivas do RRT e Engenharia de Automação
 
-5. **`BACKTRACK` e `PATH-SMOOTHING`:**
-   Quando $q_{\text{new}}$ atinge a vizinhança de tolerância de $q_{\text{goal}}$ ($\|q_{\text{new}} - q_{\text{goal}}\|_2 \le \Delta q$), o caminho bruto é extraído percorrendo os ponteiros ancestrais até $q_{\text{start}}$.
-   Em seguida, aplica-se o algoritmo de **Atalhos e Suavização (*Shortcut Path Smoothing*)**: selecionam-se pares de nós não-adjacentes $(q_i, q_j)$ da rota; se o segmento direto for livre de colisão, removem-se os nós intermediários, reduzindo o comprimento total e eliminando curvas redundantes.
+A tabela abaixo resume as operações matemáticas do RRT e sua tradução direta na dinâmica do chão de fábrica:
+
+| Primitiva Algorítmica | Fundamento Matemático | Função Operacional no AGV / FMS |
+| :--- | :--- | :--- |
+| **`SAMPLE`** | Amostragem estocástica com distribuição mista $(1 - p_{\text{goal}})\mathcal{U}(\mathcal{C}) + p_{\text{goal}}\delta(q_{\text{goal}})$ | Equilibra a exploração de corredores fabris vazios com a atração rápida ao ponto de carga/descarga |
+| **`NEAREST`** | Busca de ponto mais próximo sob métrica euclidiana $\|v - q_{\text{rand}}\|_2$ | Seleciona o waypoint da árvore mais conveniente para expansão contínua da trajetória |
+| **`STEER`** | Projeção incremental de passo $\Delta q$ respeitando raio de giro do veículo | Garante passos cinematicamente factíveis sem comandos abruptos aos servo-acionamentos |
+| **`COLLISION-FREE`** | Teste de interseção contínua $\overline{q_{\text{near}} q_{\text{new}}} \cap \mathcal{C}_{\text{obs}} = \emptyset$ | Garante que o AGV mantenha distância segura da esteira `M-101`, túnel e canaletas |
+| **`BACKTRACK`** | Travessia reversa única da raiz aos nós ancestrais da árvore $\mathcal{T}$ | Extrai a sequência ordenada de comandos de navegação a ser enviada ao CLP de bordo |
+| **`PATH-SMOOTHING`** | Otimização por atalhos diretos (*shortcutting*) em subespaços convexos | Elimina curvas em ziguezague, reduzindo a distância percorrida e o tempo de ciclo |
+
+---
+
+### 3.3. Formulação Analítica Passo a Passo das Primitivas
+
+#### A. Amostragem com Viés ao Objetivo (SAMPLE com Goal Bias)
+Gera um ponto estocástico $q_{\text{rand}} \in \mathcal{C}$ a cada ciclo:
+
+$$q_{\text{rand}} = \begin{cases} q_{\text{goal}}, & \text{com probabilidade } p_{\text{goal}} \\ \mathcal{U}(\mathcal{C}), & \text{com probabilidade } 1 - p_{\text{goal}} \end{cases}$$
+
+O parâmetro $p_{\text{goal}} = 0{,}10$ ($10\%$) acelera a convergência assim que o AGV atinge a zona desobstruída em frente ao posto de entrega.
+
+#### B. Busca do Vizinho Mais Próximo (NEAREST)
+Localiza o nó da árvore mais próximo em distância euclidiana ao ponto sorteado:
+
+$$q_{\text{near}} = \arg\min_{v \in V} \Vert v - q_{\text{rand}} \Vert_2$$
+
+#### C. Extensão Cinemática por Passo Fixo (STEER)
+A partir de $q_{\text{near}}$, projeta-se o novo nó $q_{\text{new}}$ na direção de $q_{\text{rand}}$ por uma distância incremental $\Delta q = 0{,}20\text{ m}$:
+
+$$q_{\text{new}} = q_{\text{near}} + \Delta q \cdot \frac{q_{\text{rand}} - q_{\text{near}}}{\Vert q_{\text{rand}} - q_{\text{near}} \Vert_2}$$
+
+Se $\Vert q_{\text{rand}} - q_{\text{near}} \Vert_2 < \Delta q$, adota-se diretamente $q_{\text{new}} = q_{\text{rand}}$.
+
+#### D. Verificação Contínua Livre de Colisões (COLLISION-FREE)
+Para assegurar que o segmento de reta não atravesse quinas ou bordas dos equipamentos, o trecho é interpolado parametricamente em micro-passos $\delta s \le 0{,}02\text{ m}$:
+
+$$\forall \lambda \in [0, 1], \quad \big( (1-\lambda) q_{\text{near}} + \lambda q_{\text{new}} \big) \in \mathcal{C}_{\text{livre}}$$
+
+Se qualquer micro-ponto violar a distância mínima de segurança de algum equipamento de $\mathcal{C}_{\text{obs}}$, a proposta $q_{\text{new}}$ é rejeitada. Caso contrário, adiciona-se o vértice $V \leftarrow V \cup \{q_{\text{new}}\}$ e a aresta $E \leftarrow E \cup \{(q_{\text{near}}, q_{\text{new}})\}$.
+
+#### E. Reconstrução Reversa e Suavização de Rota (BACKTRACK & PATH-SMOOTHING)
+Quando um nó $q_{\text{new}}$ é gerado dentro do raio de aceitação do objetivo ($\Vert q_{\text{new}} - q_{\text{goal}} \Vert_2 \le \Delta q$), o caminho bruto é extraído percorrendo os ponteiros ancestrais até $q_{\text{start}}$.
+
+Em seguida, o algoritmo executa $N_{\text{smooth}} = 200$ iterações de atalho: sorteiam-se dois pontos não-adjacentes $q_i$ e $q_j$ da rota; se o segmento direto $\overline{q_i q_j}$ for livre de colisões em $\mathcal{C}_{\text{livre}}$, os waypoints intermediários redundantes são suprimidos:
+
+$$q_i \longrightarrow q_{i+1} \longrightarrow \dots \longrightarrow q_j \quad \Longrightarrow \quad q_i \longrightarrow q_j$$
 
 ---
 
 ## 4. Diagrama de Fluxo do Algoritmo RRT Industrial
+
+O fluxograma abaixo detalha o encadeamento das etapas computacionais do planejador:
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'fontFamily': 'arial'}}}%%
@@ -101,11 +137,11 @@ flowchart TD
     START(["Início: Definir q_start, q_goal, C_obs e K_max"]) --> INIT["Inicializar Árvore: V = {q_start}, E = vazio, k = 0"]
     INIT --> CHECK{"k < K_max ?"}
     
-    CHECK -- Não (Timeout) --> FAIL(["Falha: Rota Segura Não Encontrada<br/>Acionar Protocolo de Espera AGV"])
-    CHECK -- Sim --> BIAS{"Sorteio Goal Bias:<br/>rand(0,1) < p_goal ?"}
+    CHECK -- "Não (Timeout)" --> FAIL(["Falha: Rota Segura Não Encontrada<br/>Acionar Protocolo de Espera AGV"])
+    CHECK -- "Sim" --> BIAS{"Sorteio Goal Bias:<br/>rand(0,1) < p_goal ?"}
     
-    BIAS -- Sim (10%) --> S_GOAL["Amostra no Destino:<br/>q_rand = q_goal"]
-    BIAS -- Não (90%) --> S_UNIF["Amostra Uniforme:<br/>q_rand = rand(0, C)"]
+    BIAS -- "Sim (10%)" --> S_GOAL["Amostra no Destino:<br/>q_rand = q_goal"]
+    BIAS -- "Não (90%)" --> S_UNIF["Amostra Uniforme:<br/>q_rand = rand(0, C)"]
     
     S_GOAL --> NEAR["NEAREST: Encontrar nó q_near em V<br/>com menor distância euclidiana"]
     S_UNIF --> NEAR
@@ -114,15 +150,15 @@ flowchart TD
     
     STEER --> COL{"COLLISION_FREE ?<br/>Segmento (q_near, q_new)<br/>cruza Esteira ou Painéis?"}
     
-    COL -- Sim (Colisão) --> REJECT["Descartar q_new<br/>Incrementar k = k + 1"]
+    COL -- "Sim (Colisão)" --> REJECT["Descartar q_new<br/>Incrementar k = k + 1"]
     REJECT --> CHECK
     
-    COL -- Não (Livre) --> ADD["Expandir Árvore:<br/>V = V U {q_new}<br/>E = E U {(q_near, q_new)}"]
+    COL -- "Não (Livre)" --> ADD["Expandir Árvore:<br/>V = V U {q_new}<br/>E = E U {(q_near, q_new)}"]
     
     ADD --> GOAL{"q_new alcançou q_goal ?<br/>dist(q_new, q_goal) <= delta_q"}
     
-    GOAL -- Não --> REJECT
-    GOAL -- Sim --> BACK["BACKTRACK: Reconstruir caminho bruto<br/>de q_goal até q_start via nós ancestrais"]
+    GOAL -- "Não" --> REJECT
+    GOAL -- "Sim" --> BACK["BACKTRACK: Reconstruir caminho bruto<br/>de q_goal até q_start via nós ancestrais"]
     
     BACK --> SMOOTH["PATH-SMOOTHING: Otimizar atalhos diretos<br/>eliminando curvas e reduzindo distância"]
     
@@ -147,12 +183,14 @@ flowchart TD
 
 ### Cenário Operacional de Missão Logística
 * **Ponto de Partida ($q_{\text{start}}$):** Baia de Loteamento 3 (`CX-303`, coordenadas $(3{,}80\text{ m}, 0{,}40\text{ m})$), após o sensor ultrassônico `US-303` registrar a conclusão de um lote de 10 peças pequenas azuis.
-* **Ponto de Destino ($q_{\text{goal}}$):** Posto de Reabastecimento do Silo de Entrada (`SILO-100`, coordenadas $(0{,}50\text{ m}, 3{,}50\text{ m})$), onde o AGV descarregará caixas vazias e coletará novos tarugos para alimentação.
+* **Ponto de Destino ($q_{\text{goal}}$):** Posto de Reabastecimento do Silo de Entrada (`SILO-100`, coordenadas $(0{,}60\text{ m}, 3{,}40\text{ m})$), onde o AGV descarregará caixas vazias e coletará novos tarugos para alimentação.
 * **Barreira Geométrica:** Para cumprir a missão, o veículo deve necessariamente atravessar de um lado a outro da bancada, contornando a estrutura central da esteira `M-101` e desviando das rampas das três canaletas de triagem e do túnel de inspeção.
 
 ---
 
 ## 6. Análise de Desempenho e Comparativo Técnico
+
+A tabela abaixo compara o desempenho das estratégias de planejamento de rota na célula:
 
 | Métrica de Navegação | Grade Ocupada Clássica ($A^*$) | RRT Bruto | RRT Suavizado (*Smoothed*) |
 | :--- | :---: | :---: | :---: |
