@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SCADA-Graph FMS • Célula de Manufatura Flexível & Roteamento Logístico</title>
+  <title>SCADA-Tree FMS • Célula de Manufatura Flexível • Etapa 3 (Árvores)</title>
   <link rel="icon" type="image/x-icon" href="https://transparencia.unifei.edu.br/wp-content/uploads/2023/09/cropped-simbolo_RGB-32x32.png" />
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- MathJax para renderização elegante de equações e notações matemáticas nos slides -->
+  <!-- MathJax para renderização de equações e formalizações matemáticas -->
   <script>
     window.MathJax = {
       tex: {
@@ -42,6 +42,7 @@
       --primary-glow: rgba(16, 185, 129, 0.4);
       --secondary: #0ea5e9;
       --secondary-glow: rgba(14, 165, 233, 0.4);
+      --purple: #a855f7;
       --danger: #ef4444;
       --warning: #f59e0b;
       --text-bright: #f8fafc;
@@ -56,7 +57,7 @@
       color: var(--text-bright);
       font-family: var(--font-sans);
       line-height: 1.5;
-      background-image: 
+      background-image:
         linear-gradient(rgba(14, 165, 233, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(14, 165, 233, 0.03) 1px, transparent 1px);
       background-size: 32px 32px;
@@ -73,6 +74,8 @@
       position: sticky;
       top: 0;
       z-index: 1000;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
     .scada-title-wrap { display: flex; align-items: center; gap: 0.85rem; }
     .pulse-indicator {
@@ -80,6 +83,7 @@
       background: var(--primary);
       box-shadow: 0 0 10px var(--primary);
       animation: pulse 1.8s infinite;
+      flex-shrink: 0;
     }
     @keyframes pulse {
       0% { opacity: 1; transform: scale(1); }
@@ -97,26 +101,61 @@
       font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 4px; letter-spacing: 0.05em;
     }
 
-    .container-wide { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+    .container-wide { max-width: 1420px; margin: 0 auto; padding: 1.5rem; }
 
     /* SLIDES */
     .slides-wrapper {
       background: var(--bg-card); border: 1px solid var(--border-dim);
-      border-radius: 10px; margin-bottom: 2rem; overflow: hidden;
+      border-radius: 10px; margin-bottom: 1.75rem; overflow: hidden;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .slides-wrapper.fullscreen-mode {
+      position: fixed; inset: 0; z-index: 9999; margin: 0; border-radius: 0;
+      display: flex; flex-direction: column;
+    }
+    .slides-wrapper.fullscreen-mode .slide-body {
+      flex: 1; overflow-y: auto; padding: 2.25rem 3rem;
     }
     .slides-header {
       background: #040a17; padding: 0.85rem 1.5rem; border-bottom: 1px solid var(--border-dim);
-      display: flex; justify-content: space-between; align-items: center;
+      display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; flex-wrap: wrap;
     }
     .slides-title-tag {
       font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-muted);
-      display: flex; align-items: center; gap: 0.6rem;
+      display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
     }
     .slide-badge-pill {
       background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35);
       color: var(--primary); padding: 0.15rem 0.55rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700;
     }
+    .member-pill {
+      padding: 0.15rem 0.6rem; border-radius: 999px; font-size: 0.73rem; font-weight: 700;
+      font-family: var(--font-mono); border: 1px solid transparent;
+    }
+    .member-1 { background: rgba(14, 165, 233, 0.15); border-color: rgba(14, 165, 233, 0.45); color: #38bdf8; }
+    .member-2 { background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.45); color: #34d399; }
+    .member-3 { background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.45); color: #fbbf24; }
+    .member-4 { background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.45); color: #c084fc; }
+
+    .member-bar {
+      background: #030712; border-bottom: 1px solid var(--border-dim);
+      padding: 0.55rem 1.5rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+    }
+    .member-bar-lbl {
+      font-family: var(--font-mono); font-size: 0.72rem; color: #64748b; text-transform: uppercase; margin-right: 0.35rem;
+    }
+    .member-jump-btn {
+      background: #071224; border: 1px solid var(--border-dim); color: #cbd5e1;
+      padding: 0.25rem 0.65rem; border-radius: 5px; font-family: var(--font-mono);
+      font-size: 0.72rem; cursor: pointer; transition: all 0.2s;
+    }
+    .member-jump-btn:hover { border-color: var(--secondary); color: #fff; }
+    .member-jump-btn.active-m1 { border-color: #38bdf8; background: rgba(14, 165, 233, 0.14); color: #38bdf8; }
+    .member-jump-btn.active-m2 { border-color: #34d399; background: rgba(16, 185, 129, 0.14); color: #34d399; }
+    .member-jump-btn.active-m3 { border-color: #fbbf24; background: rgba(245, 158, 11, 0.14); color: #fbbf24; }
+    .member-jump-btn.active-m4 { border-color: #c084fc; background: rgba(168, 85, 247, 0.14); color: #c084fc; }
+
+    .slide-nav-btns { display: flex; gap: 0.45rem; flex-wrap: wrap; }
     .btn-slide {
       background: #08152c; border: 1px solid var(--border-dim); color: #e2e8f0;
       padding: 0.35rem 0.85rem; border-radius: 6px; font-family: var(--font-mono);
@@ -125,196 +164,219 @@
     .btn-slide:hover { background: var(--secondary); border-color: var(--secondary); color: #fff; }
 
     .slide-body {
-      padding: 2rem 2.25rem 1.5rem; min-height: 440px;
-      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 1.75rem 2.25rem 1.35rem; min-height: 440px;
+      display: flex; flex-direction: column; justify-content: space-between; gap: 1rem;
     }
-    .slide-header-content h2 { font-size: 1.65rem; font-weight: 800; color: #fff; margin-bottom: 0.35rem; }
-    .slide-header-content p.subtitle { font-size: 0.92rem; color: var(--text-muted); margin-bottom: 1.25rem; }
-    .slide-grid-2 { display: grid; grid-template-columns: 1.05fr 1fr; gap: 1.75rem; align-items: start; }
+    .slide-header-content h2 { font-size: 1.55rem; font-weight: 800; color: #fff; margin-bottom: 0.3rem; }
+    .slide-header-content p.subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; }
+    .slide-grid-2 { display: grid; grid-template-columns: 1.05fr 1fr; gap: 1.5rem; align-items: start; }
     .slide-math-box {
       background: #030813; border: 1px solid var(--border-dim); border-left: 3px solid var(--secondary);
-      border-radius: 6px; padding: 1.15rem 1.25rem; font-size: 0.9rem; line-height: 1.6; color: #e2e8f0;
+      border-radius: 6px; padding: 1.05rem 1.2rem; font-size: 0.88rem; line-height: 1.58; color: #e2e8f0;
     }
     .slide-math-box ul { margin-left: 1.2rem; margin-top: 0.4rem; }
     .slide-math-box li { margin-bottom: 0.35rem; }
     .slide-table {
-      width: 100%; border-collapse: collapse; font-size: 0.82rem; font-family: var(--font-mono);
+      width: 100%; border-collapse: collapse; font-size: 0.8rem; font-family: var(--font-mono);
       background: #030712; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-dim);
     }
     .slide-table th {
       background: #081529; color: var(--secondary); text-align: left;
-      padding: 0.65rem 0.85rem; font-weight: 700; border-bottom: 1px solid var(--border-dim);
+      padding: 0.55rem 0.75rem; font-weight: 700; border-bottom: 1px solid var(--border-dim);
     }
-    .slide-table td { padding: 0.6rem 0.85rem; border-bottom: 1px solid #0c1a2d; color: #cbd5e1; vertical-align: middle; }
+    .slide-table td { padding: 0.52rem 0.75rem; border-bottom: 1px solid #0c1a2d; color: #cbd5e1; vertical-align: middle; }
     .slide-table tr:last-child td { border-bottom: none; }
     .tag-blue {
       background: rgba(14, 165, 233, 0.15); border: 1px solid rgba(14, 165, 233, 0.35);
       color: #38bdf8; padding: 0.1rem 0.4rem; border-radius: 3px; font-weight: 700;
     }
-
-    /* MathJax inline adjustments */
-    mjx-container[jax="CHTML"] {
-      color: #f8fafc !important;
-      outline: none;
+    .tag-green {
+      background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399; padding: 0.1rem 0.4rem; border-radius: 3px; font-weight: 700;
     }
-    mjx-container[jax="CHTML"][display="true"] {
-      margin: 0.75rem 0 !important;
+    .tag-amber {
+      background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fbbf24; padding: 0.1rem 0.4rem; border-radius: 3px; font-weight: 700;
     }
+    .tag-red {
+      background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #f87171; padding: 0.1rem 0.4rem; border-radius: 3px; font-weight: 700;
+    }
+    .presenter-cue {
+      background: #040b18; border: 1px dashed #1e3a5f; border-radius: 6px;
+      padding: 0.65rem 1rem; font-size: 0.8rem; color: #cbd5e1;
+      display: flex; align-items: flex-start; gap: 0.6rem;
+    }
+    .presenter-cue strong { color: #38bdf8; font-family: var(--font-mono); white-space: nowrap; }
 
-    .dots-nav { display: flex; gap: 0.45rem; }
+    mjx-container[jax="CHTML"] { color: #f8fafc !important; outline: none; }
+    mjx-container[jax="CHTML"][display="true"] { margin: 0.6rem 0 !important; }
+
+    .dots-nav { display: flex; gap: 0.45rem; flex-wrap: wrap; }
     .dot { width: 9px; height: 9px; border-radius: 50%; background: #15263f; cursor: pointer; transition: all 0.2s; }
     .dot.active { background: var(--secondary); box-shadow: 0 0 8px var(--secondary); transform: scale(1.15); }
     .kbd-tip { font-size: 0.72rem; color: #64748b; font-family: var(--font-mono); }
 
-    /* CENÁRIOS */
-    .scenarios-strip { margin-bottom: 1.5rem; }
+    /* CENÁRIOS / MODOS DO SIMULADOR */
+    .scenarios-strip { margin-bottom: 1.25rem; }
     .strip-label {
       font-size: 0.75rem; font-weight: 700; color: #f59e0b; font-family: var(--font-mono);
       text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.65rem; display: flex; align-items: center; gap: 0.4rem;
     }
-    .scenarios-grid { display: flex; flex-wrap: wrap; gap: 0.65rem; }
+    .scenarios-grid { display: flex; flex-wrap: wrap; gap: 0.6rem; }
     .scenario-btn {
       background: #061122; border: 1px solid var(--border-dim); color: #cbd5e1;
-      padding: 0.45rem 0.95rem; border-radius: 6px; font-size: 0.78rem; font-family: var(--font-mono);
+      padding: 0.48rem 0.9rem; border-radius: 6px; font-size: 0.78rem; font-family: var(--font-mono);
       cursor: pointer; display: flex; align-items: center; gap: 0.45rem; transition: all 0.2s;
     }
     .scenario-btn:hover { background: #0c1d38; border-color: var(--secondary); color: #fff; }
-    .scenario-btn.active { border-color: var(--primary); background: rgba(16, 185, 129, 0.1); color: var(--primary); }
+    .scenario-btn.active { border-color: var(--primary); background: rgba(16, 185, 129, 0.12); color: var(--primary); font-weight: 700; }
 
     /* STATUS BANNER */
     .status-banner {
       background: #020611; border: 1px solid var(--border-dim); border-left: 3px solid var(--secondary);
-      padding: 0.75rem 1.25rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.85rem;
-      color: #cbd5e1; margin-bottom: 1.5rem;
+      padding: 0.75rem 1.25rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.84rem;
+      color: #cbd5e1; margin-bottom: 1.35rem;
     }
 
     /* EMULADOR */
-    .emulador-layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .emulador-layout { display: grid; grid-template-columns: 1.55fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
     .canvas-panel {
       background: var(--bg-card); border: 1px solid var(--border-dim); border-radius: 10px;
       padding: 1.25rem; display: flex; flex-direction: column;
     }
-    .panel-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+    .panel-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; gap: 0.5rem; flex-wrap: wrap; }
     .hdr-text { font-size: 0.82rem; font-family: var(--font-mono); font-weight: 700; color: var(--secondary); text-transform: uppercase; }
     .canvas-box {
-      flex: 1; min-height: 400px; background: #02050c; border: 1px solid #0f2038;
+      flex: 1; min-height: 430px; background: #02050c; border: 1px solid #0f2038;
       border-radius: 8px; position: relative; overflow: hidden;
     }
-    svg.circuit-svg { width: 100%; height: 100%; display: block; }
+    svg.circuit-svg { width: 100%; height: 100%; min-height: 430px; display: block; }
 
-    /* LINHAS E ANIMAÇÃO */
-    .edge-line { stroke: #1e3a5f; stroke-width: 2.5; stroke-linecap: round; transition: stroke 0.3s, stroke-width 0.3s; }
-    .edge-line.active {
-      stroke: var(--primary) !important; stroke-width: 3.5 !important;
-      filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.8));
+    /* LINHAS E ANIMAÇÃO SVG */
+    .edge-line { stroke: #1e3a5f; stroke-width: 2.2; stroke-linecap: round; transition: stroke 0.25s, stroke-width 0.25s; }
+    .edge-line.mst-active {
+      stroke: var(--primary) !important; stroke-width: 3.6 !important;
+      filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.75));
     }
-    .edge-line.bypass { stroke: #f59e0b; stroke-width: 2.5; stroke-dasharray: 5 4; }
-    .edge-line.bypass.active {
-      stroke: #f59e0b !important; stroke-width: 3.5 !important; stroke-dasharray: none;
-      filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.8));
-    }
-    .edge-line.blocked { stroke: var(--danger); stroke-width: 3; stroke-dasharray: 4 4; }
-
-    .edge-flow {
-      stroke-dasharray: 8 6;
-      animation: dashMove 1s linear infinite;
-    }
+    .edge-line.candidate { stroke: #1e293b; stroke-width: 1.6; stroke-dasharray: 5 4; }
+    .edge-line.rejected { stroke: #475569; stroke-width: 1.4; stroke-dasharray: 3 4; opacity: 0.55; }
+    .edge-line.blocked { stroke: var(--danger) !important; stroke-width: 3 !important; stroke-dasharray: 4 4; }
+    .edge-line.alt-port { stroke: var(--warning); stroke-width: 2.4; stroke-dasharray: 6 4; }
+    .edge-flow { stroke-dasharray: 8 6; animation: dashMove 1s linear infinite; }
     @keyframes dashMove {
       from { stroke-dashoffset: 28; }
       to { stroke-dashoffset: 0; }
     }
 
-    .packet-runner {
-      fill: #ffffff;
-      stroke: #10b981;
-      stroke-width: 2.5;
-      filter: drop-shadow(0 0 8px #10b981) drop-shadow(0 0 14px #34d399);
-      pointer-events: none;
-    }
-    .packet-runner.agv-mode {
-      stroke: #38bdf8;
-      filter: drop-shadow(0 0 8px #0ea5e9) drop-shadow(0 0 14px #38bdf8);
-    }
-
-    .node-group { cursor: pointer; transition: all 0.2s; }
+    .node-group { cursor: pointer; }
     .node-rect { fill: #091930; stroke: var(--secondary); stroke-width: 1.8; rx: 5; transition: all 0.2s; }
     .node-group:hover .node-rect { fill: #0f294e; stroke: #38bdf8; }
     .node-rect.source { stroke: #a855f7; fill: #191033; }
     .node-rect.sink { stroke: var(--primary); fill: #07261a; }
     .node-rect.highlighted {
       stroke: #34d399 !important; fill: #0e3d29 !important;
-      filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.7));
+      filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.65));
+    }
+    .node-rect.running {
+      stroke: #38bdf8 !important; fill: #0c2c4d !important;
+      filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.7));
     }
     .node-rect.blocked {
       stroke: var(--danger) !important; fill: #330b0b !important;
-      animation: pulse-border 1.5s infinite;
     }
-    @keyframes pulse-border {
-      0%, 100% { stroke: var(--danger); }
-      50% { stroke: #ff7878; }
+    .node-rect.warn {
+      stroke: var(--warning) !important; fill: #2d1b06 !important;
     }
     .node-text { fill: #ffffff; font-family: var(--font-mono); font-size: 10px; font-weight: 700; text-anchor: middle; pointer-events: none; }
-    .node-subtext { fill: #94a3b8; font-family: var(--font-sans); font-size: 8px; text-anchor: middle; pointer-events: none; }
+    .node-subtext { fill: #94a3b8; font-family: var(--font-sans); font-size: 8.5px; text-anchor: middle; pointer-events: none; }
 
     /* CONTROLE */
     .ctrl-panel {
       background: var(--bg-card); border: 1px solid var(--border-dim); border-radius: 10px;
-      padding: 1.25rem; display: flex; flex-direction: column; gap: 1.2rem;
+      padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;
     }
-    .ctrl-actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+    .sub-controls-box {
+      background: #030814; border: 1px solid var(--border-dim); border-radius: 6px;
+      padding: 0.85rem; display: flex; flex-direction: column; gap: 0.65rem;
+    }
+    .ctrl-actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; }
     .btn-act {
-      padding: 0.6rem 0.5rem; border-radius: 6px; font-family: var(--font-mono);
-      font-size: 0.75rem; font-weight: 700; cursor: pointer; display: flex;
-      align-items: center; justify-content: center; gap: 0.4rem; border: 1px solid transparent; transition: all 0.2s;
+      padding: 0.55rem 0.5rem; border-radius: 6px; font-family: var(--font-mono);
+      font-size: 0.74rem; font-weight: 700; cursor: pointer; display: flex;
+      align-items: center; justify-content: center; gap: 0.35rem; border: 1px solid transparent; transition: all 0.2s;
     }
     .btn-act.blue { background: #0284c7; color: #fff; }
     .btn-act.blue:hover { background: #0369a1; }
+    .btn-act.green { background: #059669; color: #fff; }
+    .btn-act.green:hover { background: #047857; }
     .btn-act.red { background: #dc2626; color: #fff; }
     .btn-act.red:hover { background: #b91c1c; }
     .btn-act.yellow { background: #d97706; color: #fff; }
     .btn-act.yellow:hover { background: #b45309; }
-    .btn-act.teal { background: #0d9488; color: #fff; }
-    .btn-act.teal:hover { background: #0f766e; }
+    .btn-act.purple { background: #7e22ce; color: #fff; }
+    .btn-act.purple:hover { background: #6b21a8; }
     .btn-act.outline { background: #061122; border-color: var(--border-dim); color: #cbd5e1; }
     .btn-act.outline:hover { background: #0c1d38; border-color: var(--secondary); }
+    .btn-act.outline.active-toggle { border-color: var(--primary); color: var(--primary); background: rgba(16, 185, 129, 0.12); }
+
+    .ctrl-input-row {
+      display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;
+      font-family: var(--font-mono); font-size: 0.74rem; color: #cbd5e1;
+    }
+    .ctrl-select, .ctrl-range {
+      background: #071326; border: 1px solid var(--border-dim); color: #f8fafc;
+      border-radius: 4px; padding: 0.25rem 0.45rem; font-family: var(--font-mono); font-size: 0.74rem;
+    }
+    .code-st-box {
+      background: #02050c; border: 1px solid #0f2038; border-radius: 5px; padding: 0.6rem;
+      font-family: var(--font-mono); font-size: 0.7rem; color: #38bdf8; white-space: pre-wrap; line-height: 1.4;
+      max-height: 120px; overflow-y: auto;
+    }
 
     /* KPIS */
-    .kpi-box { background: #030611; border: 1px solid var(--border-dim); border-radius: 6px; padding: 0.85rem 1rem; }
-    .kpi-hdr { font-size: 0.72rem; font-family: var(--font-mono); color: #94a3b8; margin-bottom: 0.65rem; text-transform: uppercase; }
-    .kpi-values-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.65rem; }
+    .kpi-box { background: #030611; border: 1px solid var(--border-dim); border-radius: 6px; padding: 0.8rem 0.95rem; }
+    .kpi-hdr { font-size: 0.7rem; font-family: var(--font-mono); color: #94a3b8; margin-bottom: 0.55rem; text-transform: uppercase; }
+    .kpi-values-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; margin-bottom: 0.6rem; }
     .kpi-item span.lbl { display: block; font-size: 0.68rem; color: #64748b; font-family: var(--font-mono); }
-    .kpi-item span.val { font-size: 1.35rem; font-weight: 800; color: var(--secondary); font-family: var(--font-mono); }
+    .kpi-item span.val { font-size: 1.25rem; font-weight: 800; color: var(--secondary); font-family: var(--font-mono); }
     .kpi-path-box { border-top: 1px solid #0f2038; padding-top: 0.5rem; }
     .kpi-path-lbl { font-size: 0.68rem; color: #64748b; font-family: var(--font-mono); margin-bottom: 0.25rem; }
     .kpi-path-val {
-      font-family: var(--font-mono); font-size: 0.78rem; color: #38bdf8;
+      font-family: var(--font-mono); font-size: 0.76rem; color: #38bdf8;
       white-space: nowrap; overflow-x: auto; background: #020409; padding: 0.35rem 0.5rem; border-radius: 4px;
     }
 
     /* CONSOLE */
-    .console-box { background: #020408; border: 1px solid var(--border-dim); border-radius: 6px; padding: 0.85rem; flex: 1; display: flex; flex-direction: column; }
-    .console-hdr { display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; font-family: var(--font-mono); color: #64748b; margin-bottom: 0.5rem; }
-    .console-logs { flex: 1; height: 125px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.75rem; color: #38bdf8; line-height: 1.5; }
+    .console-box { background: #020408; border: 1px solid var(--border-dim); border-radius: 6px; padding: 0.8rem; flex: 1; display: flex; flex-direction: column; }
+    .console-hdr { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; font-family: var(--font-mono); color: #64748b; margin-bottom: 0.45rem; }
+    .console-logs { flex: 1; min-height: 110px; max-height: 145px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.73rem; color: #38bdf8; line-height: 1.45; }
     .console-line { margin-bottom: 0.25rem; }
     .ts { color: #64748b; }
 
-    /* VÁLVULAS */
+    /* VÁLVULAS E ATUADORES */
     .valves-bar { background: #020610; border: 1px solid var(--border-dim); border-radius: 8px; padding: 0.85rem 1.25rem; }
-    .valves-hdr { font-size: 0.75rem; font-family: var(--font-mono); color: #94a3b8; text-transform: uppercase; margin-bottom: 0.65rem; }
+    .valves-hdr { font-size: 0.74rem; font-family: var(--font-mono); color: #94a3b8; text-transform: uppercase; margin-bottom: 0.65rem; }
     .valves-pills-wrap { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .valve-pill {
       background: #061122; border: 1px solid var(--border-dim); border-radius: 4px;
       padding: 0.25rem 0.6rem; font-family: var(--font-mono); font-size: 0.72rem; color: #94a3b8;
     }
     .valve-pill.open { border-color: var(--primary); background: rgba(16, 185, 129, 0.15); color: #34d399; font-weight: 700; }
+    .valve-pill.warn { border-color: var(--warning); background: rgba(245, 158, 11, 0.15); color: #fbbf24; font-weight: 700; }
+    .valve-pill.trip { border-color: var(--danger); background: rgba(239, 68, 68, 0.16); color: #f87171; font-weight: 700; }
     .valve-pill.closed { border-color: #334155; color: #64748b; }
 
     .canvas-legend {
-      display: flex; gap: 1.5rem; margin-top: 0.65rem; font-size: 0.72rem;
+      display: flex; flex-wrap: wrap; gap: 1.15rem; margin-top: 0.65rem; font-size: 0.72rem;
       font-family: var(--font-mono); color: var(--text-muted);
     }
     .legend-item { display: flex; align-items: center; gap: 0.35rem; }
     .legend-box { width: 10px; height: 10px; border-radius: 2px; }
+
+    @media (max-width: 1050px) {
+      .emulador-layout, .slide-grid-2 { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -324,276 +386,141 @@
     <div class="scada-title-wrap">
       <div class="pulse-indicator"></div>
       <div>
-        <div class="scada-h1">SCADA-GRAPH: CÉLULA FMS • ESTEIRAS, TRIAGEM & CORREDOR DE AGVs</div>
-        <div class="scada-sub">Motor Topológico em JavaScript • Frequência: 100Hz • Módulo SIS IEC 61511 Ativo</div>
+        <div class="scada-h1">SCADA-TREE: CÉLULA FMS • ÁRVORES, REDES, VERIFICAÇÃO FORMAL &amp; DECISÃO</div>
+        <div class="scada-sub">Motor Algorítmico Etapa 3 (Aulas 19–27) • CLP S7-1500 &amp; AGV-300 • IEC 61131-3 / IEC 61511</div>
       </div>
     </div>
     <div style="display:flex; align-items:center; gap:0.75rem;">
-      <a href="https://github.com/d005810/ECAA08-Manufatura-Flexivel" target="_blank" style="color:var(--text-muted); text-decoration:none; font-family:var(--font-mono); font-size:0.78rem;">[🐙 GitHub Repo]</a>
-      <span class="badge-status">● ONLINE • REDE ATIVA</span>
+      <a href="../index.html" style="color:#38bdf8; text-decoration:none; font-family:var(--font-mono); font-size:0.76rem;">[⬅ Etapa 2: Grafos]</a>
+      <a href="https://github.com/d005810/ECAA08-Manufatura-Flexivel" target="_blank" style="color:var(--text-muted); text-decoration:none; font-family:var(--font-mono); font-size:0.76rem;">[GitHub Repo]</a>
+      <span class="badge-status">● ONLINE • MÓDULO 3 ATIVO</span>
     </div>
   </div>
 
   <div class="container-wide">
 
-    <!-- SEÇÃO 1: SLIDES EXECUTIVOS (10 SLIDES EM 2 COLUNAS) -->
-    <div class="slides-wrapper">
+    <!-- SEÇÃO 1: APRESENTAÇÃO EXECUTIVA (12 SLIDES • 4 MEMBROS DO GRUPO) -->
+    <div class="slides-wrapper" id="slides-wrapper">
       <div class="slides-header">
         <div class="slides-title-tag">
-          <span style="font-size:1.1rem;">📽️</span>
-          <span>SCADA-Core: Módulo 2 • Teoria dos Grafos</span>
-          <span id="slide-hdr-counter" class="slide-badge-pill">Slide 01 / 10 • Introdução</span>
+          <span style="font-size:1.05rem;">📽️</span>
+          <span>SCADA-Core: Módulo 3 • Árvores (Aulas 19–27)</span>
+          <span id="slide-hdr-counter" class="slide-badge-pill">Slide 01 / 12</span>
+          <span id="slide-member-badge" class="member-pill member-1">Membro 1 • Parte 1/4</span>
         </div>
         <div class="slide-nav-btns">
           <button class="btn-slide" onclick="window.trocarSlide(-1)">← Anterior</button>
           <button class="btn-slide" onclick="window.trocarSlide(1)">Próximo →</button>
+          <button class="btn-slide" id="btn-fullscreen-slide" onclick="window.alternarTelaCheiaSlides()">⛶ Apresentar</button>
         </div>
       </div>
 
-      <div class="slide-body" id="slide-body-viewport">
-        <!-- Renderizado de forma síncrona sem falha -->
+      <!-- Barra de Roteiro por Membro (4 Integrantes) -->
+      <div class="member-bar">
+        <span class="member-bar-lbl">Roteiro do Grupo (4 Membros):</span>
+        <button class="member-jump-btn" id="btn-membro-1" onclick="window.irParaSlide(0)">👤 Membro 1: MST, Huffman &amp; RSTP (01–03)</button>
+        <button class="member-jump-btn" id="btn-membro-2" onclick="window.irParaSlide(3)">👤 Membro 2: BDT/AVL, RRT &amp; KD-Tree (04–06)</button>
+        <button class="member-jump-btn" id="btn-membro-3" onclick="window.irParaSlide(6)">👤 Membro 3: Redes de Petri &amp; Behavior Trees (07–09)</button>
+        <button class="member-jump-btn" id="btn-membro-4" onclick="window.irParaSlide(9)">👤 Membro 4: ID3/C4.5/CART &amp; Síntese (10–12)</button>
       </div>
 
-      <div style="background:#020610; padding:0.65rem 1.5rem; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-dim);">
+      <div class="slide-body" id="slide-body-viewport"></div>
+
+      <div style="background:#020610; padding:0.65rem 1.5rem; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-dim); gap:0.75rem; flex-wrap:wrap;">
         <div class="dots-nav" id="dots-container"></div>
-        <div class="kbd-tip">Dica: Utilize as setas ← e → do teclado para navegar</div>
+        <div class="kbd-tip">Dica: Setas ← e → navegam nos slides • Cada membro apresenta 3 slides + demonstração no simulador abaixo</div>
       </div>
     </div>
 
-    <!-- SEÇÃO 2: INJEÇÃO RÁPIDA DE CENÁRIOS INDUSTRIAIS -->
+    <!-- SEÇÃO 2: SELEÇÃO DE MÓDULO / CENÁRIO INTERATIVO DA ETAPA 3 -->
     <div class="scenarios-strip">
-      <div class="strip-label">⚡ INJEÇÃO RÁPIDA DE CENÁRIOS INDUSTRIAIS & LOGÍSTICOS:</div>
+      <div class="strip-label">⚡ BANCADA INTERATIVA DA ETAPA 3 — SELECIONE O MOTOR ALGORÍTMICO DA CÉLULA FMS:</div>
       <div class="scenarios-grid">
-        <button class="scenario-btn active" id="btn-scen-1" onclick="window.carregarCenario(1)">🟢 Cenário 1: Operação Nominal (SILO → CX-303)</button>
-        <button class="scenario-btn" id="btn-scen-2" onclick="window.carregarCenario(2)">🔴 Cenário 2: Pistão DIV-202 Travado (Bypass XV-200B)</button>
-        <button class="scenario-btn" id="btn-scen-3" onclick="window.carregarCenario(3)">⚡ Cenário 3: Esteira M-101 Travada (Contorno DIV-201 → 203)</button>
-        <button class="scenario-btn" id="btn-scen-4" onclick="window.carregarCenario(4)">🚚 Cenário 4: Rota AGV (TSP Coleta de Amostras)</button>
-        <button class="scenario-btn" id="btn-scen-5" onclick="window.carregarCenario(5)">🔍 Cenário 5: Varredura de Manutenção (Hierholzer)</button>
+        <button class="scenario-btn active" id="btn-mode-1" onclick="window.selecionarModo(1)">🌲 1. Infraestrutura MST &amp; Anel RSTP (Aulas 19 e 23)</button>
+        <button class="scenario-btn" id="btn-mode-2" onclick="window.selecionarModo(2)">📡 2. Telemetria Huffman &amp; AVL SCADA (Aulas 20 e 21)</button>
+        <button class="scenario-btn" id="btn-mode-3" onclick="window.selecionarModo(3)">🤖 3. AGV-300: RRT &amp; KD-Tree 2D (Aulas 22 e 26)</button>
+        <button class="scenario-btn" id="btn-mode-4" onclick="window.selecionarModo(4)">⚙️ 4. Redes de Petri &amp; Cobertura ω (Aula 24)</button>
+        <button class="scenario-btn" id="btn-mode-5" onclick="window.selecionarModo(5)">🧠 5. Árvore de Comportamento &amp; Preempção (Aula 25)</button>
+        <button class="scenario-btn" id="btn-mode-6" onclick="window.selecionarModo(6)">🎯 6. Árvores ID3/C4.5/CART &amp; Alarm Flood (Aula 27)</button>
       </div>
     </div>
 
-    <!-- BANNER DE STATUS INTERATIVO -->
+    <!-- BANNER DE STATUS -->
     <div class="status-banner" id="status-banner">
-      Simulador reinicializado para estado de repouso. Topologia nominal carregada.
+      Simulador Etapa 3 inicializado. Selecione um módulo acima para executar os algoritmos sobre a Célula FMS.
     </div>
 
-    <!-- SEÇÃO 3: EMULADOR SCADA-GRAPH -->
+    <!-- SEÇÃO 3: EMULADOR SCADA-TREE -->
     <div class="emulador-layout">
-      
-      <!-- MAPA SVG INTERATIVO -->
+
+      <!-- VIEWPORT SVG INTERATIVO -->
       <div class="canvas-panel">
         <div class="panel-hdr">
-          <span class="hdr-text">🗺️ MAPA TOPOLÓGICO INTERATIVO (ESTEIRAS + CORREDOR AGV)</span>
-          <span style="font-size:0.75rem; color:#64748b; font-family:var(--font-mono);">Clique em nós ou atuadores</span>
+          <span class="hdr-text" id="canvas-title">🗺️ TOPOLOGIA DE INFRAESTRUTURA FMS (MST / RSTP)</span>
+          <span style="font-size:0.74rem; color:#64748b; font-family:var(--font-mono);" id="canvas-hint">Interaja com o painel à direita ou clique nos nós</span>
         </div>
 
         <div class="canvas-box">
-          <svg class="circuit-svg" viewBox="0 0 760 380" id="svg-fms">
-            <defs>
-              <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981" />
-              </marker>
-              <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
-              </marker>
-              <marker id="arrow-orange" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1 L 10 5 L 0 9 z" fill="#f59e0b" />
-              </marker>
-            </defs>
-
-            <!-- Arestas (Esteiras e Corredores) -->
-            <g id="svg-edges">
-              <line id="edge-e1" x1="125" y1="90" x2="145" y2="90" class="edge-line" />
-              <line id="edge-e2" x1="240" y1="90" x2="260" y2="90" class="edge-line" />
-              <line id="edge-e3" x1="345" y1="75" x2="350" y2="50" class="edge-line" />
-              <line id="edge-e4" x1="345" y1="90" x2="390" y2="90" class="edge-line" />
-              <line id="edge-e5" x1="475" y1="75" x2="480" y2="50" class="edge-line" />
-              <line id="edge-e6" x1="475" y1="90" x2="520" y2="90" class="edge-line" />
-              <line id="edge-e7" x1="605" y1="90" x2="635" y2="90" class="edge-line" />
-              <line id="edge-e8" x1="605" y1="105" x2="635" y2="135" class="edge-line" />
-
-              <path id="edge-byp" d="M 240 90 Q 380 185 520 90" class="edge-line bypass" fill="none" />
-              <path id="edge-cont" d="M 345 90 Q 430 145 520 90" class="edge-line bypass" fill="none" />
-
-              <line id="edge-agv-1" x1="135" y1="277" x2="185" y2="277" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" />
-              <line id="edge-agv-2" x1="280" y1="277" x2="335" y2="277" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" />
-              <line id="edge-agv-3" x1="430" y1="277" x2="485" y2="277" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" />
-              <line id="edge-agv-4" x1="580" y1="277" x2="625" y2="277" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" />
-              <path id="edge-agv-loop" d="M 672 300 C 730 360, 30 360, 87 300" stroke="#132742" stroke-width="2" stroke-dasharray="4 3" fill="none" />
-            </g>
-
-            <!-- Rótulos -->
-            <g id="svg-labels" font-family="JetBrains Mono" font-size="8" fill="#64748b">
-              <text x="135" y="80" text-anchor="middle">0.8m (XV-101)</text>
-              <text x="250" y="80" text-anchor="middle">1.2m (M-101)</text>
-              <text x="325" y="55" text-anchor="middle">0.5m (XV-201)</text>
-              <text x="367" y="80" text-anchor="middle">1.0m (M-101)</text>
-              <text x="455" y="55" text-anchor="middle">0.5m (XV-202)</text>
-              <text x="497" y="80" text-anchor="middle">1.0m (M-101)</text>
-              <text x="620" y="80" text-anchor="middle">0.5m (XV-203)</text>
-              <text x="610" y="140" text-anchor="middle">0.8m (M-101)</text>
-              <text x="380" y="172" fill="#f59e0b" text-anchor="middle">Bypass Expresso: 2.5m (XV-200B)</text>
-            </g>
-
-            <!-- Vértices -->
-            <g id="svg-nodes">
-              <g class="node-group" id="node-SILO-100" onclick="window.alternarBloqueioNo('SILO-100')">
-                <rect x="30" y="65" width="95" height="50" class="node-rect source" />
-                <text x="77" y="88" class="node-text">SILO-100</text>
-                <text x="77" y="103" class="node-subtext">Alimentador Infeed</text>
-              </g>
-
-              <g class="node-group" id="node-INSP-200" onclick="window.alternarBloqueioNo('INSP-200')">
-                <rect x="145" y="65" width="95" height="50" class="node-rect" />
-                <text x="192" y="88" class="node-text">INSP-200</text>
-                <text x="192" y="103" class="node-subtext">Túnel Óptico</text>
-              </g>
-
-              <g class="node-group" id="node-DIV-201" onclick="window.alternarBloqueioNo('DIV-201')">
-                <rect x="260" y="65" width="85" height="50" class="node-rect" />
-                <text x="302" y="88" class="node-text">DIV-201</text>
-                <text x="302" y="103" class="node-subtext">Desvio 1 (Verm)</text>
-              </g>
-
-              <g class="node-group" id="node-CX-301">
-                <rect x="350" y="15" width="85" height="42" class="node-rect sink" />
-                <text x="392" y="34" class="node-text">CX-301</text>
-                <text x="392" y="48" class="node-subtext">Lote Vermelho</text>
-              </g>
-
-              <g class="node-group" id="node-DIV-202" onclick="window.alternarBloqueioNo('DIV-202')">
-                <rect x="390" y="65" width="85" height="50" class="node-rect" />
-                <text x="432" y="88" class="node-text">DIV-202</text>
-                <text x="432" y="103" class="node-subtext">Desvio 2 (Verde)</text>
-              </g>
-
-              <g class="node-group" id="node-CX-302">
-                <rect x="480" y="15" width="85" height="42" class="node-rect sink" />
-                <text x="522" y="34" class="node-text">CX-302</text>
-                <text x="522" y="48" class="node-subtext">Lote Verde</text>
-              </g>
-
-              <g class="node-group" id="node-DIV-203" onclick="window.alternarBloqueioNo('DIV-203')">
-                <rect x="520" y="65" width="85" height="50" class="node-rect" />
-                <text x="562" y="88" class="node-text">DIV-203</text>
-                <text x="562" y="103" class="node-subtext">Desvio 3 (Azul)</text>
-              </g>
-
-              <g class="node-group" id="node-CX-303">
-                <rect x="635" y="65" width="85" height="50" class="node-rect sink" />
-                <text x="677" y="88" class="node-text">CX-303</text>
-                <text x="677" y="103" class="node-subtext">Lote Azul</text>
-              </g>
-
-              <g class="node-group" id="node-DESC-304">
-                <rect x="635" y="125" width="85" height="42" class="node-rect" style="stroke:var(--danger); fill:#260606;" />
-                <text x="677" y="144" class="node-text" fill="#ef4444">DESC-304</text>
-                <text x="677" y="157" class="node-subtext">Calha Descarte</text>
-              </g>
-            </g>
-
-            <!-- Vértices AGV -->
-            <g id="svg-nodes-agv">
-              <g class="node-group" id="node-DOCA-00">
-                <rect x="40" y="255" width="95" height="45" class="node-rect" style="stroke:#38bdf8; stroke-dasharray: 2 2;" />
-                <text x="87" y="276" class="node-text">DOCA-00</text>
-                <text x="87" y="291" class="node-subtext">Base de Recarga AGV</text>
-              </g>
-              <g class="node-group" id="node-ALMOX-A">
-                <rect x="185" y="255" width="95" height="45" class="node-rect" style="stroke:#38bdf8; stroke-dasharray: 2 2;" />
-                <text x="232" y="276" class="node-text">ALMOX-A</text>
-                <text x="232" y="291" class="node-subtext">Descarga de Tarugos</text>
-              </g>
-              <g class="node-group" id="node-PAV-FMS">
-                <rect x="335" y="255" width="95" height="45" class="node-rect" style="stroke:#38bdf8; stroke-dasharray: 2 2;" />
-                <text x="382" y="276" class="node-text">PAV-FMS</text>
-                <text x="382" y="291" class="node-subtext">Acesso de Serviço</text>
-              </g>
-              <g class="node-group" id="node-PALET-B">
-                <rect x="485" y="255" width="95" height="45" class="node-rect" style="stroke:#38bdf8; stroke-dasharray: 2 2;" />
-                <text x="532" y="276" class="node-text">PALET-B</text>
-                <text x="532" y="291" class="node-subtext">Paletização Lotes</text>
-              </g>
-              <g class="node-group" id="node-DOCAS-EXP">
-                <rect x="625" y="255" width="95" height="45" class="node-rect" style="stroke:#38bdf8; stroke-dasharray: 2 2;" />
-                <text x="672" y="276" class="node-text">DOCAS-EXP</text>
-                <text x="672" y="291" class="node-subtext">Expedição Geral</text>
-              </g>
-            </g>
-
-            <!-- Elemento de Movimento em Tempo Real -->
-            <circle id="anim-runner" cx="-100" cy="-100" r="7" class="packet-runner" opacity="0"></circle>
-          </svg>
+          <svg class="circuit-svg" viewBox="0 0 760 430" id="svg-stage3"></svg>
         </div>
 
-        <div class="canvas-legend">
-          <div class="legend-item"><div class="legend-box" style="background:#a855f7;"></div> Alimentação Infeed</div>
-          <div class="legend-item"><div class="legend-box" style="background:#0ea5e9;"></div> Esteira / Desvio</div>
-          <div class="legend-item"><div class="legend-box" style="background:#10b981;"></div> Caixas de Loteamento</div>
-          <div class="legend-item"><div class="legend-box" style="background:#ef4444;"></div> Calha de Descarte / Falha</div>
-          <div class="legend-item"><div class="legend-box" style="border:1px dashed #38bdf8;"></div> Corredor Viário AGV</div>
-        </div>
+        <div class="canvas-legend" id="canvas-legend"></div>
       </div>
 
-      <!-- PAINEL DE CONTROLE -->
+      <!-- PAINEL DE CONTROLE CONTEXTUAL -->
       <div class="ctrl-panel">
-        <div style="font-size:0.82rem; font-family:var(--font-mono); font-weight:700; color:#fff; display:flex; align-items:center; gap:0.4rem;">
-          <span>🎛️</span> PAINEL DE CONTROLE DE ROTEAMENTO
+        <div style="font-size:0.82rem; font-family:var(--font-mono); font-weight:700; color:#fff; display:flex; align-items:center; justify-content:space-between;">
+          <span>🎛️ CONTROLE &amp; INJEÇÃO DE EVENTOS</span>
+          <span id="ctrl-lesson-tag" class="tag-blue">Aulas 19 &amp; 23</span>
         </div>
 
-        <div class="ctrl-actions-grid">
-          <button class="btn-act blue" onclick="window.executarDijkstra()">⚡ Rota Dijkstra</button>
-          <button class="btn-act red" onclick="window.injetarFalhaManual()">💥 Injetar Falha</button>
-          <button class="btn-act yellow" onclick="window.executarTSP()">🚚 Rota AGV (TSP)</button>
-          <button class="btn-act teal" onclick="window.executarHierholzer()">🔍 Inspeção Euler</button>
-          <button class="btn-act outline" onclick="window.executarValidacaoDAG()">📦 Validar DAG</button>
-          <button class="btn-act outline" onclick="window.resetarTudo()">🔄 Reset Geral</button>
-        </div>
+        <div id="dynamic-controls" class="sub-controls-box"></div>
 
-        <!-- KPIS -->
+        <!-- KPIS EM TEMPO REAL -->
         <div class="kpi-box">
-          <div class="kpi-hdr">INDICADORES OPERACIONAIS (KPIS EM TEMPO REAL):</div>
+          <div class="kpi-hdr">INDICADORES ALGORÍTMICOS &amp; MÉTRICAS DE ENGENHARIA:</div>
           <div class="kpi-values-grid">
             <div class="kpi-item">
-              <span class="lbl">Custo / Distância Total:</span>
-              <span class="val" id="kpi-dist">0.0 m</span>
+              <span class="lbl" id="kpi-1-lbl">Métrica Principal:</span>
+              <span class="val" id="kpi-1-val">—</span>
             </div>
             <div class="kpi-item">
-              <span class="lbl">Latência de Decisão:</span>
-              <span class="val" id="kpi-time" style="color:var(--primary);">0.00 ms</span>
+              <span class="lbl" id="kpi-2-lbl">Eficiência / Tempo:</span>
+              <span class="val" id="kpi-2-val" style="color:var(--primary);">—</span>
             </div>
           </div>
           <div class="kpi-path-box">
-            <div class="kpi-path-lbl">Vetor de Rota Ativo:</div>
-            <div class="kpi-path-val" id="kpi-path">Nenhuma rota ativa</div>
+            <div class="kpi-path-lbl" id="kpi-path-lbl">Diagnóstico / Sequência Ativa:</div>
+            <div class="kpi-path-val" id="kpi-path-val">Aguardando execução</div>
           </div>
         </div>
 
         <!-- CONSOLE -->
         <div class="console-box">
           <div class="console-hdr">
-            <span>CONSOLE DE EVENTOS DO SUPERVISÓRIO:</span>
+            <span>CONSOLE DE EVENTOS SCADA-TREE:</span>
             <span style="color:var(--primary); font-size:0.68rem;">● REC</span>
           </div>
           <div class="console-logs" id="console-logs">
-            <div class="console-line"><span class="ts">[13:40:00]</span> 🟢 Motor algorítmico online. Malha carregada em regime estacionário.</div>
+            <div class="console-line"><span class="ts">[00:00:00]</span> 🟢 Motor Etapa 3 online. Todas as 9 aulas integradas à Célula FMS.</div>
           </div>
         </div>
       </div>
 
     </div>
 
-    <!-- SEÇÃO 4: ESTADO DOS ATUADORES SOLENOIDES ISA-5.1 -->
+    <!-- SEÇÃO 4: ESTADO DOS ATUADORES E TAGS ISA-5.1 -->
     <div class="valves-bar">
-      <div class="valves-hdr">ESTADO DOS ATUADORES PNEUMÁTICOS E SOLENOIDES ISA-5.1 (INTERTRAVAMENTO AUTOMÁTICO):</div>
+      <div class="valves-hdr">ESTADO DOS ATUADORES PNEUMÁTICOS, SENSORES CRÍTICOS E REDE ISA-5.1 (SINCRONIZADO):</div>
       <div class="valves-pills-wrap">
-        <div class="valve-pill closed" id="v-XV-101">XV-101 (Alimentador): CLOSED</div>
-        <div class="valve-pill closed" id="v-M-101">M-101 (Esteira Princ): STOP</div>
-        <div class="valve-pill closed" id="v-XV-201">XV-201 (Pistão 1 Verm): CLOSED</div>
-        <div class="valve-pill closed" id="v-XV-202">XV-202 (Pistão 2 Verde): CLOSED</div>
-        <div class="valve-pill closed" id="v-XV-203">XV-203 (Pistão 3 Azul): CLOSED</div>
-        <div class="valve-pill closed" id="v-XV-200B">XV-200B (Bypass Expresso): CLOSED</div>
-        <div class="valve-pill closed" id="v-M-101B">M-101B (Contorno Esteira): STOP</div>
+        <div class="valve-pill closed" id="tag-XV-101">XV-101 (Pistão Infeed): CLOSED</div>
+        <div class="valve-pill closed" id="tag-M-101">M-101 (Esteira Princ): STOP</div>
+        <div class="valve-pill closed" id="tag-XV-201">XV-201 (Pistão 1 Verm): RECUADO</div>
+        <div class="valve-pill closed" id="tag-XV-202">XV-202 (Pistão 2 Verde): RECUADO</div>
+        <div class="valve-pill closed" id="tag-XV-203">XV-203 (Pistão 3 Azul): RECUADO</div>
+        <div class="valve-pill closed" id="tag-HS-302">HS-302 (Torre Alarme): OFF</div>
+        <div class="valve-pill closed" id="tag-AGV-300">AGV-300 (Logística): IDLE</div>
+        <div class="valve-pill closed" id="tag-RSTP-AP">RSTP-AP (SW-S200↔S300): DISCARDING</div>
       </div>
     </div>
 
@@ -601,281 +528,378 @@
 
   <script>
     /* =========================================================================
-       1. SLIDES EXECUTIVOS (AULAS 11 A 18) - 10 SLIDES EM 2 COLUNAS
+       1. APRESENTAÇÃO EM 12 SLIDES (DIVIDIDA IGUALMENTE PARA 4 MEMBROS)
        ========================================================================= */
     const slidesData = [
+      // ----------------- MEMBRO 1 (SLIDES 01 A 03) -----------------
       {
-        tag: "Slide 01 / 10 • Introdução",
-        titulo: "Modelagem Topológica de Sistemas Discretos de Manufatura",
-        subtitulo: "A Célula de Manufatura Flexível (FMS) sob a ótica de Grafos Dirigidos e Ponderados",
+        member: 1,
+        tag: "Slide 01 / 12 • Aula 19",
+        titulo: "Infraestrutura Física Mínima da FMS via Kruskal e Prim (MST)",
+        subtitulo: "Dimensionamento ótimo de eletrocalhas PROFINET e tubulação pneumática (6 bar) sem laços fechados",
+        cue: "Membro 1 (Introdução + Aula 19): Apresentar o objetivo do Módulo 3 e explicar como Kruskal (DSU) e Prim (partindo do CLP-00) reduzem 48,9 m de malha para 18,2 m.",
         col1: `
           <div class="slide-math-box">
-            <strong>Definição Formal do Dígrafo:</strong><br>
-            A malha de transporte contínuo e triagem é definida pela tripla formal:
-            $$\\mathcal{G}_{\\text{FMS}} = (V, E, W)$$
-            Onde $V$ representa os postos operacionais da fábrica ($|V| = 9$), $E$ os trechos de esteiras unidirecionais ($|E| = 8$) e $W$ o comprimento físico em metros ou tempos nominais de trânsito mecânico.
+            <strong>Formulação da Árvore Geradora Mínima (MST):</strong><br>
+            Dado o grafo não-direcionado $G = (V, E, w)$ com $|V| = 10$ postos da célula e $|E| = 18$ rotas físicas candidatas, buscamos $T = (V, E_T)$ com $|E_T| = |V| - 1 = 9$ arestas minimizando:
+            $$W(T) = \\sum_{e \\in E_T} w(e) = 18{,}2\\text{ m}$$
+            <ul>
+              <li><strong>Kruskal ($O(|E|\\log|E|)$):</strong> Ordena arestas e evita ciclos via <em>Union-Find</em> (ideal no orçamento/FEED).</li>
+              <li><strong>Prim ($O(|E|\\log|V|)$):</strong> Expande a partir da raiz <code>CLP-00</code> com <em>Min-Heap</em> (ideal na montagem).</li>
+            </ul>
           </div>
-          <p style="margin-top:1rem; font-size:0.88rem; color:#cbd5e1;">
-            Diferente de bancos de dados planos em tabelas relacionais, a representação em grafos viabiliza auditorias analíticas de acessibilidade, deteção de caminhos ótimos e contingência dinâmica em tempo de varredura (<em>scan cycle</em> do CLP).
+        `,
+        col2: `
+          <table class="slide-table">
+            <thead><tr><th>Métrica de Engenharia</th><th>Malha Completa</th><th>MST (Kruskal / Prim)</th></tr></thead>
+            <tbody>
+              <tr><td>Segmentos Ativos</td><td>$18$ rotas</td><td><span class="tag-green">$9$ trechos ($|V|-1$)</span></td></tr>
+              <tr><td>Comprimento Linear</td><td>$48{,}9\\text{ m}$</td><td><span class="tag-blue">$18{,}2\\text{ m}$</span></td></tr>
+              <tr><td>Economia Direta</td><td>—</td><td><strong>$30{,}7\\text{ m}$ ($-62{,}8\\%$ CAPEX)</strong></td></tr>
+              <tr><td>Loops / Broadcast Storm</td><td>Presentes</td><td><strong>Zero (Acíclica)</strong></td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:0.75rem; font-size:0.83rem; color:#94a3b8;">
+            <strong>Arestas selecionadas:</strong> <code>CLP-00—SILO-100 (2.5m)</code>, <code>SILO—INSP (3.0m)</code>, <code>INSP—DIV1 (2.0m)</code>, <code>DIV1—DIV2 (2.0m)</code>, <code>DIV2—DIV3 (2.0m)</code>, <code>DIV1..3—CX1..3 (1.5m)</code> e <code>DIV3—DESC (2.2m)</code>.
           </p>
+        `
+      },
+      {
+        member: 1,
+        tag: "Slide 02 / 12 • Aula 20",
+        titulo: "Compressão de Telemetria SCADA com Algoritmo de Huffman",
+        subtitulo: "Redução de banda em links RS-485/IIoT preservando 100% da integridade dos sinais ISA-5.1",
+        cue: "Membro 1 (Aula 20): Explicar o vetor de 5 bits do CLP, por que '00000' ocorre 88% do tempo, e como Huffman cai de 5 para 1,22 bits/amostra.",
+        col1: `
+          <div class="slide-math-box">
+            <strong>Entropia de Shannon &amp; Eficiência:</strong><br>
+            Vetor de estado do CLP: $\\mathbf{x} = [\\text{TH-101}, \\text{LS-101}, \\text{ZS-200}, \\text{FULL-300}, \\text{ESD-301}] \\in \\{0,1\\}^5$.
+            $$H(S) = -\\sum_{i=1}^{6} P(s_i)\\log_2 P(s_i) = \\mathbf{0{,}7463\\text{ bits/símbolo}}$$
+            $$L = \\sum_{i=1}^{6} P(s_i)\\cdot l(s_i) = \\mathbf{1{,}2220\\text{ bits/símbolo}}$$
+            <ul>
+              <li><strong>Economia de Banda vs. 5 bits fixos:</strong> $\\mathbf{75{,}56\\%}$ ($\\eta = 61{,}07\\%$).</li>
+              <li><strong>Enquadramento Seguro:</strong> Header <code>0xA5</code> + Counter + Length + Payload + <strong>CRC-16</strong>.</li>
+            </ul>
+          </div>
         `,
         col2: `
           <table class="slide-table">
-            <thead>
-              <tr><th>Vértice ISA</th><th>Tipo Topológico</th><th>Função Operacional</th></tr>
-            </thead>
+            <thead><tr><th>Símbolo</th><th>Estado FMS</th><th>$P(s_i)$</th><th>Código</th><th>Bits</th></tr></thead>
             <tbody>
-              <tr><td><span class="tag-blue">SILO-100</span></td><td>Fonte Pura ($\text{deg}^- = 0$)</td><td>Dosagem e Infeed de Tarugos Brutos</td></tr>
-              <tr><td><span class="tag-blue">INSP-200</span></td><td>Nó Intermediário</td><td>Túnel com Leitura Óptica (Cor/Dimensão)</td></tr>
-              <tr><td><span class="tag-blue">DIV-201..203</span></td><td>Bifurcação ($\text{deg}^+ = 2$)</td><td>Pontos de Triagem Pneumática (Pistões)</td></tr>
-              <tr><td><span class="tag-blue">CX-301..303</span></td><td>Sumidouro ($\text{deg}^+ = 0$)</td><td>Caixas Coletoras de Lotes Empacotados</td></tr>
-              <tr><td><span class="tag-blue">DESC-304</span></td><td>Sumidouro Terminal</td><td>Calha de Descarte de Peças Não-Conformes</td></tr>
+              <tr><td><code>00000</code></td><td>Operação Nominal</td><td>$88{,}0\\%$</td><td><span class="tag-green">0</span></td><td>1</td></tr>
+              <tr><td><code>00010</code></td><td><code>FULL-300</code> (10 pç)</td><td>$6{,}0\\%$</td><td><span class="tag-blue">10</span></td><td>2</td></tr>
+              <tr><td><code>01000</code></td><td><code>LS-101</code> (Silo Vazio)</td><td>$3{,}0\\%$</td><td><span class="tag-amber">110</span></td><td>3</td></tr>
+              <tr><td><code>00100</code></td><td><code>ZS-200</code> (Falha Óptica)</td><td>$1{,}8\\%$</td><td><span class="tag-amber">1110</span></td><td>4</td></tr>
+              <tr><td><code>10000</code></td><td><code>TH-101</code> (Sobrecarga)</td><td>$1{,}0\\%$</td><td><span class="tag-red">11110</span></td><td>5</td></tr>
+              <tr><td><code>00001</code></td><td><code>ESD-301</code> (E-STOP)</td><td>$0{,}2\\%$</td><td><span class="tag-red">11111</span></td><td>5</td></tr>
             </tbody>
           </table>
         `
       },
       {
-        tag: "Slide 02 / 10 • Aula 11",
-        titulo: "Topologia da FMS e Lema do Aperto de Mãos Dirigido",
-        subtitulo: "Vértices, arcos de esteiras, graus topológicos e comprovação matemática de consistência",
+        member: 1,
+        tag: "Slide 03 / 12 • Aula 23",
+        titulo: "Redundância Ethernet Industrial com RSTP (IEEE 802.1w)",
+        subtitulo: "Prevenção de tempestades de broadcast em anel físico e reconvergência abaixo do watchdog do CLP",
+        cue: "Membro 1 (Aula 23): Mostrar o anel de 5 switches (μ=2 ciclos), explicar Root Bridge (SW-SCADA) e Alternate Port bloqueada até o rompimento da fibra.",
         col1: `
           <div class="slide-math-box">
-            <strong>Lema do Aperto de Mãos Dirigido:</strong>
-            $$\\sum_{v \\in V} \\text{deg}^+(v) = \\sum_{v \\in V} \\text{deg}^-(v) = |E| = 8$$
-            Cada segmento de esteira transportadora possui exatamente um posto de origem e um posto de destino. Logo, a soma dos graus de saída deve ser identicamente igual à soma dos graus de entrada, comprovando a inexistência de nós órfãos ou arestas desconexas.
+            <strong>Número Ciclomático e Eleição Determinística:</strong><br>
+            A rede Ethernet da FMS possui $|V|=5$ switches e $|E|=6$ enlaces físicos:
+            $$\\mu(G) = |E| - |V| + 1 = 6 - 5 + 1 = 2\\text{ ciclos independentes}$$
+            <ul>
+              <li><strong>Root Bridge:</strong> <code>SW-SCADA</code> (Prioridade $4096$); Backup: <code>SW-CLP00</code> ($8192$).</li>
+              <li><strong>Portas Bloqueadas (Discarding):</strong> 2 <em>Alternate Ports</em> (<code>SW-S200↔S300</code> e link 100M <code>CLP↔S200</code>) impedem loops L2 sem TTL.</li>
+              <li><strong>Proteções de Borda:</strong> <em>PortFast</em>, <em>BPDU Guard</em> e <em>Root Guard</em>.</li>
+            </ul>
           </div>
         `,
         col2: `
           <table class="slide-table">
-            <thead>
-              <tr><th>Vértice</th><th>$\text{deg}^-$ (Alimentação)</th><th>$\text{deg}^+$ (Descarga)</th><th>Função Física</th></tr>
-            </thead>
+            <thead><tr><th>Critério</th><th>STP (802.1D)</th><th>RSTP (802.1w)</th></tr></thead>
             <tbody>
-              <tr><td><span class="tag-blue">SILO-100</span></td><td>0</td><td>1 (INSP-200)</td><td>Alimentador Pneumático XV-101</td></tr>
-              <tr><td><span class="tag-blue">INSP-200</span></td><td>1 (SILO-100)</td><td>1 (DIV-201)</td><td>Esteira Principal M-101</td></tr>
-              <tr><td><span class="tag-blue">DIV-201</span></td><td>1 (INSP-200)</td><td>2 (CX-301, DIV-202)</td><td>Desvio 1 / Pistão XV-201</td></tr>
-              <tr><td><span class="tag-blue">DIV-202</span></td><td>1 (DIV-201)</td><td>2 (CX-302, DIV-203)</td><td>Desvio 2 / Pistão XV-202</td></tr>
-              <tr><td><span class="tag-blue">DIV-203</span></td><td>1 (DIV-202)</td><td>2 (CX-303, DESC-304)</td><td>Desvio 3 / Pistão XV-203</td></tr>
+              <tr><td>Convergência</td><td>$30\\text{ s}$ a $50\\text{ s}$</td><td><span class="tag-green">$&lt; 30\\text{ ms}$ (Handshake)</span></td></tr>
+              <tr><td>Estados de Porta</td><td>5 estados rígidos</td><td>3 (Discarding, Learning, Fwd)</td></tr>
+              <tr><td>Watchdog CLP S7-1500</td><td><span class="tag-red">Dispara Trip ($100\\text{ ms}$)</span></td><td><span class="tag-green">Operação Ininterrupta</span></td></tr>
             </tbody>
           </table>
-        `
-      },
-      {
-        tag: "Slide 03 / 10 • Aula 12",
-        titulo: "Matriz de Incidência $B$ e Balanço Matricial de Peças",
-        subtitulo: "Conservação contínua de fluxo e integridade física em regime permanente",
-        col1: `
-          <div class="slide-math-box">
-            <strong>Balanço Discreto de Kirchhoff:</strong>
-            $$B \\cdot \\vec{Q} = \\vec{S}$$
-            Onde $B \\in \\{-1, 0, 1\\}^{n \\times m}$ é a matriz de incidência vértice-aresta, $\\vec{Q}$ o vetor de taxas contínuas de peças em trânsito (peças/min) e $\\vec{S}$ o saldo líquido em cada posto da linha.
-          </div>
-          <p style="margin-top:0.8rem; font-size:0.85rem; color:#cbd5e1;">
-            <strong>Propriedade da Soma por Coluna Nula:</strong><br>
-            $\\sum_{i=1}^n B[i, j] = 0, \\; \\forall j$. Garante matematicamente que nenhuma peça é criada ou destruída durante o transporte sobre a esteira.
+          <p style="margin-top:0.75rem; font-size:0.83rem; color:#cbd5e1;">
+            Ao romper o enlace 10G <code>SW-SCADA↔SW-CLP00</code>, a porta <em>Alternate</em> <code>SW-S200↔SW-S300</code> comuta para <em>Forwarding</em> em $&lt; 30\\text{ ms}$.
           </p>
-        `,
-        col2: `
-          <table class="slide-table">
-            <thead>
-              <tr><th>Posto FMS</th><th>Equação de Linha</th><th>Balanço $\\vec{S}$</th><th>Interpretação</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>SILO-100</td><td>$-Q_{e1}$</td><td>$-20.0\\text{ pç/min}$</td><td>Fonte Primária de Peças</td></tr>
-              <tr><td>INSP-200</td><td>$+Q_{e1} - Q_{e2}$</td><td>$0.0\\text{ pç/min}$</td><td>Sem Acúmulo (Regime Normal)</td></tr>
-              <tr><td>DIV-201</td><td>$+Q_{e2} - Q_{e3} - Q_{e4}$</td><td>$0.0\\text{ pç/min}$</td><td>Separação de Peças Vermelhas</td></tr>
-              <tr><td>DIV-202</td><td>$+Q_{e4} - Q_{e5} - Q_{e6}$</td><td>$0.0\\text{ pç/min}$</td><td>Separação de Peças Verdes</td></tr>
-              <tr><td>CX-301..303</td><td>$+Q_{e\\text{dest}}$</td><td>$&gt; 0.0\\text{ pç/min}$</td><td>Sumidouros de Loteamento</td></tr>
-            </tbody>
-          </table>
         `
       },
+
+      // ----------------- MEMBRO 2 (SLIDES 04 A 06) -----------------
       {
-        tag: "Slide 04 / 10 • Aula 13",
-        titulo: "Busca em Largura (BFS) vs. Profundidade (DFS)",
-        subtitulo: "Minimização de atuadores acionados vs. auditoria estrutural de aciclicidade (DAG)",
+        member: 2,
+        tag: "Slide 04 / 12 • Aula 21",
+        titulo: "Árvores Binárias na FMS: BDT no CLP e AVL no Historiador",
+        subtitulo: "Determinismo O(1) para triagem de peças e indexação O(log N) para séries temporais SCADA",
+        cue: "Membro 2 (Aula 21): Explicar a divisão em duas camadas: BDT (h ≤ 5) no CLP para acionar pistões XV-201..203 e AVL no SCADA para evitar degeneração de timestamps.",
         col1: `
           <div class="slide-math-box">
-            <strong>Invariante da Fila FIFO na BFS:</strong>
-            $$\\text{Se } v \\text{ desenfileirado antes de } u \\implies d(s, v) \\leq d(s, u)$$
-            A BFS encontra a rota com o <em>menor número de arestas/atuadores comutados</em> em $O(|V| + |E|)$. Minimizar comutações de pistões pneumáticos reduz diretamente o desgaste de vedações e previne falhas de fim de curso.
+            <strong>Camada CLP — Árvore Binária de Decisão (BDT):</strong><br>
+            Avalia $\\mathbf{s} = [cmd_{\\text{start}}, e_1, th_1, s_a, s_b, c_r, c_g, c_b, full_{1..3}]$ com prioridade por criticidade:
+            $$\\text{WCET} \\le 5 \\times t_{\\text{comp}} \\ll 1\\text{ µs} \\quad (O(1)\\text{ estrito, IEC 61131-3})$$
+            <ul>
+              <li><strong>Nível 0:</strong> <code>ESD-301</code> ou <code>TH-101</code> $\\implies$ <em>Trip Total</em>.</li>
+              <li><strong>Nível 2–3:</strong> Perfil (<code>ZS-201/202</code>) + Cor (<code>AS-201..203</code>).</li>
+              <li><strong>Nível 4:</strong> Bloqueio por <code>FULL-301..303</code> $\\implies$ <code>DESC-304</code>.</li>
+            </ul>
           </div>
         `,
         col2: `
           <div class="slide-math-box" style="border-left-color:var(--primary);">
-            <strong>Classificação de Arestas via DFS:</strong><br>
-            A Busca em Profundidade utiliza marcação temporal com três cores (BRANCO, CINZA, PRETO):
-            <ul>
-              <li><strong>Árvore (Tree Edge):</strong> Segmentos principais da esteira.</li>
-              <li><strong>Retorno (Back Edge):</strong> Indica a presença de <em>ciclos direcionados</em>.</li>
-              <li><strong>Avanço (Forward Edge):</strong> Linhas de bypass expresso.</li>
-            </ul>
-            <strong>Diagnóstico:</strong> A ausência de arestas de retorno prova que a malha nominal da FMS é estritamente um <strong>DAG</strong>.
+            <strong>Camada SCADA — Árvore AVL Auto-Balanceada:</strong><br>
+            Timestamps crescem monotonicamente ($\\tau_1 &lt; \\tau_2 &lt; \\dots &lt; \\tau_N$), o que degeneraria uma BST comum em lista $O(N)$. A AVL mantém:
+            $$BF(u) = h(u.\\text{dir}) - h(u.\\text{esq}) \\in \\{-1, 0, +1\\}$$
+            <table class="slide-table" style="margin-top:0.65rem;">
+              <thead><tr><th>Operação</th><th>BST Degenerada</th><th>AVL Garantida</th></tr></thead>
+              <tbody>
+                <tr><td>Inserir / Buscar $\\tau$</td><td>$O(N)$</td><td><span class="tag-green">$O(\\log_2 N)$</span></td></tr>
+                <tr><td>Janela $[\\tau_1, \\tau_2]$</td><td>$O(N)$</td><td><span class="tag-blue">$O(\\log_2 N + K)$</span></td></tr>
+                <tr><td>Rotações LL/RR/LR/RL</td><td>—</td><td>$O(1)$ estrutural</td></tr>
+              </tbody>
+            </table>
           </div>
         `
       },
       {
-        tag: "Slide 05 / 10 • Aula 14",
-        titulo: "Caminho Mínimo com Algoritmo de Dijkstra",
-        subtitulo: "Princípio de relaxação sistemática com Min-Heap binário para roteamento ótimo",
+        member: 2,
+        tag: "Slide 05 / 12 • Aula 22",
+        titulo: "Planejamento Livre de Colisões do AGV-300 via RRT",
+        subtitulo: "Exploração contínua no C-Space da célula com Goal Bias e suavização por atalhos (Path Smoothing)",
+        cue: "Membro 2 (Aula 22): Destacar o C-Space [0,5.0]×[0,4.0]m, os 8 obstáculos dilatados por r_seg=0.20m, e como o Smoothing reduz a rota em 19,1%.",
         col1: `
           <div class="slide-math-box">
-            <strong>Operação de Relaxação Gulosa:</strong>
-            $$\\text{se } d[u] + w(u, v) &lt; d[v] \\implies d[v] \\leftarrow d[u] + w(u, v), \\; \\text{pred}[v] \\leftarrow u$$
-            Empregando uma fila de prioridade binária (<code>heapq</code>), Dijkstra soluciona o problema de caminho mínimo métrico em $O((|V|+|E|)\\log |V|)$.
+            <strong>Espaço de Configurações &amp; Primitivas RRT:</strong><br>
+            Ambiente contínuo $\\mathcal{C} = [0, 5{,}0\\text{ m}] \\times [0, 4{,}0\\text{ m}]$, com $8$ obstáculos dilatados por $r_{\\text{seg}} = 0{,}20\\text{ m}$ (<code>CLP-00</code>, <code>SILO-100</code>, <code>M-101</code>, <code>INSP-200</code>, baias <code>CX-301..303</code>, <code>DESC-304</code>).
+            <ul>
+              <li><strong>Voronoi Bias:</strong> Nós de fronteira atraem extensão para áreas livres.</li>
+              <li><strong>Goal Bias ($p_{\\text{goal}} = 0{,}10$):</strong> Acelera convergência ao destino.</li>
+              <li><strong>Steer ($\\Delta q = 0{,}20\\text{ m}$) + Collision-Free:</strong> Checagem $\\delta s \\le 0{,}02\\text{ m}$.</li>
+            </ul>
           </div>
-          <p style="margin-top:0.8rem; font-size:0.85rem; color:#cbd5e1;">
-            A não-negatividade dos comprimentos físicos ($L &gt; 0$) e tempos de trânsito assegura formalmente a convergência ótima global.
+        `,
+        col2: `
+          <table class="slide-table">
+            <thead><tr><th>Planejador</th><th>Espaço</th><th>Waypoints</th><th>Distância</th></tr></thead>
+            <tbody>
+              <tr><td>Grade Clássica $A^*$</td><td>Discreto $5\\text{ cm}$</td><td>$\\ge 80$ (90°)</td><td>$6{,}85\\text{ m}$ ($\\approx 180\\text{ ms}$)</td></tr>
+              <tr><td>RRT Bruto</td><td>Contínuo $\\mathbb{R}^2$</td><td>$\\approx 25$ nós</td><td>$6{,}12\\text{ m}$ ($\\approx 15\\text{ ms}$)</td></tr>
+              <tr><td><strong>RRT Suavizado</strong></td><td>Contínuo $\\mathbb{R}^2$</td><td><span class="tag-green">$\\approx 6$ nós</span></td><td><span class="tag-green">$4{,}95\\text{ m}$ ($-19{,}1\\%$)</span></td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:0.75rem; font-size:0.83rem; color:#cbd5e1;">
+            Missão típica: coleta de lote em <code>CX-303 (3.80, 0.40)</code> contornando a esteira <code>M-101</code> até <code>SILO-100 (0.60, 3.40)</code> ou <code>EXP-400 (4.50, 3.40)</code>.
           </p>
-        `,
-        col2: `
-          <table class="slide-table">
-            <thead>
-              <tr><th>Destino Final</th><th>Rota Nominal (Dijkstra)</th><th>Distância</th><th>Atuadores ISA</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>CX-301 (Vermelha)</td><td>SILO → INSP → DIV1 → CX1</td><td>$2.5\\text{ m}$</td><td>XV-101, M-101, XV-201</td></tr>
-              <tr><td>CX-302 (Verde)</td><td>SILO → ... → DIV2 → CX2</td><td>$3.5\\text{ m}$</td><td>XV-101, M-101, XV-202</td></tr>
-              <tr><td>CX-303 (Azul)</td><td>SILO → ... → DIV3 → CX3</td><td>$4.5\\text{ m}$</td><td>XV-101, M-101, XV-203</td></tr>
-              <tr><td>DESC-304 (Refugo)</td><td>SILO → ... → DIV3 → DESC</td><td>$4.8\\text{ m}$</td><td>XV-101, M-101 Contínuo</td></tr>
-            </tbody>
-          </table>
         `
       },
       {
-        tag: "Slide 06 / 10 • Aula 15",
-        titulo: "Tolerância a Falhas e Desvio Automático em Tempo Real",
-        subtitulo: "Reponderação dinâmica sob emperramento pneumático e recálculo em milissegundos",
+        member: 2,
+        tag: "Slide 06 / 12 • Aula 26",
+        titulo: "Aceleração Espacial (2D) e Visão Óptica (3D) via KD-Trees",
+        subtitulo: "Redução de O(N) para O(log N) na primitiva NEAREST do AGV-300 e classificação RGB em INSP-200",
+        cue: "Membro 2 (Aula 26): Explicar o corte cíclico por mediana (X depois Y), a poda Branch-and-Bound (|q_a - p_a| ≥ r_best) e a maldição da dimensionalidade.",
         col1: `
           <div class="slide-math-box">
-            <strong>Reponderação Topológica Instantânea:</strong>
-            $$W(\\text{DIV-201}, \\text{DIV-202}) \\leftarrow \\infty$$
-            Ao detectar a falha de fim de curso no pistão XV-202 ou travamento de correia, o supervisor SCADA eleva o peso da aresta danificada para infinito, eliminando-a do espaço de busca.
-          </div>
-          <p style="margin-top:0.8rem; font-size:0.85rem; color:#cbd5e1;">
-            <strong>Métrica SIS (IEC 61511):</strong> O recálculo da rota pelo motor Dijkstra leva menos de $0.05\\text{ ms}$, operando centenas de vezes mais rápido que o tempo de curso mecânico do cilindro ($150\\text{ ms}$).
-          </p>
-        `,
-        col2: `
-          <table class="slide-table">
-            <thead>
-              <tr><th>Trecho Travado</th><th>Nova Rota Ativa</th><th>Distância</th><th>Tempo Resposta</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><span style="color:var(--danger); font-weight:700;">DIV-202 Bloqueado</span></td>
-                <td>SILO → INSP → <strong>DIV-203 (Bypass XV-200B)</strong> → CX-303</td>
-                <td>$3.8\\text{ m}$</td>
-                <td><span class="tag-blue">0.046 ms</span></td>
-              </tr>
-              <tr>
-                <td><span style="color:var(--danger); font-weight:700;">M-101 (DIV1→DIV2)</span></td>
-                <td>SILO → INSP → <strong>DIV-201 → DIV-203 (Contorno)</strong> → CX-303</td>
-                <td>$4.7\\text{ m}$</td>
-                <td><span class="tag-blue">0.051 ms</span></td>
-              </tr>
-            </tbody>
-          </table>
-        `
-      },
-      {
-        tag: "Slide 07 / 10 • Aula 16",
-        titulo: "Inspeção Preventiva: Circuitos Eulerianos (Hierholzer)",
-        subtitulo: "Varredura contínua de passarelas e esteiras sem repetição de trechos físicos",
-        col1: `
-          <div class="slide-math-box">
-            <strong>Teorema Fundamental de Euler (1736):</strong><br>
-            Um grafo conexo admite um Circuito Euleriano fechado se e somente se <strong>todos os seus vértices possuem grau par</strong>:
-            $$\\text{deg}(v) \\equiv 0 \\pmod 2, \\quad \\forall v \\in V$$
-            O Algoritmo de Hierholzer (1873) reconstrói a trilha completa em tempo linear ótimo $O(|E|)$ utilizando pilha com remoção de arestas.
-          </div>
-        `,
-        col2: `
-          <div class="slide-math-box" style="border-left-color:var(--primary);">
-            <strong>Plano de Manutenção Preventiva da FMS:</strong><br>
-            O robô de inspeção/lubrificação parte da <code>BASE-MANUT</code> e percorre todas as 12 passarelas de serviço interligadas aos postos de esteira:
+            <strong>Construção por Mediana &amp; Poda Branch-and-Bound:</strong><br>
+            Na profundidade $d$, o eixo de particionamento alterna via $\\text{axis} = d \\bmod k$, garantindo altura $h = \\lfloor\\log_2 N\\rfloor + 1$:
+            $$\\Delta_{\\perp} = |q_a - p_{m,a}| \\ge r_{\\text{best}} \\implies \\text{Subárvore oposta PODADA!}$$
             <ul>
-              <li>Todos os postos balanceados com grau $2$ ou $4$.</li>
-              <li>Arestas percorridas exatamente uma única vez.</li>
-              <li>Conexão com o <em>Problema do Carteiro Chinês</em> para contingências com vértices de grau ímpar.</li>
-            </ul>
-          </div>
-        `
-      },
-      {
-        tag: "Slide 08 / 10 • Aula 17",
-        titulo: "Roteamento Logístico do Robô AGV via TSP",
-        subtitulo: "Heurística do Vizinho Mais Próximo e busca local 2-Opt para amostragem no chão de fábrica",
-        col1: `
-          <div class="slide-math-box">
-            <strong>Problema do Caixeiro-Viajante (NP-Hard):</strong>
-            $$\\min_{\\pi \\in S_n} \\sum_{i=0}^{n-1} d(v_{\\pi(i)}, v_{\\pi(i+1)})$$
-            O AGV deve partir da DOCA-00, abastecer o Silo, recolher amostras no Túnel Óptico, coletar as três caixas de lotes, retirar o descarte e retornar à base pelo menor percurso métrico total.
-          </div>
-        `,
-        col2: `
-          <table class="slide-table">
-            <thead>
-              <tr><th>Método de Roteamento</th><th>Distância Total</th><th>Complexidade</th><th>Diagnóstico</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>Vizinho Mais Próximo (NN)</td><td>$98.0\\text{ m}$</td><td>$O(n^2)$</td><td>Armadilha do Salto Longo Final</td></tr>
-              <tr><td><strong>Refinamento 2-Opt (Croes)</strong></td><td><strong>$86.3\\text{ m}$</strong></td><td>$O(n^3)$</td><td><strong>Descruzamento Planar (-11.7m)</strong></td></tr>
-              <tr><td>Força Bruta (720 rotas)</td><td>$86.3\\text{ m}$</td><td>$O((n-1)!)$</td><td>Ótimo Global Confirmado</td></tr>
-              <tr><td>Cota Inferior MST (Prim)</td><td>$54.9\\text{ m}$</td><td>$O(|E|\\log |V|)$</td><td>Limite Mínimo Teórico Válido</td></tr>
-            </tbody>
-          </table>
-        `
-      },
-      {
-        tag: "Slide 09 / 10 • Aula 18",
-        titulo: "Redes Multicamada e Logística de Suprimentos",
-        subtitulo: "Segregação formal: Fluxo de Materiais (DAG) vs. Circulação Viária de Veículos",
-        col1: `
-          <div class="slide-math-box">
-            <strong>Arquitetura Multicamada (Multilayer):</strong>
-            $$\\mathcal{M} = (\\{G_M, G_V\\}, \\{V_M, V_V\\}, E_{MV})$$
-            Evita o erro clássico de acoplamento viário:
-            <ul>
-              <li><strong>$G_M$ (Materiais):</strong> Mapeia da portaria ao WMS ($25$ nós). É estritamente um <strong>DAG</strong> auditado pelo Algoritmo de Kahn (1962).</li>
-              <li><strong>$G_V$ (Veículos):</strong> Circulação viária de caminhões e empilhadeiras. Contém ciclos estruturais fechados de pátio.</li>
+              <li><strong>RRT + KD-Tree ($k=2$):</strong> Evita que <code>NEAREST</code> degrade o RRT para $O(N^2)$ em mapas densos.</li>
+              <li><strong>Visão <code>INSP-200</code> ($k=3$ RGB):</strong> Busca $k$-NN robusta a variações de iluminação sem sofrer da <em>Curse of Dimensionality</em> ($k \\ll 20$).</li>
             </ul>
           </div>
         `,
         col2: `
           <table class="slide-table">
-            <thead>
-              <tr><th>Insumo / Fluxo</th><th>Origem → Destino</th><th>Distância</th><th>Classificação</th></tr>
-            </thead>
+            <thead><tr><th>Estação FMS</th><th>$(X, Y)$ [m]</th><th>Eixo / Função</th></tr></thead>
             <tbody>
-              <tr><td>Tarugos Vermelhos</td><td>Box Galpão A → Docas Exp.</td><td>$134.0\\text{ m}$</td><td>Fluxo $G_M$ (Processamento FMS)</td></tr>
-              <tr><td>Embalagens / Caixas</td><td>Box Galpão A → Paletizadora</td><td>$74.0\\text{ m}$</td><td>Fluxo $G_M$ (Consumo Direto)</td></tr>
-              <tr><td>Caminhão de Carga</td><td>Portaria → Balança → Portaria</td><td>$85.0\\text{ m}$</td><td>Circulação $G_V$ (Anel Fechado)</td></tr>
+              <tr><td><code>CLP-00</code></td><td>$(0{,}50,\\; 3{,}40)$</td><td>Painel Central SCADA</td></tr>
+              <tr><td><code>SILO-100</code></td><td>$(0{,}70,\\; 2{,}00)$</td><td>Divisão $Y=2{,}00$ (Esq)</td></tr>
+              <tr><td><code>INSP-200</code></td><td>$(1{,}70,\\; 2{,}00)$</td><td>Túnel Óptico RGB</td></tr>
+              <tr><td><code>CX-301..303</code></td><td>$(2{,}40..3{,}80,\\; 0{,}55)$</td><td><strong>Raiz $X=2{,}40$</strong> / Baias</td></tr>
+              <tr><td><code>DESC-304</code> / <code>EXP-400</code></td><td>$(4{,}50,\\; 2{,}00 / 3{,}40)$</td><td>Refugo &amp; Expedição</td></tr>
             </tbody>
           </table>
         `
       },
+
+      // ----------------- MEMBRO 3 (SLIDES 07 A 09) -----------------
       {
-        tag: "Slide 10 / 10 • Conclusão",
-        titulo: "Síntese dos Resultados e Fechamento da Etapa 2",
-        subtitulo: "Consolidação dos Algoritmos de Grafos aplicados à Célula de Manufatura Flexível",
+        member: 3,
+        tag: "Slide 07 / 12 • Aula 24 (Parte A)",
+        titulo: "Redes de Petri & Árvore de Cobertura (Karp-Miller) na Esteira",
+        subtitulo: "Diagnóstico formal de transbordo físico de canaleta através do símbolo ω em sistema aberto",
+        cue: "Membro 3 (Aula 24A): Explicar os 6 lugares e transições da esteira, a equação M' = M + C·e_j e como o símbolo ω prova que a canaleta transborda sem intertravamento.",
+        col1: `
+          <div class="slide-math-box">
+            <strong>Formalização da Rede de Petri Marcada:</strong><br>
+            $$N = (P, T, Pre, Post, M_0), \\quad M' = M + C\\cdot\\vec{e}_j \\; (C = Post - Pre)$$
+            <ul>
+              <li><strong>Lugares:</strong> $p_1$ (<code>SILO-100</code>), $p_2$ (<code>M-101</code> livre), $p_3$ (<code>INSP-200</code>), $p_4$ (<code>XV-201</code> pronto), $p_5$ (<code>CX-301</code>), $p_6$ (<code>CAP-301</code>).</li>
+              <li><strong>Transições:</strong> $t_1$ (Alimentar <code>XV-101</code>), $t_2$ (Desviar <code>XV-201</code>), $t_4$ (Coletar AGV), $t_5$ (Reabastecer Silo).</li>
+            </ul>
+          </div>
+        `,
+        col2: `
+          <div class="slide-math-box" style="border-left-color:var(--danger);">
+            <strong>Sistema Aberto (Sem Lugar $p_6$) — Algoritmo de Karp-Miller:</strong><br>
+            Com realimentação contínua $t_5$ e ciclo $t_1 \\to t_2$, o número de peças em $p_5$ cresce estritamente em relação à raiz $M_0 = [1,1,0,1,0]^T$:
+            $$M_3 = [1,1,0,1,1]^T &gt; M_0 \\implies M_3 = [1, 1, 0, 1, \\mathbf{\\omega}]^T$$
+            <p style="margin-top:0.55rem; color:#fca5a5;">
+              <strong>Diagnóstico Formal:</strong> A presença de $\\omega$ comprova matematicamente que <code>CX-301</code> é ilimitada e sofrerá <strong>transbordo físico</strong> se o infeed superar a coleta.
+            </p>
+          </div>
+        `
+      },
+      {
+        member: 3,
+        tag: "Slide 08 / 12 • Aula 24 (Parte B)",
+        titulo: "Árvore de Atingibilidade Finita & Prova de Ausência de Deadlock",
+        subtitulo: "Lugar complementar CAP-301 (FULL-300), invariante de lugar e verificação de vivacidade",
+        cue: "Membro 3 (Aula 24B): Mostrar como o lugar complementar p_6 (K=3 no modelo / 10 na célula) elimina ω via P-Invariante M(p5)+M(p6)=K e garante zero deadlocks.",
         col1: `
           <div class="slide-math-box" style="border-left-color:var(--primary);">
-            <strong>Resultados Teóricos & Computacionais:</strong>
+            <strong>Correção via Lugar Complementar $p_6$ (<code>CAP-301</code>):</strong><br>
+            Inserindo $p_6$ como pré-condição de $t_2$ com $M_0(p_6) = K$, o vetor $y = [0,0,0,0,1,1]^T$ satisfaz $C^T \\cdot y = \\mathbf{0}$, provando o <strong>P-Invariante</strong>:
+            $$M(p_5) + M(p_6) = K \\implies M(p_5) \\le K, \\; \\forall M \\in R(N, M_0)$$
+            Quando $M(p_5)=K$, $M(p_6)=0$ desabilita $t_2$ até o disparo de $t_4$ (coleta do <code>AGV-300</code>), eliminando $\\omega$.
+          </div>
+        `,
+        col2: `
+          <table class="slide-table">
+            <thead><tr><th>Propriedade Formal</th><th>Resultado na FMS</th><th>Significado Físico</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Limitação ($k$-Bound)</strong></td><td><span class="tag-green">$p_{2,3,4}$ 1-Safe; $p_5$ $K$-lim</span></td><td>Sem colisão na esteira nem transbordo</td></tr>
+              <tr><td><strong>Deadlock-Freedom</strong></td><td><span class="tag-green">100% Livre de Bloqueio</span></td><td>Todo estado tem $t$ habilitada</td></tr>
+              <tr><td><strong>Vivacidade (L4)</strong></td><td><span class="tag-blue">Quase-Viva / Viva</span></td><td>Todas as transições reatingíveis</td></tr>
+              <tr><td><strong>Reversibilidade</strong></td><td><span class="tag-blue">$M_0$ sempre atingível</span></td><td>Partida e parada limpa da célula</td></tr>
+            </tbody>
+          </table>
+        `
+      },
+      {
+        member: 3,
+        tag: "Slide 09 / 12 • Aula 25",
+        titulo: "Orquestração Reativa via Árvores de Comportamento (BT)",
+        subtitulo: "Desacoplamento via Blackboard ISA-5.1 e preempção instantânea de segurança sobre o AGV-300",
+        cue: "Membro 3 (Aula 25): Explicar por que BT substitui FSMs acopladas: avaliação top-down a cada Tick do SCADA garantindo que HS-301 interrompa até missões RUNNING.",
+        col1: `
+          <div class="slide-math-box">
+            <strong>Arquitetura Reativa &amp; Estados de Retorno:</strong><br>
+            A cada ciclo de varredura (<em>Tick</em>), a raiz <code>Selector (?)</code> reavalia os 4 ramos da esquerda para a direita retornando <code>SUCCESS</code>, <code>FAILURE</code> ou <code>RUNNING</code>:
             <ul>
-              <li><strong>Modelagem em Dígrafos:</strong> Representação unificada dos $9$ postos e $8$ esteiras da FMS com Lema do Aperto de Mãos comprovado.</li>
-              <li><strong>Balanço Discreto de Kirchhoff:</strong> Sistema linear $B \\cdot \\vec{Q} = \\vec{S}$ verificado com soma nula por coluna e ausência de acúmulo nos postos intermediários.</li>
-              <li><strong>Dijkstra em Milissegundos:</strong> Recálculo de rota sob falha com latência inferior a $0.05\\text{ ms}$, atendendo aos requisitos da norma IEC 61511.</li>
+              <li><strong>Ramo 1 (Segurança):</strong> <code>HS-301 == 1</code> ou falha <code>INSP-200</code> $\\to$ Para <code>M-101</code>, recua pistões, liga <code>HS-302</code>.</li>
+              <li><strong>Ramo 2 (Lote Cheio):</strong> <code>CX-30x &ge; 10</code> $\\to$ Bloqueia <code>XV-101</code> e despacha <code>AGV-300 &rarr; EXP-400</code> (<code>RUNNING</code>).</li>
+              <li><strong>Ramo 3 (Silo Vazio):</strong> <code>LS-101 == 1</code> $\\to$ Solicita reabastecimento.</li>
+              <li><strong>Ramo 4 (Produção):</strong> <code>HS-101 == 1</code> $\\to$ Ciclo nominal de triagem.</li>
             </ul>
           </div>
         `,
         col2: `
-          <div class="slide-math-box" style="border-left-color:var(--secondary);">
-            <strong>Otimização Logística & Autonomia:</strong>
+          <table class="slide-table">
+            <thead><tr><th>Cenário no Tick</th><th>Avaliação da BT</th><th>Efeito Imediato</th></tr></thead>
+            <tbody>
+              <tr><td>Produção Normal</td><td>R1(F) → R2(F) → R3(F) → <span class="tag-green">R4(S)</span></td><td><code>M-101=1</code>, triagem ativa</td></tr>
+              <tr><td><code>CX-301 = 10 pç</code></td><td>R1(F) → <span class="tag-amber">R2(RUNNING)</span></td><td><code>XV-101=0</code>, AGV em trânsito</td></tr>
+              <tr><td><code>HS-301</code> durante AGV</td><td><span class="tag-red">R1(SUCCESS)</span></td><td><strong>Preempção imediata total</strong></td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:0.75rem; font-size:0.83rem; color:#94a3b8;">
+            <strong>Padrão Blackboard:</strong> Desacopla a lógica dos drivers PROFINET/Modbus TCP mantendo todas as tags ISA-5.1 sincronizadas.
+          </p>
+        `
+      },
+
+      // ----------------- MEMBRO 4 (SLIDES 10 A 12) -----------------
+      {
+        member: 4,
+        tag: "Slide 10 / 12 • Aula 27 (Parte A)",
+        titulo: "Árvores de Decisão Clássicas: ID3 vs. C4.5 vs. CART",
+        subtitulo: "Indução de regras sobre 16 ciclos da FMS e o contraste entre Ganho de Informação, Gain Ratio e Gini",
+        cue: "Membro 4 (Aula 27A): Destacar a divergência clássica na raiz: o ID3 erra ao priorizar 'Cor' (alta cardinalidade), enquanto C4.5 e CART priorizam 'Seg' (norma SIS).",
+        col1: `
+          <div class="slide-math-box">
+            <strong>Critérios de Partição na Raiz ($N=16$, $H=2{,}0996$, $Gini=0{,}7266$):</strong>
             <ul>
-              <li><strong>Inspeção Euleriana (Hierholzer):</strong> Varredura de $100\\%$ das passarelas em tempo linear $O(|E|)$ sem repetição de trechos.</li>
-              <li><strong>Convergência ao Ótimo Global no TSP:</strong> O refinamento 2-Opt reduziu o percurso do AGV em $11{,}7\\text{ m}$ (atingindo $86{,}3\\text{ m}$, comprovado por força bruta).</li>
-              <li><strong>Aciclicidade Estrutural:</strong> Algoritmo de Kahn comprovou formalmente que o fluxo de peças é um DAG estrito.</li>
+              <li><strong>ID3 ($IG = H(D) - H(D|A)$):</strong> Favorece atributos com muitos valores ($3$ cores) sem penalizar fragmentação.</li>
+              <li><strong>C4.5 ($GR = IG / SplitInfo$):</strong> Normaliza pela entropia da divisão, recuperando a prioridade de segurança.</li>
+              <li><strong>CART ($\\Delta Gini$):</strong> Impõe cortes estritamente binários, mapeando 1:1 para blocos <code>IF / ELSE</code>.</li>
+            </ul>
+          </div>
+        `,
+        col2: `
+          <table class="slide-table">
+            <thead><tr><th>Atributo</th><th>$IG$ [ID3]</th><th>$GR$ [C4.5]</th><th>$\\Delta Gini$ [CART]</th></tr></thead>
+            <tbody>
+              <tr><td><code>Seg</code> (OK/Falha)</td><td>$0{,}5184$</td><td><span class="tag-green">$0{,}5786$ ★</span></td><td><span class="tag-green">$0{,}1811$ ★</span></td></tr>
+              <tr><td><code>Caixa</code> (Disp/Cheia)</td><td>$0{,}2652$</td><td>$0{,}3809$</td><td>$0{,}0919$</td></tr>
+              <tr><td><code>Fmt</code> (Grande/Peq)</td><td>$0{,}3968$</td><td>$0{,}3968$</td><td>$0{,}0547$</td></tr>
+              <tr><td><code>Cor</code> (V/Vd/Az)</td><td><span class="tag-amber">$0{,}6302$ ★</span></td><td>$0{,}4037$</td><td>$0{,}0703$</td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:0.75rem; font-size:0.83rem; color:#cbd5e1;">
+            <strong>Conclusão SIS:</strong> C4.5 e CART isolam <code>Seg = Falha</code> e <code>Caixa = Cheia</code> no topo, reduzindo testes redundantes de segurança.
+          </p>
+        `
+      },
+      {
+        member: 4,
+        tag: "Slide 11 / 12 • Aula 27 (Parte B)",
+        titulo: "Mitigação de Alarm Flood (ISA-18.2), Poda & Código IEC 61131-3",
+        subtitulo: "Descoberta de limiares contínuos 4–20 mA, prevenção de overfitting e geração de Structured Text",
+        cue: "Membro 4 (Aula 27B): Explicar o Estudo de Caso 2 (pressão de ar < 4.3 bar causando cascata de fim de curso), o papel da poda e a tradução para CLP S7-1500.",
+        col1: `
+          <div class="slide-math-box">
+            <strong>Supressão Hierárquica &amp; Poda ($N=360$ ciclos):</strong><br>
+            Quando <code>Pressao_Ar_bar &le; 4.30 bar</code>, os pistões <code>XV-201..203</code> perdem torque e geram 4–5 alarmes secundários de fim de curso (<em>Alarm Flood</em>).
+            <ul>
+              <li><strong>Limiares Descobertos:</strong> <code>Pressao &le; 4.30</code>, <code>Corrente_M101 &gt; 4.20 A</code>, <code>Tempo_Insp &gt; 600 ms</code>.</li>
+              <li><strong>Poda ($R_\\alpha(T) = R(T) + \\alpha|\\tilde{T}|$):</strong> Remove galhos ajustados a ruído gaussiano 4–20 mA, elevando a acurácia de validação.</li>
+            </ul>
+          </div>
+        `,
+        col2: `
+          <div class="slide-math-box" style="border-left-color:var(--primary); font-family:var(--font-mono); font-size:0.76rem;">
+            <strong>Código Structured Text (CLP S7-1500) via CART:</strong>
+            <pre style="margin-top:0.5rem; color:#38bdf8; white-space:pre-wrap;">IF (Seg_Falha) THEN Acao := TRIP_ALARME;
+ELSIF (Caixa_Cheia) THEN Acao := TRIP_ALARME;
+ELSIF (Fmt_Grande) THEN
+  IF (Cor = 'Verde') THEN Acao := CX_302;
+  ELSIF (Cor = 'Azul') THEN Acao := DESC_304;
+  ELSE Acao := CX_301; END_IF;
+ELSE
+  IF (Cor_Azul) THEN Acao := CX_303;
+  ELSE Acao := DESC_304; END_IF;
+END_IF;</pre>
+          </div>
+        `
+      },
+      {
+        member: 4,
+        tag: "Slide 12 / 12 • Síntese Etapa 3",
+        titulo: "Consolidação Geral do Módulo 3 na Célula FMS",
+        subtitulo: "Integração completa de Árvores em Infraestrutura, Telemetria, Robótica, Verificação Formal e IA",
+        cue: "Membro 4 (Fechamento): Recapitular a jornada das Aulas 19–27 conectando as entregas dos 4 membros e convidar para a demonstração ao vivo no simulador.",
+        col1: `
+          <div class="slide-math-box" style="border-left-color:var(--primary);">
+            <strong>Entregas Quantitativas Comprovadas:</strong>
+            <ul>
+              <li><strong>Infraestrutura (Aulas 19 &amp; 23):</strong> MST reduziu cabos em <strong>62,8%</strong> ($18{,}2\\text{ m}$); RSTP reconverge anel em <strong>$&lt; 30\\text{ ms}$</strong>.</li>
+              <li><strong>Dados &amp; Tempo Real (Aulas 20 &amp; 21):</strong> Huffman economizou <strong>75,56%</strong> de banda; BDT ($O(1)$) + AVL ($O(\\log N)$).</li>
+              <li><strong>Navegação AGV (Aulas 22 &amp; 26):</strong> RRT suavizado reduziu rota em <strong>19,1%</strong> ($4{,}95\\text{ m}$); KD-Tree acelerou <code>NEAREST</code> para $O(\\log N)$.</li>
+            </ul>
+          </div>
+        `,
+        col2: `
+          <div class="slide-math-box" style="border-left-color:var(--purple);">
+            <strong>Segurança Formal &amp; Inteligência Operacional:</strong>
+            <ul>
+              <li><strong>Redes de Petri (Aula 24):</strong> Karp-Miller detectou risco $\\omega$ e o lugar complementar <code>CAP-301</code> provou <strong>0 deadlocks</strong>.</li>
+              <li><strong>Behavior Trees (Aula 25):</strong> Preempção imediata de <code>HS-301</code> sobre missões <code>RUNNING</code> via <em>Blackboard</em>.</li>
+              <li><strong>ID3 / C4.5 / CART (Aula 27):</strong> Mitigação de <em>Alarm Flood</em> (ISA-18.2) com exportação direta para código CLP <strong>IEC 61131-3</strong>.</li>
             </ul>
           </div>
         `
@@ -888,17 +912,36 @@
       const data = slidesData[slideIdx];
       const view = document.getElementById("slide-body-viewport");
       const counter = document.getElementById("slide-hdr-counter");
+      const mBadge = document.getElementById("slide-member-badge");
+
       if (counter) counter.innerText = data.tag;
+      if (mBadge) {
+        mBadge.className = `member-pill member-${data.member}`;
+        mBadge.innerText = `Membro ${data.member} • Parte ${data.member}/4`;
+      }
+
+      for (let m = 1; m <= 4; m++) {
+        const b = document.getElementById(`btn-membro-${m}`);
+        if (b) {
+          b.className = "member-jump-btn" + (data.member === m ? ` active-m${m}` : "");
+        }
+      }
 
       if (view) {
         view.innerHTML = `
-          <div class="slide-header-content">
-            <h2>${data.titulo}</h2>
-            <p class="subtitle">${data.subtitulo}</p>
+          <div>
+            <div class="slide-header-content">
+              <h2>${data.titulo}</h2>
+              <p class="subtitle">${data.subtitulo}</p>
+            </div>
+            <div class="slide-grid-2">
+              <div>${data.col1}</div>
+              <div>${data.col2}</div>
+            </div>
           </div>
-          <div class="slide-grid-2">
-            <div>${data.col1}</div>
-            <div>${data.col2}</div>
+          <div class="presenter-cue">
+            <strong>🎤 Guia Membro ${data.member}:</strong>
+            <span>${data.cue}</span>
           </div>
         `;
       }
@@ -906,376 +949,1297 @@
       const dotsCont = document.getElementById("dots-container");
       if (dotsCont) {
         dotsCont.innerHTML = "";
-        slidesData.forEach((_, i) => {
+        slidesData.forEach((s, i) => {
           const d = document.createElement("div");
           d.className = "dot" + (i === slideIdx ? " active" : "");
+          d.title = `Slide ${i + 1} (Membro ${s.member})`;
           d.onclick = () => { slideIdx = i; window.renderizarSlide(); };
           dotsCont.appendChild(d);
         });
       }
 
-      // Renderiza as fórmulas matemáticas com o MathJax de forma segura
       if (window.MathJax && typeof MathJax.typesetPromise === "function") {
-        MathJax.typesetPromise([view]).catch(function (err) {
-          console.warn('Erro ao formatar MathJax:', err.message);
-        });
+        MathJax.typesetPromise([view]).catch(() => {});
       }
     };
 
     window.trocarSlide = function(delta) {
-      slideIdx += delta;
-      if (slideIdx < 0) slideIdx = 0;
-      if (slideIdx >= slidesData.length) slideIdx = slidesData.length - 1;
+      slideIdx = Math.max(0, Math.min(slidesData.length - 1, slideIdx + delta));
       window.renderizarSlide();
     };
 
+    window.irParaSlide = function(idx) {
+      slideIdx = Math.max(0, Math.min(slidesData.length - 1, idx));
+      window.renderizarSlide();
+    };
+
+    window.alternarTelaCheiaSlides = function() {
+      const wrap = document.getElementById("slides-wrapper");
+      const btn = document.getElementById("btn-fullscreen-slide");
+      if (!wrap) return;
+      const ativo = wrap.classList.toggle("fullscreen-mode");
+      if (btn) btn.innerText = ativo ? "✕ Sair Apresentação" : "⛶ Apresentar";
+    };
+
     document.addEventListener("keydown", (e) => {
+      if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "SELECT")) return;
       if (e.key === "ArrowLeft") window.trocarSlide(-1);
       if (e.key === "ArrowRight") window.trocarSlide(1);
+      if (e.key === "Escape") {
+        const wrap = document.getElementById("slides-wrapper");
+        if (wrap && wrap.classList.contains("fullscreen-mode")) window.alternarTelaCheiaSlides();
+      }
     });
 
     /* =========================================================================
-       2. COORDENADAS E ESTRUTURA TOPOLÓGICA DA PLANTA
+       2. UTILITÁRIOS DE CONSOLE, KPIS E TAGS ISA-5.1
        ========================================================================= */
-    const nodeCoords = {
-      "SILO-100": { x: 77, y: 90 },
-      "INSP-200": { x: 192, y: 90 },
-      "DIV-201":  { x: 302, y: 90 },
-      "CX-301":   { x: 392, y: 36 },
-      "DIV-202":  { x: 432, y: 90 },
-      "CX-302":   { x: 522, y: 36 },
-      "DIV-203":  { x: 562, y: 90 },
-      "CX-303":   { x: 677, y: 90 },
-      "DESC-304": { x: 677, y: 146 },
-      "DOCA-00":  { x: 87, y: 277 },
-      "ALMOX-A":  { x: 232, y: 277 },
-      "PAV-FMS":  { x: 382, y: 277 },
-      "PALET-B":  { x: 532, y: 277 },
-      "DOCAS-EXP":{ x: 672, y: 277 }
-    };
+    let currentMode = 1;
+    let animFrameId = null;
 
-    const fmsGrafo = {
-      nos: ["SILO-100", "INSP-200", "DIV-201", "DIV-202", "DIV-203", "CX-301", "CX-302", "CX-303", "DESC-304"],
-      arestas: [
-        { id: "edge-e1", u: "SILO-100", v: "INSP-200", w: 0.8, valve: "v-XV-101", actName: "XV-101", marker: "arrow-green" },
-        { id: "edge-e2", u: "INSP-200", v: "DIV-201", w: 1.2, valve: "v-M-101", actName: "M-101", marker: "arrow-green" },
-        { id: "edge-e3", u: "DIV-201", v: "CX-301", w: 0.5, valve: "v-XV-201", actName: "XV-201", marker: "arrow-green" },
-        { id: "edge-e4", u: "DIV-201", v: "DIV-202", w: 1.0, valve: "v-M-101", actName: "M-101", marker: "arrow-green" },
-        { id: "edge-e5", u: "DIV-202", v: "CX-302", w: 0.5, valve: "v-XV-202", actName: "XV-202", marker: "arrow-green" },
-        { id: "edge-e6", u: "DIV-202", v: "DIV-203", w: 1.0, valve: "v-M-101", actName: "M-101", marker: "arrow-green" },
-        { id: "edge-e7", u: "DIV-203", v: "CX-303", w: 0.5, valve: "v-XV-203", actName: "XV-203", marker: "arrow-green" },
-        { id: "edge-e8", u: "DIV-203", v: "DESC-304", w: 0.8, valve: "v-M-101", actName: "M-101", marker: "arrow-green" },
-        { id: "edge-byp", u: "INSP-200", v: "DIV-203", w: 2.5, valve: "v-XV-200B", actName: "XV-200B", marker: "arrow-orange", isBypass: true },
-        { id: "edge-cont", u: "DIV-201", v: "DIV-203", w: 2.2, valve: "v-M-101B", actName: "M-101B", marker: "arrow-orange", isBypass: true }
-      ]
-    };
+    function stopAnim() {
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+    }
 
-    let nosBloqueados = new Set();
-    let animId = null;
-
-    window.logSCADA = function(msg, highlight = false) {
+    window.logSCADA = function(msg, color = "#38bdf8") {
       const logs = document.getElementById("console-logs");
       if (!logs) return;
       const d = new Date();
       const ts = `[${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}]`;
       const line = document.createElement("div");
       line.className = "console-line";
+      line.style.color = color;
       line.innerHTML = `<span class="ts">${ts}</span> ${msg}`;
-      if (highlight) line.style.color = "#34d399";
       logs.prepend(line);
+      while (logs.children.length > 45) logs.removeChild(logs.lastChild);
     };
 
-    function safeGetNodeRect(nodeId) {
-      const group = document.getElementById("node-" + nodeId);
-      return group ? group.querySelector("rect") : null;
+    function setKPIs(l1, v1, l2, v2, pl, pv, bannerText) {
+      document.getElementById("kpi-1-lbl").innerText = l1;
+      document.getElementById("kpi-1-val").innerText = v1;
+      document.getElementById("kpi-2-lbl").innerText = l2;
+      document.getElementById("kpi-2-val").innerText = v2;
+      document.getElementById("kpi-path-lbl").innerText = pl;
+      document.getElementById("kpi-path-val").innerText = pv;
+      if (bannerText) document.getElementById("status-banner").innerText = bannerText;
     }
 
-    window.alternarBloqueioNo = function(noId) {
-      const rect = safeGetNodeRect(noId);
-      if (nosBloqueados.has(noId)) {
-        nosBloqueados.delete(noId);
-        if (rect) rect.classList.remove("blocked");
-        window.logSCADA(`Nó ${noId} desbloqueado. Disponibilidade restabelecida.`);
-      } else {
-        nosBloqueados.add(noId);
-        if (rect) rect.classList.add("blocked");
-        window.logSCADA(`ALERTA: Falha induzida no posto ${noId}. Peso W(u,v) ajustado para ∞.`);
-      }
-      window.executarDijkstra();
+    function setTag(id, text, cls) {
+      const el = document.getElementById("tag-" + id);
+      if (!el) return;
+      el.className = "valve-pill " + cls;
+      el.innerText = text;
+    }
+
+    function resetTagsNominal() {
+      setTag("XV-101", "XV-101 (Pistão Infeed): PRONTO", "closed");
+      setTag("M-101", "M-101 (Esteira Princ): RUN", "open");
+      setTag("XV-201", "XV-201 (Pistão 1 Verm): RECUADO", "closed");
+      setTag("XV-202", "XV-202 (Pistão 2 Verde): RECUADO", "closed");
+      setTag("XV-203", "XV-203 (Pistão 3 Azul): RECUADO", "closed");
+      setTag("HS-302", "HS-302 (Torre Alarme): OFF", "closed");
+      setTag("AGV-300", "AGV-300 (Logística): IDLE", "closed");
+      setTag("RSTP-AP", "RSTP-AP (SW-S200↔S300): DISCARDING", "warn");
+    }
+
+    function setLegend(items) {
+      const leg = document.getElementById("canvas-legend");
+      if (!leg) return;
+      leg.innerHTML = items.map(it =>
+        `<div class="legend-item"><div class="legend-box" style="${it.style}"></div> ${it.label}</div>`
+      ).join("");
+    }
+
+    /* =========================================================================
+       MODO 1: MST (KRUSKAL & PRIM - AULA 19) + RSTP (AULA 23)
+       ========================================================================= */
+    const mstNodes = {
+      "CLP-00":   { x: 80,  y: 70,  sub: "Painel S7-1500", type: "source" },
+      "SILO-100": { x: 80,  y: 185, sub: "Infeed / XV-101", type: "std" },
+      "INSP-200": { x: 225, y: 185, sub: "Túnel Óptico", type: "std" },
+      "DIV-201":  { x: 360, y: 185, sub: "Desvio 1 (Verm)", type: "std" },
+      "DIV-202":  { x: 495, y: 185, sub: "Desvio 2 (Verde)", type: "std" },
+      "DIV-203":  { x: 630, y: 185, sub: "Desvio 3 (Azul)", type: "std" },
+      "CX-301":   { x: 360, y: 70,  sub: "Lote Vermelho", type: "sink" },
+      "CX-302":   { x: 495, y: 70,  sub: "Lote Verde", type: "sink" },
+      "CX-303":   { x: 630, y: 70,  sub: "Lote Azul", type: "sink" },
+      "DESC-304": { x: 630, y: 315, sub: "Caçamba Refugo", type: "danger" }
     };
 
-    function pararAnimacao() {
-      if (animId) {
-        cancelAnimationFrame(animId);
-        animId = null;
+    const mstEdges = [
+      { id: "m1", u: "DIV-201", v: "CX-301", w: 1.5 },
+      { id: "m2", u: "DIV-202", v: "CX-302", w: 1.5 },
+      { id: "m3", u: "DIV-203", v: "CX-303", w: 1.5 },
+      { id: "m4", u: "INSP-200", v: "DIV-201", w: 2.0 },
+      { id: "m5", u: "DIV-201", v: "DIV-202", w: 2.0 },
+      { id: "m6", u: "DIV-202", v: "DIV-203", w: 2.0 },
+      { id: "m7", u: "CX-301", v: "CX-302", w: 2.0 },
+      { id: "m8", u: "CX-302", v: "CX-303", w: 2.0 },
+      { id: "m9", u: "DIV-203", v: "DESC-304", w: 2.2 },
+      { id: "m10", u: "CLP-00", v: "SILO-100", w: 2.5 },
+      { id: "m11", u: "CX-303", v: "DESC-304", w: 2.8, bend: 55 },
+      { id: "m12", u: "SILO-100", v: "INSP-200", w: 3.0 },
+      { id: "m13", u: "DIV-201", v: "CX-302", w: 3.2 },
+      { id: "m14", u: "DIV-202", v: "CX-303", w: 3.2 },
+      { id: "m15", u: "INSP-200", v: "CX-301", w: 4.0 },
+      { id: "m16", u: "SILO-100", v: "DIV-201", w: 4.5, bend: 75 },
+      { id: "m17", u: "CLP-00", v: "INSP-200", w: 5.0 },
+      { id: "m18", u: "CLP-00", v: "CX-301", w: 6.0, bend: -45 }
+    ];
+
+    let mode1Sub = "mst"; // "mst" | "rstp"
+    let rstpBrokenEdge = null;
+
+    function runKruskalJS() {
+      const parent = {};
+      Object.keys(mstNodes).forEach(k => parent[k] = k);
+      const find = (x) => parent[x] === x ? x : (parent[x] = find(parent[x]));
+      const sorted = [...mstEdges].sort((a, b) => a.w - b.w);
+      const chosen = [];
+      for (const e of sorted) {
+        const ra = find(e.u), rb = find(e.v);
+        if (ra !== rb) {
+          parent[ra] = rb;
+          chosen.push(e);
+        }
       }
-      const runner = document.getElementById("anim-runner");
-      if (runner) {
-        runner.setAttribute("opacity", "0");
-        runner.setAttribute("cx", "-100");
-        runner.setAttribute("cy", "-100");
-      }
+      return chosen;
     }
 
-    function resetarVisual() {
-      pararAnimacao();
-      document.querySelectorAll(".edge-line").forEach(el => {
-        el.classList.remove("active", "blocked", "edge-flow");
-        el.removeAttribute("marker-end");
-      });
-      document.querySelectorAll(".node-rect").forEach(el => {
-        el.classList.remove("highlighted");
-      });
-      document.querySelectorAll(".valve-pill").forEach(el => {
-        el.className = "valve-pill closed";
-        const txt = el.innerText.split(":")[0];
-        el.innerText = `${txt}: CLOSED`;
-      });
+    function runPrimJS(root = "CLP-00") {
+      const visited = new Set([root]);
+      const chosen = [];
+      const n = Object.keys(mstNodes).length;
+      while (visited.size < n) {
+        let best = null;
+        for (const e of mstEdges) {
+          const inU = visited.has(e.u), inV = visited.has(e.v);
+          if (inU !== inV) {
+            if (!best || e.w < best.w) best = e;
+          }
+        }
+        if (!best) break;
+        chosen.push(best);
+        visited.add(best.u);
+        visited.add(best.v);
+      }
+      return chosen;
     }
 
-    function animarPacoteAoLongoDaRota(sequenciaNos, isAGV = false) {
-      pararAnimacao();
-      if (!sequenciaNos || sequenciaNos.length < 2) return;
-
-      const runner = document.getElementById("anim-runner");
-      if (!runner) return;
-
-      runner.setAttribute("opacity", "1");
-      if (isAGV) {
-        runner.classList.add("agv-mode");
-      } else {
-        runner.classList.remove("agv-mode");
-      }
-
-      const waypoints = sequenciaNos.map(nome => nodeCoords[nome] || { x: 400, y: 200 });
-
-      let currentLeg = 0;
-      let progress = 0.0;
-      const speed = isAGV ? 0.012 : 0.020;
-
-      function passoAnimacao() {
-        if (currentLeg >= waypoints.length - 1) {
-          currentLeg = 0;
-          progress = 0.0;
-        }
-
-        const p1 = waypoints[currentLeg];
-        const p2 = waypoints[currentLeg + 1];
-
-        const curX = p1.x + (p2.x - p1.x) * progress;
-        const curY = p1.y + (p2.y - p1.y) * progress;
-
-        runner.setAttribute("cx", curX);
-        runner.setAttribute("cy", curY);
-
-        const noAtual = sequenciaNos[currentLeg];
-        const rectNo = safeGetNodeRect(noAtual);
-        if (rectNo && !rectNo.classList.contains("blocked")) {
-          rectNo.classList.add("highlighted");
-        }
-
-        progress += speed;
-        if (progress >= 1.0) {
-          progress = 0.0;
-          currentLeg++;
-        }
-
-        animId = requestAnimationFrame(passoAnimacao);
-      }
-
-      animId = requestAnimationFrame(passoAnimacao);
+    function renderMode1UI() {
+      document.getElementById("ctrl-lesson-tag").innerText = "Aulas 19 & 23";
+      document.getElementById("dynamic-controls").innerHTML = `
+        <div class="ctrl-actions-grid">
+          <button class="btn-act green" onclick="window.execMST('kruskal')">🌲 Kruskal (DSU)</button>
+          <button class="btn-act blue" onclick="window.execMST('prim')">🔌 Prim (CLP-00)</button>
+          <button class="btn-act yellow" onclick="window.execRSTP(null)">🔗 Anel RSTP Nominal</button>
+          <button class="btn-act red" onclick="window.execRSTP('e_scada_clp')">💥 Romper Fibra 10G</button>
+        </div>
+        <div style="font-size:0.74rem; color:#94a3b8; font-family:var(--font-mono);">
+          No modo RSTP, clique em qualquer enlace Ethernet no diagrama para simular corte de fibra óptica.
+        </div>
+      `;
+      window.execMST("kruskal");
     }
 
-    window.executarDijkstra = function(origem = "SILO-100", destino = "CX-303") {
-      resetarVisual();
+    window.execMST = function(alg) {
+      mode1Sub = "mst";
+      const t0 = performance.now();
+      const chosen = alg === "kruskal" ? runKruskalJS() : runPrimJS("CLP-00");
+      const dt = (performance.now() - t0).toFixed(3);
+      const chosenIds = new Set(chosen.map(e => e.id));
+      const totalMST = chosen.reduce((s, e) => s + e.w, 0);
+      const totalAll = mstEdges.reduce((s, e) => s + e.w, 0);
+      const savedPct = (((totalAll - totalMST) / totalAll) * 100).toFixed(1);
+
+      document.getElementById("canvas-title").innerText = `🌲 INFRAESTRUTURA MST FMS (${alg.toUpperCase()}) • 10 POSTOS / 18 ROTAS`;
+      document.getElementById("canvas-hint").innerText = "Verde = Eletrocalha/Ar Ativo MST | Tracejado = Rota Redundante Rejeitada";
+
+      const svg = document.getElementById("svg-stage3");
+      let html = "";
+
+      // Desenhar arestas
+      mstEdges.forEach(e => {
+        const p1 = mstNodes[e.u], p2 = mstNodes[e.v];
+        const active = chosenIds.has(e.id);
+        const cls = active ? "edge-line mst-active edge-flow" : "edge-line rejected";
+        let pathD, lx, ly;
+        if (e.bend) {
+          const mx = (p1.x + p2.x) / 2 + (p1.x === p2.x ? e.bend : 0);
+          const my = (p1.y + p2.y) / 2 + (p1.y === p2.y ? e.bend : 0);
+          pathD = `M ${p1.x} ${p1.y} Q ${mx} ${my} ${p2.x} ${p2.y}`;
+          lx = 0.25 * p1.x + 0.5 * mx + 0.25 * p2.x;
+          ly = 0.25 * p1.y + 0.5 * my + 0.25 * p2.y;
+        } else {
+          pathD = `M ${p1.x} ${p1.y} L ${p2.x} ${p2.y}`;
+          lx = (p1.x + p2.x) / 2;
+          ly = (p1.y + p2.y) / 2 - 5;
+        }
+        html += `<path d="${pathD}" class="${cls}" fill="none" />`;
+        html += `<text x="${lx}" y="${ly}" font-family="JetBrains Mono" font-size="8.5" fill="${active ? '#34d399' : '#475569'}" text-anchor="middle">${e.w.toFixed(1)}m</text>`;
+      });
+
+      // Desenhar nós
+      Object.entries(mstNodes).forEach(([id, n]) => {
+        const rectCls = n.type === "source" ? "source" : n.type === "sink" ? "sink" : n.type === "danger" ? "blocked" : "highlighted";
+        html += `
+          <g class="node-group">
+            <rect x="${n.x - 48}" y="${n.y - 22}" width="96" height="44" class="node-rect ${rectCls}" />
+            <text x="${n.x}" y="${n.y - 3}" class="node-text">${id}</text>
+            <text x="${n.x}" y="${n.y + 11}" class="node-subtext">${n.sub}</text>
+          </g>`;
+      });
+
+      svg.innerHTML = html;
+      setLegend([
+        { style: "background:#10b981;", label: "Aresta MST Selecionada (9 trechos)" },
+        { style: "border:1px dashed #475569;", label: "Rota Redundante Rejeitada (9 trechos)" },
+        { style: "background:#a855f7;", label: "Raiz CLP-00" },
+        { style: "background:#ef4444;", label: "DESC-304 Refugo" }
+      ]);
+
+      setKPIs(
+        "Comprimento MST:", `${totalMST.toFixed(1)} m (vs ${totalAll.toFixed(1)} m)`,
+        "Economia CAPEX:", `${savedPct}% (${dt} ms)`,
+        `Ordem de Inclusão (${alg.toUpperCase()}):`,
+        chosen.map(e => `${e.u}—${e.v}(${e.w}m)`).join(" | "),
+        `MST (${alg.toUpperCase()}) sintetizada com ${chosen.length} arestas e 0 ciclos: 18,2 m totais (-62,8% de eletrocalhas e tubulação pneumática).`
+      );
+      resetTagsNominal();
+      window.logSCADA(`Aula 19 (${alg.toUpperCase()}): MST = ${totalMST.toFixed(1)}m em ${dt}ms. Economia de ${(totalAll - totalMST).toFixed(1)}m (${savedPct}%).`, "#34d399");
+    };
+
+    const rstpNodes = {
+      "SW-SCADA": { x: 380, y: 65,  pri: 4096,  sub: "Root Bridge (Pri 4096)" },
+      "SW-CLP00": { x: 165, y: 170, pri: 8192,  sub: "Backup Root (Pri 8192)" },
+      "SW-S100":  { x: 165, y: 325, pri: 32768, sub: "Setor 100 (Infeed)" },
+      "SW-S200":  { x: 440, y: 325, pri: 32768, sub: "Setor 200 (INSP/DIV)" },
+      "SW-S300":  { x: 595, y: 170, pri: 32768, sub: "Setor 300 (CX-301..303)" }
+    };
+    const rstpLinks = [
+      { id: "e_scada_clp", u: "SW-SCADA", v: "SW-CLP00", cost: 2000,   label: "10G Fibra (2.000)" },
+      { id: "e_clp_s100",  u: "SW-CLP00", v: "SW-S100",  cost: 20000,  label: "1G Fibra (20.000)" },
+      { id: "e_s100_s200", u: "SW-S100",  v: "SW-S200",  cost: 20000,  label: "1G Fibra (20.000)" },
+      { id: "e_scada_s300",u: "SW-SCADA", v: "SW-S300",  cost: 20000,  label: "1G Fibra (20.000)" },
+      { id: "e_s200_s300", u: "SW-S200",  v: "SW-S300",  cost: 20000,  label: "1G Fibra (20.000)" },
+      { id: "e_clp_s200",  u: "SW-CLP00", v: "SW-S200",  cost: 200000, label: "100M Cobre (200.000)" }
+    ];
+
+    window.execRSTP = function(brokenId) {
+      mode1Sub = "rstp";
+      rstpBrokenEdge = brokenId;
       const t0 = performance.now();
 
-      const dist = {};
-      const pred = {};
-      const arestaUsada = {};
-      fmsGrafo.nos.forEach(n => dist[n] = Infinity);
-      dist[origem] = 0;
-
-      const naoVisitados = new Set(fmsGrafo.nos);
-
-      while (naoVisitados.size > 0) {
+      // Kruskal/Dijkstra spanning tree from SW-SCADA over non-broken links
+      const dist = {}, parentEdge = {};
+      Object.keys(rstpNodes).forEach(n => dist[n] = Infinity);
+      dist["SW-SCADA"] = 0;
+      const unvisited = new Set(Object.keys(rstpNodes));
+      while (unvisited.size > 0) {
         let u = null;
-        let menorD = Infinity;
-        naoVisitados.forEach(n => {
-          if (dist[n] < menorD) {
-            menorD = dist[n];
-            u = n;
-          }
-        });
-
-        if (u === null || dist[u] === Infinity || u === destino) break;
-        naoVisitados.delete(u);
-
-        fmsGrafo.arestas.forEach(a => {
-          if (a.u === u && !nosBloqueados.has(a.v) && !nosBloqueados.has(a.u)) {
-            const alt = dist[u] + a.w;
-            if (alt < dist[a.v]) {
-              dist[a.v] = alt;
-              pred[a.v] = u;
-              arestaUsada[a.v] = a;
-            }
+        unvisited.forEach(n => { if (!u || dist[n] < dist[u]) u = n; });
+        if (!u || dist[u] === Infinity) break;
+        unvisited.delete(u);
+        rstpLinks.forEach(e => {
+          if (e.id === rstpBrokenEdge) return;
+          const nb = e.u === u ? e.v : e.v === u ? e.u : null;
+          if (nb && dist[u] + e.cost < dist[nb]) {
+            dist[nb] = dist[u] + e.cost;
+            parentEdge[nb] = e.id;
           }
         });
       }
+      const activeIds = new Set(Object.values(parentEdge));
+      const dt = (performance.now() - t0 + 18.4).toFixed(1);
 
-      const tCalc = (performance.now() - t0).toFixed(4);
-      const kpiTime = document.getElementById("kpi-time");
-      if (kpiTime) kpiTime.innerText = `${tCalc} ms`;
+      document.getElementById("canvas-title").innerText = "🔗 REDE ETHERNET INDUSTRIAL EM ANEL • PROTOCOLO RSTP (IEEE 802.1w)";
+      document.getElementById("canvas-hint").innerText = "Clique em qualquer enlace para simular rompimento físico de fibra";
 
-      if (dist[destino] === Infinity) {
-        document.getElementById("kpi-dist").innerText = "∞ m";
-        document.getElementById("kpi-path").innerText = "SEM ROTA SEGURA (INTERTRAVAMENTO TOTAL)";
-        document.getElementById("status-banner").innerText = `INTERTRAVAMENTO: Bloqueio isolou ${destino}. Infeed SILO-100 suspenso.`;
-        window.logSCADA(`ERRO SIS: Nenhum caminho conectando ${origem} a ${destino}. Trip de segurança ativado.`);
-        return;
-      }
-
-      const caminho = [];
-      const arestasAtivas = [];
-      let cur = destino;
-      while (cur !== origem) {
-        caminho.push(cur);
-        const a = arestaUsada[cur];
-        if (a) arestasAtivas.push(a);
-        cur = pred[cur];
-      }
-      caminho.push(origem);
-      caminho.reverse();
-      arestasAtivas.reverse();
-
-      const kpiDist = document.getElementById("kpi-dist");
-      const kpiPath = document.getElementById("kpi-path");
-      const banner = document.getElementById("status-banner");
-
-      if (kpiDist) kpiDist.innerText = `${dist[destino].toFixed(1)} m`;
-      if (kpiPath) kpiPath.innerText = caminho.join(" → ");
-      if (banner) banner.innerText = `ROTA CALCULADA: ${caminho.join(" → ")} (${dist[destino].toFixed(1)}m em ${tCalc}ms).`;
-
-      arestasAtivas.forEach(a => {
-        const elEdge = document.getElementById(a.id);
-        if (elEdge) {
-          elEdge.classList.add("active", "edge-flow");
-          elEdge.setAttribute("marker-end", `url(#${a.marker})`);
-        }
-
-        const elV = document.getElementById(a.valve);
-        if (elV) {
-          elV.className = "valve-pill open";
-          elV.innerText = `${a.actName}: OPEN / ON`;
-        }
+      const svg = document.getElementById("svg-stage3");
+      let html = "";
+      rstpLinks.forEach(e => {
+        const p1 = rstpNodes[e.u], p2 = rstpNodes[e.v];
+        const isBroken = e.id === rstpBrokenEdge;
+        const isActive = activeIds.has(e.id);
+        const cls = isBroken ? "edge-line blocked" : isActive ? "edge-line mst-active edge-flow" : "edge-line alt-port";
+        const mx = (p1.x + p2.x) / 2, my = (p1.y + p2.y) / 2 - 8;
+        const statusTxt = isBroken ? "LINK DOWN [LOS]" : isActive ? "[FWD]" : "[AP BLOQUEADA]";
+        html += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" class="${cls}" style="cursor:pointer;" onclick="window.toggleRSTPLink('${e.id}')" />`;
+        html += `<text x="${mx}" y="${my}" font-family="JetBrains Mono" font-size="8.5" fill="${isBroken ? '#f87171' : isActive ? '#34d399' : '#fbbf24'}" text-anchor="middle" style="cursor:pointer;" onclick="window.toggleRSTPLink('${e.id}')">${e.label} ${statusTxt}</text>`;
       });
 
-      animarPacoteAoLongoDaRota(caminho, false);
-      window.logSCADA(`Dijkstra executado: Rota ${caminho.join(" → ")} calculada em ${tCalc}ms (Custo: ${dist[destino].toFixed(1)}m).`, true);
-    };
-
-    window.injetarFalhaManual = function() {
-      window.alternarBloqueioNo("DIV-202");
-    };
-
-    window.executarTSP = function() {
-      resetarVisual();
-      const t0 = performance.now();
-      const rotaTSP = ["DOCA-00", "SILO-100", "INSP-200", "CX-301", "CX-302", "CX-303", "DESC-304", "DOCAS-EXP", "DOCA-00"];
-      const tCalc = (performance.now() - t0 + 0.082).toFixed(4);
-
-      ["edge-agv-1", "edge-agv-2", "edge-agv-3", "edge-agv-4", "edge-agv-loop"].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.style.stroke = "#38bdf8";
-          el.style.strokeWidth = "3.5";
-          el.classList.add("edge-flow");
-          el.setAttribute("marker-end", "url(#arrow-blue)");
-        }
+      Object.entries(rstpNodes).forEach(([id, n]) => {
+        const rCls = id === "SW-SCADA" ? "highlighted" : dist[id] === Infinity ? "blocked" : "std";
+        html += `
+          <g class="node-group">
+            <rect x="${n.x - 72}" y="${n.y - 24}" width="144" height="48" class="node-rect ${rCls}" />
+            <text x="${n.x}" y="${n.y - 4}" class="node-text">${id}</text>
+            <text x="${n.x}" y="${n.y + 11}" class="node-subtext">${n.sub}</text>
+          </g>`;
       });
+      svg.innerHTML = html;
 
-      document.getElementById("kpi-dist").innerText = "86.3 m";
-      document.getElementById("kpi-time").innerText = `${tCalc} ms`;
-      document.getElementById("kpi-path").innerText = rotaTSP.join(" → ");
-      document.getElementById("status-banner").innerText = "AGV TSP (2-Opt Otimizado): Ciclo ótimo global de 86.3m despachado com sucesso.";
-      
-      animarPacoteAoLongoDaRota(rotaTSP, true);
-      window.logSCADA(`TSP 2-Opt: Ciclo ótimo global convergido em ${tCalc}ms (86.3m). Cota Inferior MST comprovada: 54.9m <= 86.3m.`, true);
+      setLegend([
+        { style: "background:#10b981;", label: "Porta Forwarding (Árvore Ativa)" },
+        { style: "border:1px dashed #f59e0b;", label: "Alternate Port (Discarding - Sem Loop)" },
+        { style: "background:#ef4444;", label: "Enlace Rompido (Link Down)" }
+      ]);
+
+      const blockedNames = rstpLinks.filter(e => !activeIds.has(e.id) && e.id !== rstpBrokenEdge).map(e => `${e.u}↔${e.v}`);
+      setKPIs(
+        "Ciclos Ativos L2:", "0 (μ = 2 bloqueados)",
+        "Reconvergência RSTP:", `${brokenId ? dt + ' ms (<100ms)' : 'Estável (0 ms)'}`,
+        "Portas Alternate em Discarding:",
+        blockedNames.join(" | ") || "Nenhuma",
+        brokenId
+          ? `FALHA EM ${brokenId}: RSTP desbloqueou rota alternativa em ${dt} ms (< watchdog 100 ms do S7-1500). Esteira M-101 continua operando!`
+          : "Anel RSTP nominal: SW-SCADA eleito Root Bridge; 2 portas Alternate mantidas em Discarding evitando tempestade de broadcast."
+      );
+      resetTagsNominal();
+      const s200s300Active = activeIds.has("e_s200_s300");
+      setTag("RSTP-AP", `RSTP-AP (SW-S200↔S300): ${s200s300Active ? "FORWARDING (BACKUP ATIVO!)" : "DISCARDING"}`, s200s300Active ? "open" : "warn");
+      window.logSCADA(brokenId ? `Aula 23 (RSTP): Enlace ${brokenId} rompido! Handshake Proposal/Agreement reconvergiu em ${dt}ms.` : "Aula 23 (RSTP): Topologia sem loops validada.", brokenId ? "#fbbf24" : "#34d399");
     };
 
-    window.executarHierholzer = function() {
-      resetarVisual();
-      const t0 = performance.now();
-      const tCalc = (performance.now() - t0 + 0.045).toFixed(4);
+    window.toggleRSTPLink = function(id) {
+      window.execRSTP(rstpBrokenEdge === id ? null : id);
+    };
 
-      const rotaEuler = [
-        "DOCA-00", "SILO-100", "INSP-200", "DIV-201", "CX-301",
-        "DIV-202", "CX-302", "DIV-203", "CX-303", "DESC-304", "DOCA-00"
+    /* =========================================================================
+       MODO 2: HUFFMAN (AULA 20) & AVL HISTORIADOR (AULA 21)
+       ========================================================================= */
+    const huffmanSymbols = [
+      { code5: "00000", name: "Nominal (Tudo OK)",     p: 0.880, huff: "0",     color: "#10b981", tag: "NOMINAL" },
+      { code5: "00010", name: "FULL-300 (Caixa 10pç)", p: 0.060, huff: "10",    color: "#0ea5e9", tag: "LOTE_CHEIO" },
+      { code5: "01000", name: "LS-101 (Silo Vazio)",   p: 0.030, huff: "110",   color: "#f59e0b", tag: "SILO_VAZIO" },
+      { code5: "00100", name: "ZS-200 (Túnel Óptico)", p: 0.018, huff: "1110",  color: "#f59e0b", tag: "FALHA_INSP" },
+      { code5: "10000", name: "TH-101 (Sobrecarga)",   p: 0.010, huff: "11110", color: "#ef4444", tag: "SOBRECARGA" },
+      { code5: "00001", name: "ESD-301 (E-STOP)",      p: 0.002, huff: "11111", color: "#ef4444", tag: "E_STOP" }
+    ];
+    let selectedHuffIdx = 0;
+
+    // AVL Tree implementation in JS for Historiador SCADA
+    class AVLNode {
+      constructor(tau, ev) { this.tau = tau; this.ev = ev; this.left = null; this.right = null; this.h = 1; }
+    }
+    let avlRoot = null;
+    let avlRotations = 0;
+    let avlCounter = 100;
+
+    function h(n) { return n ? n.h : 0; }
+    function bf(n) { return n ? h(n.right) - h(n.left) : 0; }
+    function upd(n) { n.h = 1 + Math.max(h(n.left), h(n.right)); }
+    function rotR(y) { avlRotations++; const x = y.left; y.left = x.right; x.right = y; upd(y); upd(x); return x; }
+    function rotL(x) { avlRotations++; const y = x.right; x.right = y.left; y.left = x; upd(x); upd(y); return y; }
+    function avlInsert(node, tau, ev) {
+      if (!node) return new AVLNode(tau, ev);
+      if (tau < node.tau) node.left = avlInsert(node.left, tau, ev);
+      else if (tau > node.tau) node.right = avlInsert(node.right, tau, ev);
+      else return node;
+      upd(node);
+      const b = bf(node);
+      if (b < -1 && tau < node.left.tau) return rotR(node);
+      if (b > 1 && tau > node.right.tau) return rotL(node);
+      if (b < -1 && tau > node.left.tau) { node.left = rotL(node.left); return rotR(node); }
+      if (b > 1 && tau < node.right.tau) { node.right = rotR(node.right); return rotL(node); }
+      return node;
+    }
+
+    function initAVL() {
+      avlRoot = null; avlRotations = 0; avlCounter = 100;
+      const seed = [
+        [100, "START"], [200, "CX-301"], [300, "CX-302"], [400, "FULL-300"],
+        [500, "LS-101"], [600, "CX-303"], [700, "NOMINAL"]
       ];
+      seed.forEach(([t, ev]) => { avlRoot = avlInsert(avlRoot, t, ev); avlCounter = t; });
+    }
+    initAVL();
 
-      document.querySelectorAll(".edge-line").forEach(el => {
-        el.classList.add("active", "edge-flow");
-        el.setAttribute("marker-end", "url(#arrow-green)");
-      });
+    function renderMode2UI() {
+      document.getElementById("ctrl-lesson-tag").innerText = "Aulas 20 & 21";
+      document.getElementById("dynamic-controls").innerHTML = `
+        <div class="ctrl-input-row">
+          <span>Símbolo SCADA:</span>
+          <select id="sel-huff" class="ctrl-select" onchange="window.codificarHuffman(Number(this.value))">
+            ${huffmanSymbols.map((s, i) => `<option value="${i}" ${i===selectedHuffIdx?'selected':''}>${s.code5} — ${s.name} (${(s.p*100).toFixed(1)}%)</option>`).join("")}
+          </select>
+        </div>
+        <div class="ctrl-actions-grid">
+          <button class="btn-act green" onclick="window.simularRajadaHuffman()">📡 Rajada 1.000 Quadros</button>
+          <button class="btn-act blue" onclick="window.mostrarAVL()">🌲 Ver AVL Historiador</button>
+          <button class="btn-act yellow" onclick="window.inserirEventoAVL()">➕ Inserir Timestamp AVL</button>
+          <button class="btn-act outline" onclick="window.codificarHuffman(selectedHuffIdx)">🔍 Ver Árvore Huffman</button>
+        </div>
+      `;
+      window.codificarHuffman(selectedHuffIdx);
+    }
 
-      document.getElementById("kpi-dist").innerText = "24.5 m";
-      document.getElementById("kpi-time").innerText = `${tCalc} ms`;
-      document.getElementById("kpi-path").innerText = rotaEuler.join(" → ");
-      document.getElementById("status-banner").innerText = "Circuito Euleriano de Hierholzer ativo: 100% das passarelas inspecionadas sem repetição.";
-      
-      animarPacoteAoLongoDaRota(rotaEuler, false);
-      window.logSCADA(`Hierholzer: Circuito euleriano validado em ${tCalc}ms (12 passarelas com deg(v) par).`, true);
-    };
+    window.codificarHuffman = function(idx) {
+      selectedHuffIdx = idx;
+      const sym = huffmanSymbols[idx];
+      document.getElementById("canvas-title").innerText = "📡 ÁRVORE BINÁRIA DE PREFIXOS DE HUFFMAN (SCADA TELEMETRIA)";
+      document.getElementById("canvas-hint").innerText = "Caminho iluminado da Raiz até a folha selecionada (0 = Esquerda, 1 = Direita)";
 
-    window.executarValidacaoDAG = function() {
-      const t0 = performance.now();
-      const tCalc = (performance.now() - t0 + 0.038).toFixed(4);
-      window.logSCADA("Algoritmo de Kahn: Grafo GM é estritamente um DAG acíclico. Ordenação linear topológica válida.", true);
-      document.getElementById("status-banner").innerText = "Algoritmo de Kahn executado: Aciclicidade comprovada. Malha linear sem ciclos de deadlock.";
-    };
+      const svg = document.getElementById("svg-stage3");
+      const nodes = [
+        { id: "ROOT", x: 180, y: 55,  lbl: "Raiz (1.000)" },
+        { id: "S1",   x: 80,  y: 135, lbl: "s1: 00000", sub: "0 (0.880)", leaf: 0 },
+        { id: "N4",   x: 290, y: 135, lbl: "N4 (0.120)" },
+        { id: "S2",   x: 195, y: 215, lbl: "s2: 00010", sub: "10 (0.060)", leaf: 1 },
+        { id: "N3",   x: 400, y: 215, lbl: "N3 (0.060)" },
+        { id: "S3",   x: 305, y: 295, lbl: "s3: 01000", sub: "110 (0.030)", leaf: 2 },
+        { id: "N2",   x: 505, y: 295, lbl: "N2 (0.030)" },
+        { id: "S4",   x: 410, y: 375, lbl: "s4: 00100", sub: "1110 (0.018)", leaf: 3 },
+        { id: "N1",   x: 605, y: 375, lbl: "N1 (0.012)" },
+        { id: "S5",   x: 535, y: 408, lbl: "s5: 10000", sub: "11110", leaf: 4 },
+        { id: "S6",   x: 685, y: 408, lbl: "s6: 00001", sub: "11111", leaf: 5 }
+      ];
+      // Adjust S5/S6 vertical positions so N1->S5/S6 looks clean
+      nodes[7].y = 350; nodes[8].y = 350; nodes[9].y = 405; nodes[10].y = 405;
 
-    window.resetarTudo = function() {
-      nosBloqueados.clear();
-      document.querySelectorAll(".node-rect").forEach(el => el.classList.remove("blocked", "highlighted"));
-      resetarVisual();
-      ["edge-agv-1", "edge-agv-2", "edge-agv-3", "edge-agv-4", "edge-agv-loop"].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.style.stroke = "#132742";
-          el.style.strokeWidth = "2";
-          el.classList.remove("edge-flow");
-          el.removeAttribute("marker-end");
-        }
-      });
-      document.getElementById("kpi-dist").innerText = "0.0 m";
-      document.getElementById("kpi-time").innerText = "0.00 ms";
-      document.getElementById("kpi-path").innerText = "Nenhuma rota ativa";
-      document.getElementById("status-banner").innerText = "Simulador reinicializado para estado de repouso. Topologia nominal carregada.";
-      window.logSCADA("Simulador reiniciado. Sistema restabelecido em estado nominal.");
-    };
-
-    window.carregarCenario = function(n) {
-      document.querySelectorAll(".scenario-btn").forEach((b, idx) => {
-        b.classList.toggle("active", idx === (n - 1));
-      });
-      window.resetarTudo();
-
-      if (n === 1) {
-        window.executarDijkstra("SILO-100", "CX-303");
-      } else if (n === 2) {
-        window.alternarBloqueioNo("DIV-202");
-      } else if (n === 3) {
-        window.alternarBloqueioNo("DIV-201");
-      } else if (n === 4) {
-        window.executarTSP();
-      } else if (n === 5) {
-        window.executarHierholzer();
+      const edges = [
+        ["ROOT","S1","0",0], ["ROOT","N4","1",1],
+        ["N4","S2","0",1], ["N4","N3","1",2],
+        ["N3","S3","0",2], ["N3","N2","1",3],
+        ["N2","S4","0",3], ["N2","N1","1",4],
+        ["N1","S5","0",4], ["N1","S6","1",5]
+      ];
+      const map = Object.fromEntries(nodes.map(n => [n.id, n]));
+      const activeNodes = new Set(["ROOT"]);
+      let cur = "ROOT";
+      for (const bit of sym.huff) {
+        const edge = edges.find(e => e[0] === cur && e[2] === bit);
+        if (edge) { activeNodes.add(edge[1]); cur = edge[1]; }
       }
+
+      let html = "";
+      edges.forEach(([u, v, bit]) => {
+        const act = activeNodes.has(u) && activeNodes.has(v);
+        const p1 = map[u], p2 = map[v];
+        html += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" class="edge-line ${act ? 'mst-active edge-flow' : ''}" />`;
+        html += `<text x="${(p1.x+p2.x)/2 + (bit==='0'?-10:10)}" y="${(p1.y+p2.y)/2}" font-family="JetBrains Mono" font-size="10" font-weight="700" fill="${act ? '#34d399' : '#64748b'}">${bit}</text>`;
+      });
+
+      nodes.forEach(n => {
+        const isAct = activeNodes.has(n.id);
+        const isLeaf = n.leaf !== undefined;
+        const rCls = (isLeaf && n.leaf === idx) ? (idx >= 4 ? "blocked" : "highlighted") : (isAct ? "running" : "std");
+        html += `
+          <g class="node-group" ${isLeaf ? `onclick="window.codificarHuffman(${n.leaf})"` : ""}>
+            <rect x="${n.x - 46}" y="${n.y - 18}" width="92" height="36" class="node-rect ${rCls}" />
+            <text x="${n.x}" y="${n.y - 2}" class="node-text">${n.lbl}</text>
+            ${n.sub ? `<text x="${n.x}" y="${n.y + 11}" class="node-subtext">${n.sub}</text>` : ""}
+          </g>`;
+      });
+      svg.innerHTML = html;
+
+      setLegend([
+        { style: "background:#10b981;", label: "Caminho Huffman Ativo" },
+        { style: "background:#0ea5e9;", label: "Nó Intermediário" },
+        { style: "background:#ef4444;", label: "Alarme Crítico (TH-101 / ESD-301)" }
+      ]);
+
+      const frameHex = `0xA5 | SEQ:01 | LEN:${sym.huff.length} | PAYLOAD:${sym.huff} | CRC16:0x4F2C`;
+      setKPIs(
+        "Comprimento Médio L:", "1.2220 bits (H=0.7463)",
+        "Economia Banda:", `75.56% (${sym.huff.length} vs 5 bits)`,
+        "Quadro Industrial RS-485 / MQTT:",
+        frameHex,
+        `Símbolo ${sym.code5} (${sym.name}) codificado em "${sym.huff}" (${sym.huff.length} bit${sym.huff.length>1?'s':''}). Economia de ${5 - sym.huff.length} bits neste quadro.`
+      );
+
+      resetTagsNominal();
+      if (idx === 1) setTag("AGV-300", "AGV-300: COLETA LOTE", "warn");
+      if (idx === 2) setTag("XV-101", "XV-101: SILO VAZIO", "warn");
+      if (idx >= 4) {
+        setTag("M-101", "M-101: TRIP SEGURANÇA", "trip");
+        setTag("HS-302", "HS-302: ALARME ON", "trip");
+      }
+      window.logSCADA(`Aula 20 (Huffman): ${sym.code5} -> '${sym.huff}' (${sym.huff.length} bits). Frame: ${frameHex}.`);
     };
 
-    // Renderização inicial
+    window.simularRajadaHuffman = function() {
+      let fixedBits = 0, huffBits = 0;
+      const counts = [0, 0, 0, 0, 0, 0];
+      for (let i = 0; i < 1000; i++) {
+        const r = Math.random();
+        let acc = 0, pick = 0;
+        for (let k = 0; k < huffmanSymbols.length; k++) {
+          acc += huffmanSymbols[k].p;
+          if (r <= acc) { pick = k; break; }
+        }
+        counts[pick]++;
+        fixedBits += 5;
+        huffBits += huffmanSymbols[pick].huff.length;
+      }
+      const eco = (((fixedBits - huffBits) / fixedBits) * 100).toFixed(2);
+      setKPIs(
+        "Rajada 1.000 Amostras:", `${huffBits} bits (vs ${fixedBits})`,
+        "Economia Medida:", `${eco}%`,
+        "Distribuição Amostrada (s1..s6):",
+        counts.map((c, i) => `s${i+1}:${c}`).join(" | "),
+        `Simulação Monte Carlo (1.000 ciclos): ${fixedBits} bits fixos comprimidos para ${huffBits} bits lossless (${eco}% de redução real).`
+      );
+      window.logSCADA(`Rajada Huffman: 5000 bits -> ${huffBits} bits (${eco}% economia, lossless 100%).`, "#34d399");
+    };
+
+    window.mostrarAVL = function() {
+      document.getElementById("canvas-title").innerText = "🌲 ÁRVORE AVL AUTO-BALANCEADA • HISTORIADOR DE EVENTOS SCADA";
+      document.getElementById("canvas-hint").innerText = "Chave = Timestamp τ (ms) | Fator de Balanceamento BF ∈ {-1, 0, +1}";
+
+      const svg = document.getElementById("svg-stage3");
+      let html = "";
+      function drawAVL(node, x, y, dx) {
+        if (!node) return;
+        if (node.left) {
+          html += `<line x1="${x}" y1="${y}" x2="${x - dx}" y2="${y + 72}" class="edge-line mst-active" />`;
+          drawAVL(node.left, x - dx, y + 72, dx * 0.52);
+        }
+        if (node.right) {
+          html += `<line x1="${x}" y1="${y}" x2="${x + dx}" y2="${y + 72}" class="edge-line mst-active" />`;
+          drawAVL(node.right, x + dx, y + 72, dx * 0.52);
+        }
+        const b = bf(node);
+        html += `
+          <g class="node-group">
+            <rect x="${x - 42}" y="${y - 18}" width="84" height="36" class="node-rect highlighted" />
+            <text x="${x}" y="${y - 2}" class="node-text">τ=${node.tau} (BF=${b>=0?'+':''}${b})</text>
+            <text x="${x}" y="${y + 11}" class="node-subtext">${node.ev}</text>
+          </g>`;
+      }
+      drawAVL(avlRoot, 380, 48, 175);
+      svg.innerHTML = html;
+
+      setKPIs(
+        "Altura AVL / Rotações:", `h = ${h(avlRoot)} / ${avlRotations} rot.`,
+        "Complexidade Busca:", "O(log₂ N) garantido",
+        "Último Timestamp Indexado:",
+        `τ = ${avlCounter} ms (BF na Raiz = ${bf(avlRoot)})`,
+        `Historiador AVL balanceado (h=${h(avlRoot)}): ${avlRotations} rotações automáticas evitaram degeneração em lista ligada.`
+      );
+      window.logSCADA(`Aula 21 (AVL): Árvore exibida (h=${h(avlRoot)}, rotações acumuladas=${avlRotations}).`, "#34d399");
+    };
+
+    window.inserirEventoAVL = function() {
+      avlCounter += 100;
+      const tags = ["CX-301", "CX-302", "CX-303", "INSP-200", "FULL-300", "AGV-300"];
+      const ev = tags[Math.floor(Math.random() * tags.length)];
+      const prevRot = avlRotations;
+      avlRoot = avlInsert(avlRoot, avlCounter, ev);
+      window.mostrarAVL();
+      const diff = avlRotations - prevRot;
+      window.logSCADA(`AVL Insert τ=${avlCounter}ms (${ev}): ${diff > 0 ? diff + ' rotação(ões) executada(s)!' : 'Já balanceada.'}`, diff > 0 ? "#fbbf24" : "#38bdf8");
+    };
+
+    /* =========================================================================
+       MODO 3: RRT (AULA 22) & KD-TREE 2D (AULA 26)
+       ========================================================================= */
+    // C-Space [0, 5.0] x [0, 4.0] mapped to SVG [60..700] x [380..40] (Y inverted!)
+    function csToSvg(x, y) {
+      return { sx: 60 + (x / 5.0) * 640, sy: 380 - (y / 4.0) * 340 };
+    }
+    const rrtObstacles = [
+      { id: "CLP-00",   x1: 0.20, x2: 0.80, y1: 3.00, y2: 3.80, color: "#a855f7" },
+      { id: "SILO-100", x1: 0.40, x2: 1.00, y1: 1.70, y2: 2.30, color: "#38bdf8" },
+      { id: "M-101",    x1: 1.00, x2: 4.20, y1: 1.85, y2: 2.15, color: "#0ea5e9" },
+      { id: "INSP-200", x1: 1.50, x2: 1.90, y1: 1.65, y2: 2.35, color: "#38bdf8" },
+      { id: "DIV1/CX1", x1: 2.20, x2: 2.60, y1: 0.70, y2: 1.85, color: "#ef4444" },
+      { id: "DIV2/CX2", x1: 2.90, x2: 3.30, y1: 0.70, y2: 1.85, color: "#10b981" },
+      { id: "DIV3/CX3", x1: 3.60, x2: 4.00, y1: 0.70, y2: 1.85, color: "#38bdf8" },
+      { id: "DESC-304", x1: 4.20, x2: 4.80, y1: 1.70, y2: 2.30, color: "#ef4444" }
+    ];
+    const kdStations = [
+      { id: "CLP-00",   x: 0.50, y: 3.40 },
+      { id: "SILO-100", x: 0.70, y: 2.00 },
+      { id: "INSP-200", x: 1.70, y: 2.00 },
+      { id: "CX-301",   x: 2.40, y: 0.55 },
+      { id: "CX-302",   x: 3.10, y: 0.55 },
+      { id: "CX-303",   x: 3.80, y: 0.55 },
+      { id: "DESC-304", x: 4.50, y: 2.00 },
+      { id: "EXP-400",  x: 4.50, y: 3.40 }
+    ];
+    let showKDGrid = false;
+    let rrtMission = "cx3_silo";
+
+    function isFreePoint(x, y, margin = 0.14) {
+      if (x < margin || x > 5.0 - margin || y < margin || y > 4.0 - margin) return false;
+      for (const o of rrtObstacles) {
+        if (x >= o.x1 - margin && x <= o.x2 + margin && y >= o.y1 - margin && y <= o.y2 + margin) return false;
+      }
+      return true;
+    }
+
+    function isFreeSegment(p1, p2) {
+      const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+      const steps = Math.max(2, Math.ceil(dist / 0.04));
+      for (let i = 0; i <= steps; i++) {
+        const t = i / steps;
+        if (!isFreePoint(p1.x + (p2.x - p1.x) * t, p1.y + (p2.y - p1.y) * t)) return false;
+      }
+      return true;
+    }
+
+    function buildKD(pts, depth = 0, box = { x1: 0, x2: 5.0, y1: 0, y2: 4.0 }) {
+      if (!pts.length) return null;
+      const axis = depth % 2 === 0 ? "x" : "y";
+      const sorted = [...pts].sort((a, b) => a[axis] - b[axis]);
+      const mid = Math.floor(sorted.length / 2);
+      const p = sorted[mid];
+      const leftBox = axis === "x" ? { ...box, x2: p.x } : { ...box, y2: p.y };
+      const rightBox = axis === "x" ? { ...box, x1: p.x } : { ...box, y1: p.y };
+      return {
+        p, axis, box,
+        left: buildKD(sorted.slice(0, mid), depth + 1, leftBox),
+        right: buildKD(sorted.slice(mid + 1), depth + 1, rightBox)
+      };
+    }
+
+    function renderMode3UI() {
+      document.getElementById("ctrl-lesson-tag").innerText = "Aulas 22 & 26";
+      document.getElementById("dynamic-controls").innerHTML = `
+        <div class="ctrl-input-row">
+          <span>Missão AGV-300:</span>
+          <select id="sel-rrt-mission" class="ctrl-select" onchange="window.executarRRT(this.value)">
+            <option value="cx3_silo" ${rrtMission==='cx3_silo'?'selected':''}>CX-303 (3.80,0.40) → SILO-100 (0.60,3.40)</option>
+            <option value="cx1_exp" ${rrtMission==='cx1_exp'?'selected':''}>CX-301 (2.40,0.40) → EXP-400 (4.50,3.40)</option>
+            <option value="silo_exp" ${rrtMission==='silo_exp'?'selected':''}>SILO-100 (0.60,3.40) → EXP-400 (4.50,3.40)</option>
+          </select>
+        </div>
+        <div class="ctrl-actions-grid">
+          <button class="btn-act green" onclick="window.executarRRT()">🌳 Gerar RRT + Smooth</button>
+          <button class="btn-act purple" onclick="window.toggleKDTree()">📐 ${showKDGrid ? 'Ocultar' : 'Exibir'} KD-Tree 2D</button>
+        </div>
+      `;
+      window.executarRRT(rrtMission);
+    }
+
+    window.toggleKDTree = function() {
+      showKDGrid = !showKDGrid;
+      renderMode3UI();
+    };
+
+    window.executarRRT = function(mission) {
+      if (mission) rrtMission = mission;
+      stopAnim();
+      const t0 = performance.now();
+      const missions = {
+        cx3_silo: { start: { x: 3.80, y: 0.40 }, goal: { x: 0.60, y: 3.40 }, lbl: "CX-303 → SILO-100" },
+        cx1_exp:  { start: { x: 2.40, y: 0.40 }, goal: { x: 4.50, y: 3.40 }, lbl: "CX-301 → EXP-400" },
+        silo_exp: { start: { x: 0.60, y: 3.40 }, goal: { x: 4.50, y: 3.40 }, lbl: "SILO-100 → EXP-400" }
+      };
+      const m = missions[rrtMission];
+      const deltaQ = 0.25, pGoal = 0.12, maxIter = 1200;
+
+      let nodes = [{ x: m.start.x, y: m.start.y, parent: -1 }];
+      let goalIdx = -1;
+      for (let k = 0; k < maxIter; k++) {
+        const qr = Math.random() < pGoal ? m.goal : { x: Math.random() * 5.0, y: Math.random() * 4.0 };
+        let nearIdx = 0, nearD = Infinity;
+        for (let i = 0; i < nodes.length; i++) {
+          const d = Math.hypot(nodes[i].x - qr.x, nodes[i].y - qr.y);
+          if (d < nearD) { nearD = d; nearIdx = i; }
+        }
+        const qn = nodes[nearIdx];
+        const step = Math.min(deltaQ, nearD || deltaQ);
+        const ang = Math.atan2(qr.y - qn.y, qr.x - qn.x);
+        const qnew = { x: qn.x + step * Math.cos(ang), y: qn.y + step * Math.sin(ang), parent: nearIdx };
+        if (isFreeSegment(qn, qnew)) {
+          nodes.push(qnew);
+          if (Math.hypot(qnew.x - m.goal.x, qnew.y - m.goal.y) <= deltaQ && isFreeSegment(qnew, m.goal)) {
+            nodes.push({ x: m.goal.x, y: m.goal.y, parent: nodes.length - 1 });
+            goalIdx = nodes.length - 1;
+            break;
+          }
+        }
+      }
+
+      // Backtrack + Shortcutting Path Smoothing
+      let rawPath = [];
+      if (goalIdx !== -1) {
+        let c = goalIdx;
+        while (c !== -1) { rawPath.push(nodes[c]); c = nodes[c].parent; }
+        rawPath.reverse();
+      } else {
+        rawPath = [m.start, { x: 4.85, y: 0.40 }, { x: 4.85, y: 3.40 }, m.goal];
+      }
+
+      let smoothPath = [...rawPath];
+      for (let s = 0; s < 120 && smoothPath.length > 2; s++) {
+        const i = Math.floor(Math.random() * (smoothPath.length - 2));
+        const j = i + 2 + Math.floor(Math.random() * (smoothPath.length - i - 2));
+        if (j < smoothPath.length && isFreeSegment(smoothPath[i], smoothPath[j])) {
+          smoothPath.splice(i + 1, j - i - 1);
+        }
+      }
+
+      const pathLen = (arr) => arr.reduce((acc, p, i) => i === 0 ? 0 : acc + Math.hypot(p.x - arr[i-1].x, p.y - arr[i-1].y), 0);
+      const rawDist = pathLen(rawPath), smoothDist = pathLen(smoothPath);
+      const dt = (performance.now() - t0).toFixed(2);
+
+      document.getElementById("canvas-title").innerText = `🤖 C-SPACE [0, 5.0]×[0, 4.0]m • RRT ${showKDGrid ? '+ KD-TREE 2D' : 'DO AGV-300'}`;
+      document.getElementById("canvas-hint").innerText = "Árvore RRT (cinza) + Rota Bruta (âmbar) + Rota Suavizada (verde)";
+
+      const svg = document.getElementById("svg-stage3");
+      let html = `<rect x="60" y="40" width="640" height="340" fill="#030916" stroke="#1e3a5f" stroke-width="1.5" />`;
+
+      // KD-Tree splitting lines
+      if (showKDGrid) {
+        const kd = buildKD(kdStations);
+        function drawKD(node) {
+          if (!node) return;
+          if (node.axis === "x") {
+            const pA = csToSvg(node.p.x, node.box.y1), pB = csToSvg(node.p.x, node.box.y2);
+            html += `<line x1="${pA.sx}" y1="${pA.sy}" x2="${pB.sx}" y2="${pB.sy}" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.7" />`;
+          } else {
+            const pA = csToSvg(node.box.x1, node.p.y), pB = csToSvg(node.box.x2, node.p.y);
+            html += `<line x1="${pA.sx}" y1="${pA.sy}" x2="${pB.sx}" y2="${pB.sy}" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.7" />`;
+          }
+          drawKD(node.left);
+          drawKD(node.right);
+        }
+        drawKD(kd);
+      }
+
+      // Obstacles
+      rrtObstacles.forEach(o => {
+        const tl = csToSvg(o.x1, o.y2), br = csToSvg(o.x2, o.y1);
+        html += `<rect x="${tl.sx}" y="${tl.sy}" width="${br.sx - tl.sx}" height="${br.sy - tl.sy}" fill="#0f172a" stroke="${o.color}" stroke-width="1.6" rx="3" opacity="0.9" />`;
+        html += `<text x="${(tl.sx+br.sx)/2}" y="${(tl.sy+br.sy)/2 + 3}" font-family="JetBrains Mono" font-size="8.5" fill="#e2e8f0" text-anchor="middle">${o.id}</text>`;
+      });
+
+      // RRT Tree branches
+      nodes.forEach((n, idx) => {
+        if (n.parent === -1) return;
+        const p1 = csToSvg(nodes[n.parent].x, nodes[n.parent].y);
+        const p2 = csToSvg(n.x, n.y);
+        html += `<line x1="${p1.sx}" y1="${p1.sy}" x2="${p2.sx}" y2="${p2.sy}" stroke="#334155" stroke-width="1" />`;
+      });
+
+      // Raw path
+      const rawPts = rawPath.map(p => { const s = csToSvg(p.x, p.y); return `${s.sx},${s.sy}`; }).join(" ");
+      html += `<polyline points="${rawPts}" fill="none" stroke="#f59e0b" stroke-width="1.8" stroke-dasharray="4 3" />`;
+
+      // Smoothed path
+      const smPts = smoothPath.map(p => { const s = csToSvg(p.x, p.y); return `${s.sx},${s.sy}`; }).join(" ");
+      html += `<polyline points="${smPts}" fill="none" stroke="#10b981" stroke-width="3.5" stroke-linecap="round" />`;
+
+      // Start, Goal & EXP-400
+      const st = csToSvg(m.start.x, m.start.y), gl = csToSvg(m.goal.x, m.goal.y), exp = csToSvg(4.50, 3.40);
+      html += `<circle cx="${exp.sx}" cy="${exp.sy}" r="14" fill="none" stroke="#a855f7" stroke-dasharray="3 2" /><text x="${exp.sx}" y="${exp.sy-18}" font-family="JetBrains Mono" font-size="8.5" fill="#c084fc" text-anchor="middle">EXP-400</text>`;
+      html += `<circle cx="${st.sx}" cy="${st.sy}" r="7" fill="#38bdf8" /><text x="${st.sx}" y="${st.sy+16}" font-family="JetBrains Mono" font-size="9" fill="#38bdf8" text-anchor="middle">START</text>`;
+      html += `<circle cx="${gl.sx}" cy="${gl.sy}" r="7" fill="#10b981" /><text x="${gl.sx}" y="${gl.sy-12}" font-family="JetBrains Mono" font-size="9" fill="#34d399" text-anchor="middle">GOAL</text>`;
+      html += `<circle id="agv-rrt-dot" cx="${st.sx}" cy="${st.sy}" r="8" fill="#fff" stroke="#10b981" stroke-width="3" />`;
+
+      svg.innerHTML = html;
+
+      // Animate AGV along smoothed path
+      let leg = 0, prog = 0;
+      const svgSmooth = smoothPath.map(p => csToSvg(p.x, p.y));
+      function stepAGV() {
+        const dot = document.getElementById("agv-rrt-dot");
+        if (!dot || svgSmooth.length < 2) return;
+        if (leg >= svgSmooth.length - 1) { leg = 0; prog = 0; }
+        const a = svgSmooth[leg], b = svgSmooth[leg + 1];
+        dot.setAttribute("cx", a.sx + (b.sx - a.sx) * prog);
+        dot.setAttribute("cy", a.sy + (b.sy - a.sy) * prog);
+        prog += 0.025;
+        if (prog >= 1) { prog = 0; leg++; }
+        animFrameId = requestAnimationFrame(stepAGV);
+      }
+      animFrameId = requestAnimationFrame(stepAGV);
+
+      setLegend([
+        { style: "background:#334155;", label: "Árvore RRT Explorada" },
+        { style: "border:1px dashed #f59e0b;", label: "Rota Bruta" },
+        { style: "background:#10b981;", label: "Rota Suavizada (Shortcutting)" },
+        ...(showKDGrid ? [{ style: "border:1px dashed #a855f7;", label: "Hiperplanos KD-Tree X/Y" }] : [])
+      ]);
+
+      const redPct = (((rawDist - smoothDist) / Math.max(0.01, rawDist)) * 100).toFixed(1);
+      setKPIs(
+        "Rota Suavizada:", `${smoothDist.toFixed(2)} m (bruta: ${rawDist.toFixed(2)} m)`,
+        "Redução / Nós RRT:", `-${redPct}% (${nodes.length} nós, ${dt}ms)`,
+        `Waypoints Suavizados (${m.lbl}):`,
+        smoothPath.map(p => `(${p.x.toFixed(2)},${p.y.toFixed(2)})`).join(" → "),
+        `RRT + Path Smoothing gerou rota livre de colisões (${smoothPath.length} waypoints, ${smoothDist.toFixed(2)}m) contornando M-101 e canaletas.`
+      );
+      resetTagsNominal();
+      setTag("AGV-300", `AGV-300: ROTA ${m.lbl}`, "open");
+      window.logSCADA(`Aulas 22/26 (RRT): ${nodes.length} nós amostrados; Smoothing ${rawDist.toFixed(2)}m -> ${smoothDist.toFixed(2)}m (-${redPct}%).`, "#34d399");
+    };
+
+    /* =========================================================================
+       MODO 4: REDES DE PETRI & KARP-MILLER ω (AULA 24)
+       ========================================================================= */
+    let pnSafeMode = true; // true = com p6 (CAP-301 K=3), false = sistema aberto (ω)
+    let pnTokens = { p1: 2, p2: 1, p3: 0, p4: 1, p5: 0, p6: 3 };
+    let pnOmega = false;
+
+    function renderMode4UI() {
+      document.getElementById("ctrl-lesson-tag").innerText = "Aula 24";
+      document.getElementById("dynamic-controls").innerHTML = `
+        <div class="ctrl-actions-grid">
+          <button class="btn-act blue" onclick="window.dispararPN('t1')">▶ t1: Alimentar (XV-101)</button>
+          <button class="btn-act green" onclick="window.dispararPN('t2')">▶ t2: Desviar (XV-201)</button>
+          <button class="btn-act yellow" onclick="window.dispararPN('t4')">▶ t4: Coletar (AGV-300)</button>
+          <button class="btn-act outline" onclick="window.dispararPN('t5')">➕ t5: Reabastecer Silo</button>
+        </div>
+        <div class="ctrl-actions-grid">
+          <button class="btn-act ${pnSafeMode ? 'green' : 'red'}" onclick="window.togglePetriMode()">
+            ${pnSafeMode ? '🛡️ Modo Seguro: CAP-301 ATIVO' : '⚠️ Sistema Aberto (Sem p6)'}
+          </button>
+          <button class="btn-act outline" onclick="window.resetPetri()">🔄 Reset Marcação M0</button>
+        </div>
+      `;
+      drawPetriNet();
+    }
+
+    window.togglePetriMode = function() {
+      pnSafeMode = !pnSafeMode;
+      window.resetPetri();
+    };
+
+    window.resetPetri = function() {
+      pnTokens = { p1: 2, p2: 1, p3: 0, p4: 1, p5: 0, p6: 3 };
+      pnOmega = false;
+      renderMode4UI();
+    };
+
+    window.dispararPN = function(tr) {
+      if (tr === "t1") {
+        if (pnTokens.p1 >= 1 && pnTokens.p2 >= 1) {
+          pnTokens.p1--; pnTokens.p2--; pnTokens.p3++;
+          window.logSCADA("RdP: Transição t1 disparada (XV-101 inseriu peça em INSP-200).", "#38bdf8");
+        } else {
+          window.logSCADA("RdP: t1 bloqueada (falta ficha em SILO-100 p1 ou M-101 livre p2).", "#fbbf24");
+        }
+      } else if (tr === "t2") {
+        const capOK = !pnSafeMode || pnTokens.p6 >= 1;
+        if (pnTokens.p3 >= 1 && pnTokens.p4 >= 1 && capOK) {
+          pnTokens.p3--; pnTokens.p2++;
+          if (pnSafeMode) pnTokens.p6--;
+          pnTokens.p5 = pnTokens.p5 === "ω" ? "ω" : pnTokens.p5 + 1;
+          if (!pnSafeMode && pnTokens.p5 >= 4) {
+            pnTokens.p5 = "ω";
+            pnOmega = true;
+            window.logSCADA("ALERTA KARP-MILLER: M(p5) -> ω! Transbordo físico detectado em CX-301!", "#ef4444");
+          } else {
+            window.logSCADA("RdP: Transição t2 disparada (XV-201 desviou peça para CX-301).", "#34d399");
+          }
+        } else {
+          window.logSCADA("RdP INTERTRAVADA: t2 bloqueada por CAP-301 = 0 (FULL-300 ativo! Prevenção de transbordo).", "#fbbf24");
+        }
+      } else if (tr === "t4") {
+        if (pnTokens.p5 === "ω" || pnTokens.p5 >= 1) {
+          if (pnTokens.p5 !== "ω") pnTokens.p5--;
+          if (pnSafeMode) pnTokens.p6 = Math.min(3, pnTokens.p6 + 1);
+          window.logSCADA("RdP: Transição t4 disparada (AGV-300 coletou peça da canaleta CX-301).", "#34d399");
+        }
+      } else if (tr === "t5") {
+        pnTokens.p1++;
+        window.logSCADA("RdP: Transição t5 disparada (Silo reabastecido).", "#38bdf8");
+      }
+      drawPetriNet();
+    };
+
+    function drawPetriNet() {
+      document.getElementById("canvas-title").innerText = `⚙️ REDE DE PETRI MARCADA • ${pnSafeMode ? 'SISTEMA FECHADO (LUGAR COMPLEMENTAR CAP-301)' : 'SISTEMA ABERTO (KARP-MILLER ω)'}`;
+      document.getElementById("canvas-hint").innerText = "Dispare t1 → t2 repetidamente para testar o limite K=3 ou o surgimento de ω";
+
+      const places = [
+        { id: "p1", x: 95,  y: 95,  lbl: "p1: SILO-100", tok: pnTokens.p1 },
+        { id: "p2", x: 95,  y: 260, lbl: "p2: M-101 Livre", tok: pnTokens.p2 },
+        { id: "p3", x: 340, y: 175, lbl: "p3: INSP-200", tok: pnTokens.p3 },
+        { id: "p4", x: 465, y: 75,  lbl: "p4: XV-201 Pronto", tok: pnTokens.p4 },
+        { id: "p5", x: 640, y: 175, lbl: "p5: CX-301", tok: pnTokens.p5 },
+        ...(pnSafeMode ? [{ id: "p6", x: 465, y: 315, lbl: "p6: CAP-301 (FULL)", tok: pnTokens.p6 }] : [])
+      ];
+      const t1Enabled = pnTokens.p1 >= 1 && pnTokens.p2 >= 1;
+      const t2Enabled = pnTokens.p3 >= 1 && pnTokens.p4 >= 1 && (!pnSafeMode || pnTokens.p6 >= 1);
+      const t4Enabled = pnTokens.p5 === "ω" || pnTokens.p5 >= 1;
+
+      const svg = document.getElementById("svg-stage3");
+      let html = `
+        <defs><marker id="pn-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" /></marker></defs>
+        <line x1="95" y1="95" x2="215" y2="170" class="edge-line ${t1Enabled?'mst-active':''}" marker-end="url(#pn-arr)" />
+        <line x1="95" y1="260" x2="215" y2="180" class="edge-line ${t1Enabled?'mst-active':''}" marker-end="url(#pn-arr)" />
+        <line x1="225" y1="175" x2="310" y2="175" class="edge-line ${t1Enabled?'mst-active':''}" marker-end="url(#pn-arr)" />
+        <line x1="370" y1="175" x2="455" y2="175" class="edge-line ${t2Enabled?'mst-active':''}" marker-end="url(#pn-arr)" />
+        <line x1="465" y1="75" x2="465" y2="155" class="edge-line" marker-end="url(#pn-arr)" />
+        <line x1="475" y1="175" x2="608" y2="175" class="edge-line ${t2Enabled?'mst-active':''}" marker-end="url(#pn-arr)" />
+        <path d="M 465 195 Q 300 385 95 290" class="edge-line" fill="none" marker-end="url(#pn-arr)" />
+      `;
+      if (pnSafeMode) {
+        html += `<line x1="465" y1="315" x2="465" y2="198" class="edge-line ${pnTokens.p6>0?'mst-active':'blocked'}" marker-end="url(#pn-arr)" />`;
+        html += `<line x1="640" y1="205" x2="640" y2="295" class="edge-line ${t4Enabled?'mst-active':''}" marker-end="url(#pn-arr)" />`;
+        html += `<line x1="628" y1="315" x2="498" y2="315" class="edge-line ${t4Enabled?'mst-active':''}" marker-end="url(#pn-arr)" />`;
+      } else {
+        html += `<line x1="640" y1="205" x2="640" y2="295" class="edge-line" marker-end="url(#pn-arr)" />`;
+      }
+
+      // Transitions
+      const trans = [
+        { id: "t1", x: 220, y: 175, lbl: "t1: XV-101", en: t1Enabled },
+        { id: "t2", x: 465, y: 175, lbl: "t2: XV-201", en: t2Enabled },
+        { id: "t4", x: 640, y: 315, lbl: "t4: AGV",    en: t4Enabled }
+      ];
+      trans.forEach(t => {
+        html += `<g style="cursor:pointer;" onclick="window.dispararPN('${t.id}')">
+          <rect x="${t.x-10}" y="${t.y-22}" width="20" height="44" rx="2" fill="${t.en ? '#10b981' : '#334155'}" stroke="#f8fafc" stroke-width="1.5" />
+          <text x="${t.x}" y="${t.y-28}" font-family="JetBrains Mono" font-size="9" font-weight="700" fill="${t.en ? '#34d399' : '#94a3b8'}" text-anchor="middle">${t.lbl}</text>
+        </g>`;
+      });
+
+      // Places
+      places.forEach(p => {
+        const isDanger = p.tok === "ω" || (p.id === "p6" && p.tok === 0);
+        html += `<g>
+          <circle cx="${p.x}" cy="${p.y}" r="28" fill="${isDanger ? '#330b0b' : '#091930'}" stroke="${isDanger ? '#ef4444' : '#38bdf8'}" stroke-width="2.2" />
+          <text x="${p.x}" y="${p.y+5}" font-family="JetBrains Mono" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">${p.tok}</text>
+          <text x="${p.x}" y="${p.y+42}" font-family="JetBrains Mono" font-size="9" fill="#cbd5e1" text-anchor="middle">${p.lbl}</text>
+        </g>`;
+      });
+      svg.innerHTML = html;
+
+      setLegend([
+        { style: "background:#10b981;", label: "Transição Habilitada (Clique para disparar)" },
+        { style: "background:#0ea5e9;", label: "Lugar com Fichas (Tokens)" },
+        { style: "background:#ef4444;", label: "Capacidade Esgotada / Símbolo ω" }
+      ]);
+
+      const mVec = `[p1=${pnTokens.p1}, p2=${pnTokens.p2}, p3=${pnTokens.p3}, p4=${pnTokens.p4}, p5=${pnTokens.p5}${pnSafeMode?`, p6=${pnTokens.p6}`:''}]`;
+      const invSum = pnSafeMode ? `${pnTokens.p5 + pnTokens.p6} = K (3)` : (pnOmega ? "ω (ILIMITADO!)" : `${pnTokens.p5} (Sem teto)`);
+      setKPIs(
+        "P-Invariante M(p5)+M(p6):", invSum,
+        "Estado de Segurança:", pnOmega ? "TRANSBORDO (ω)" : (!pnSafeMode ? "VULNERÁVEL" : (pnTokens.p6===0 ? "FULL-300 ATIVO" : "SEGURO (0 Deadlock)")),
+        "Vetor de Marcação Atual M:",
+        mVec,
+        pnOmega
+          ? "DIAGNÓSTICO KARP-MILLER: Símbolo ω atingido em CX-301! Ative o Lugar Complementar CAP-301 para corrigir a planta."
+          : (pnSafeMode && pnTokens.p6 === 0 ? "Canaleta cheia (M(p5)=3, M(p6)=0): t2 bloqueada com segurança! Dispare t4 (AGV) para esvaziar." : "Rede de Petri operando dentro dos limites nominais.")
+      );
+
+      resetTagsNominal();
+      setTag("XV-101", t1Enabled ? "XV-101: PRONTO" : "XV-101: BLOQUEADO", t1Enabled ? "open" : "warn");
+      setTag("XV-201", t2Enabled ? "XV-201: HABILITADO" : "XV-201: INIBIDO", t2Enabled ? "open" : "warn");
+      if (pnOmega) setTag("HS-302", "HS-302: TRANSBORDO ω!", "trip");
+    }
+
+    /* =========================================================================
+       MODO 5: BEHAVIOR TREES & PREEMPÇÃO (AULA 25)
+       ========================================================================= */
+    let bb = { hs301: false, inspFail: false, cxCount: 4, ls101: false, hs101: true, agvProg: 0 };
+
+    function renderMode5UI() {
+      document.getElementById("ctrl-lesson-tag").innerText = "Aula 25";
+      document.getElementById("dynamic-controls").innerHTML = `
+        <div class="ctrl-actions-grid">
+          <button class="btn-act ${bb.hs301?'red':'outline'}" onclick="window.toggleBB('hs301')">🛑 E-STOP HS-301: ${bb.hs301?'ON':'OFF'}</button>
+          <button class="btn-act ${bb.inspFail?'red':'outline'}" onclick="window.toggleBB('inspFail')">📷 Falha INSP-200: ${bb.inspFail?'ON':'OFF'}</button>
+          <button class="btn-act ${bb.ls101?'yellow':'outline'}" onclick="window.toggleBB('ls101')">🪣 Silo Vazio LS-101: ${bb.ls101?'ON':'OFF'}</button>
+          <button class="btn-act ${bb.hs101?'green':'outline'}" onclick="window.toggleBB('hs101')">▶ Partida HS-101: ${bb.hs101?'ON':'OFF'}</button>
+        </div>
+        <div class="ctrl-input-row">
+          <span>Peças na Baia CX-301 (US-301): <strong id="lbl-cx-cnt">${bb.cxCount}</strong>/10</span>
+          <div style="display:flex; gap:0.35rem;">
+            <button class="btn-slide" onclick="window.encherCaixaBT()">📦 Encher (10/10)</button>
+            <button class="btn-slide" onclick="window.tickBT()">⚡ Executar 1 Tick</button>
+          </div>
+        </div>
+      `;
+      window.tickBT(false);
+    }
+
+    window.toggleBB = function(key) {
+      bb[key] = !bb[key];
+      renderMode5UI();
+    };
+    window.encherCaixaBT = function() {
+      bb.cxCount = 10; bb.agvProg = 0;
+      renderMode5UI();
+    };
+
+    window.tickBT = function(advance = true) {
+      if (advance && !bb.hs301 && !bb.inspFail) {
+        if (bb.cxCount >= 10) {
+          bb.agvProg += 34;
+          if (bb.agvProg >= 100) { bb.cxCount = 0; bb.agvProg = 0; }
+        } else if (bb.ls101) {
+          bb.ls101 = false;
+        } else if (bb.hs101) {
+          bb.cxCount = Math.min(10, bb.cxCount + 1);
+        }
+      }
+      const lbl = document.getElementById("lbl-cx-cnt");
+      if (lbl) lbl.innerText = bb.cxCount;
+
+      // Evaluate BT Root Selector (?)
+      let branch = 0, status = "FAILURE", actionMsg = "Aguardando comando HS-101";
+      if (bb.hs301 || bb.inspFail) {
+        branch = 1; status = "SUCCESS";
+        actionMsg = bb.hs301 ? "PREEMPÇÃO HS-301: M-101=0, Pistões recuados, HS-302=1" : "FALHA INSP-200: Parada segura, HS-302=1";
+      } else if (bb.cxCount >= 10) {
+        branch = 2; status = "RUNNING";
+        actionMsg = `LOTE CHEIO (10 pç): XV-101 bloqueado, AGV-300 → EXP-400 (${bb.agvProg}%)`;
+      } else if (bb.ls101) {
+        branch = 3; status = "RUNNING";
+        actionMsg = "SILO VAZIO (LS-101): AGV-300 reabastecendo SILO-100";
+      } else if (bb.hs101) {
+        branch = 4; status = "SUCCESS";
+        actionMsg = `PRODUÇÃO NOMINAL: M-101=1, Triagem ativa (CX-301: ${bb.cxCount}/10)`;
+      }
+
+      document.getElementById("canvas-title").innerText = "🧠 ÁRVORE DE COMPORTAMENTO (BEHAVIOR TREE • PADRÃO BLACKBOARD)";
+      document.getElementById("canvas-hint").innerText = "Avaliação Top-Down da esquerda para a direita a cada Tick do SCADA";
+
+      const svg = document.getElementById("svg-stage3");
+      const branches = [
+        { id: 1, x: 115, title: "-> R1: Segurança", c: "HS-301 / INSP", a: "Trip & HS-302" },
+        { id: 2, x: 290, title: "-> R2: Caixa Cheia", c: "CX >= 10 pç", a: "AGV → EXP-400" },
+        { id: 3, x: 465, title: "-> R3: Silo Vazio", c: "LS-101 == 1", a: "AGV → SILO-100" },
+        { id: 4, x: 640, title: "-> R4: Produção", c: "HS-101 == 1", a: "M-101 & Triagem" }
+      ];
+      let html = `<g><rect x="290" y="30" width="180" height="42" class="node-rect ${status==='RUNNING'?'running':status==='SUCCESS'?'highlighted':'std'}" />
+        <text x="380" y="48" class="node-text">? SELECTOR RAIZ (TICK)</text>
+        <text x="380" y="63" class="node-subtext">Retorno: ${status}</text></g>`;
+
+      branches.forEach(b => {
+        const isHit = b.id === branch;
+        const evalState = b.id < branch || branch === 0 ? "FAILURE" : (isHit ? status : "NÃO AVALIADO");
+        const rCls = isHit ? (b.id === 1 ? "blocked" : status === "RUNNING" ? "running" : "highlighted") : (b.id < branch ? "warn" : "std");
+        html += `<line x1="380" y1="72" x2="${b.x}" y2="140" class="edge-line ${isHit ? 'mst-active edge-flow' : ''}" />`;
+        html += `<g><rect x="${b.x-72}" y="140" width="144" height="46" class="node-rect ${rCls}" />
+          <text x="${b.x}" y="159" class="node-text">${b.title}</text>
+          <text x="${b.x}" y="174" class="node-subtext">${evalState}</text></g>`;
+        html += `<line x1="${b.x}" y1="186" x2="${b.x}" y2="245" class="edge-line ${isHit ? 'mst-active' : ''}" />`;
+        html += `<g><rect x="${b.x-68}" y="245" width="136" height="42" rx="18" class="node-rect ${isHit ? rCls : ''}" />
+          <text x="${b.x}" y="263" class="node-text">Cond: ${b.c}</text>
+          <text x="${b.x}" y="278" class="node-subtext">${b.id === 2 ? bb.cxCount+'/10' : 'Blackboard'}</text></g>`;
+        html += `<line x1="${b.x}" y1="287" x2="${b.x}" y2="335" class="edge-line ${isHit ? 'mst-active' : ''}" />`;
+        html += `<g><rect x="${b.x-70}" y="335" width="140" height="44" class="node-rect ${isHit ? rCls : ''}" />
+          <text x="${b.x}" y="354" class="node-text">Ação: ${b.a}</text>
+          <text x="${b.x}" y="369" class="node-subtext">${isHit ? 'EXECUTANDO' : 'IDLE'}</text></g>`;
+      });
+      svg.innerHTML = html;
+
+      setLegend([
+        { style: "background:#10b981;", label: "SUCCESS (Ramo Concluído)" },
+        { style: "background:#0ea5e9;", label: "RUNNING (Missão AGV Aberta a Preempção)" },
+        { style: "background:#ef4444;", label: "Preempção Crítica de Segurança" },
+        { style: "background:#f59e0b;", label: "FAILURE (Condição Falsa → Próximo Ramo)" }
+      ]);
+
+      setKPIs(
+        "Ramo Ativo no Tick:", branch ? `Ramo ${branch} (${status})` : "Nenhum (IDLE)",
+        "Prioridade / Preempção:", branch === 1 ? "MÁXIMA (TRIP)" : "Normal",
+        "Blackboard & Ação nos Atuadores:",
+        actionMsg,
+        actionMsg
+      );
+
+      resetTagsNominal();
+      if (branch === 1) {
+        setTag("M-101", "M-101: STOP (E-STOP)", "trip");
+        setTag("XV-101", "XV-101: RECUADO", "trip");
+        setTag("HS-302", "HS-302: ALARME ON", "trip");
+        setTag("AGV-300", "AGV-300: PARADA EMERGÊNCIA", "trip");
+      } else if (branch === 2) {
+        setTag("XV-101", "XV-101: INIBIDO (FULL)", "warn");
+        setTag("AGV-300", `AGV-300: EXP-400 (${bb.agvProg}%)`, "open");
+      } else if (branch === 3) {
+        setTag("XV-101", "XV-101: SILO VAZIO", "warn");
+        setTag("AGV-300", "AGV-300: REABASTECENDO", "open");
+      } else if (branch === 4) {
+        setTag("XV-101", "XV-101: ATIVO", "open");
+      } else {
+        setTag("M-101", "M-101: STOP", "closed");
+      }
+      window.logSCADA(`Aula 25 (BT Tick): Ramo ${branch || '-'} retornou ${status}. ${actionMsg}`, branch === 1 ? "#ef4444" : "#34d399");
+    };
+
+    /* =========================================================================
+       MODO 6: ÁRVORES DE DECISÃO ID3 / C4.5 / CART & ALARM FLOOD (AULA 27)
+       ========================================================================= */
+    let dtAlg = "CART"; // "CART" | "C45" | "ID3"
+    let dtInputs = { seg: "OK", caixa: "Disp", fmt: "Grande", cor: "Vermelha", pressao: 6.0, corrente: 2.4, tempo: 320 };
+
+    function renderMode6UI() {
+      document.getElementById("ctrl-lesson-tag").innerText = "Aula 27";
+      document.getElementById("dynamic-controls").innerHTML = `
+        <div class="ctrl-input-row">
+          <span>Algoritmo:</span>
+          <select class="ctrl-select" onchange="window.setDTParam('alg', this.value)">
+            <option value="CART" ${dtAlg==='CART'?'selected':''}>CART (Gini • Binária → CLP ST)</option>
+            <option value="C45" ${dtAlg==='C45'?'selected':''}>C4.5 (Gain Ratio • Multi-ramo)</option>
+            <option value="ID3" ${dtAlg==='ID3'?'selected':''}>ID3 (IG • Viés de Cor na Raiz)</option>
+          </select>
+        </div>
+        <div class="ctrl-actions-grid">
+          <div class="ctrl-input-row"><span>Seg:</span><select class="ctrl-select" onchange="window.setDTParam('seg', this.value)"><option ${dtInputs.seg==='OK'?'selected':''}>OK</option><option ${dtInputs.seg==='Falha'?'selected':''}>Falha</option></select></div>
+          <div class="ctrl-input-row"><span>Caixa:</span><select class="ctrl-select" onchange="window.setDTParam('caixa', this.value)"><option ${dtInputs.caixa==='Disp'?'selected':''}>Disp</option><option ${dtInputs.caixa==='Cheia'?'selected':''}>Cheia</option></select></div>
+          <div class="ctrl-input-row"><span>Fmt:</span><select class="ctrl-select" onchange="window.setDTParam('fmt', this.value)"><option ${dtInputs.fmt==='Grande'?'selected':''}>Grande</option><option ${dtInputs.fmt==='Pequena'?'selected':''}>Pequena</option></select></div>
+          <div class="ctrl-input-row"><span>Cor:</span><select class="ctrl-select" onchange="window.setDTParam('cor', this.value)"><option ${dtInputs.cor==='Vermelha'?'selected':''}>Vermelha</option><option ${dtInputs.cor==='Verde'?'selected':''}>Verde</option><option ${dtInputs.cor==='Azul'?'selected':''}>Azul</option></select></div>
+        </div>
+        <div class="ctrl-input-row">
+          <span>Pressão Ar: <strong id="lbl-p">${dtInputs.pressao.toFixed(1)}</strong> bar</span>
+          <input type="range" class="ctrl-range" min="3.0" max="7.0" step="0.1" value="${dtInputs.pressao}" oninput="window.setDTParam('pressao', Number(this.value))" />
+        </div>
+        <div class="ctrl-input-row">
+          <span>Corrente M-101: <strong id="lbl-c">${dtInputs.corrente.toFixed(1)}</strong> A</span>
+          <input type="range" class="ctrl-range" min="1.5" max="5.5" step="0.1" value="${dtInputs.corrente}" oninput="window.setDTParam('corrente', Number(this.value))" />
+        </div>
+        <div class="code-st-box" id="st-code-preview"></div>
+      `;
+      evalDT();
+    }
+
+    window.setDTParam = function(k, v) {
+      if (k === "alg") dtAlg = v;
+      else dtInputs[k] = v;
+      const lp = document.getElementById("lbl-p"), lc = document.getElementById("lbl-c");
+      if (lp) lp.innerText = dtInputs.pressao.toFixed(1);
+      if (lc) lc.innerText = dtInputs.corrente.toFixed(1);
+      evalDT();
+    };
+
+    function evalDT() {
+      // Continuous Alarm Flood root cause (Estudo de Caso 2)
+      let rootCause = "NORMAL", suppressed = 0;
+      if (dtInputs.pressao <= 4.30) { rootCause = "BAIXA_PRESSAO_AR (≤4.3 bar)"; suppressed = 4; }
+      else if (dtInputs.corrente > 4.20) { rootCause = "SOBRECARGA_M101 (>4.2 A)"; suppressed = 3; }
+
+      const effSeg = (dtInputs.seg === "Falha" || rootCause !== "NORMAL") ? "Falha" : "OK";
+      let acao = "DESC-304";
+      if (effSeg === "Falha" || dtInputs.caixa === "Cheia") acao = "TRIP_ALARME";
+      else if (dtInputs.fmt === "Grande" && dtInputs.cor === "Vermelha") acao = "CX-301";
+      else if (dtInputs.fmt === "Grande" && dtInputs.cor === "Verde") acao = "CX-302";
+      else if (dtInputs.fmt === "Pequena" && dtInputs.cor === "Azul") acao = "CX-303";
+
+      document.getElementById("canvas-title").innerText = `🎯 ÁRVORE DE DECISÃO ${dtAlg} • CLASSIFICAÇÃO & SUPRESSÃO DE ALARMES (ISA-18.2)`;
+      document.getElementById("canvas-hint").innerText = dtAlg === "ID3" ? "Observe o viés do ID3 escolhendo COR na raiz (IG=0.6302)!" : "Segurança priorizada na raiz (GR=0.5786 / ΔGini=0.1811)";
+
+      const svg = document.getElementById("svg-stage3");
+      let html = "";
+      if (dtAlg === "ID3") {
+        // ID3 puts Cor at root
+        const activeBranch = dtInputs.cor;
+        const nodes = [
+          { id: "R", x: 380, y: 45, lbl: "Cor? (IG=0.630)", act: true },
+          { id: "V", x: 145, y: 145, lbl: "Fmt? (Vermelha)", act: activeBranch==="Vermelha" },
+          { id: "G", x: 380, y: 145, lbl: "Seg? (Verde)", act: activeBranch==="Verde" },
+          { id: "B", x: 615, y: 145, lbl: "Seg? (Azul)", act: activeBranch==="Azul" },
+          { id: "L_V", x: 145, y: 270, lbl: effSeg==="Falha"||dtInputs.caixa==="Cheia"?"TRIP_ALARME":(dtInputs.fmt==="Grande"?"CX-301":"DESC-304"), act: activeBranch==="Vermelha", leaf: true },
+          { id: "L_G", x: 380, y: 270, lbl: effSeg==="Falha"||dtInputs.caixa==="Cheia"?"TRIP_ALARME":(dtInputs.fmt==="Grande"?"CX-302":"DESC-304"), act: activeBranch==="Verde", leaf: true },
+          { id: "L_B", x: 615, y: 270, lbl: effSeg==="Falha"||dtInputs.caixa==="Cheia"?"TRIP_ALARME":(dtInputs.fmt==="Pequena"?"CX-303":"DESC-304"), act: activeBranch==="Azul", leaf: true }
+        ];
+        const edges = [["R","V","Verm"],["R","G","Verde"],["R","B","Azul"],["V","L_V",""],["G","L_G",""],["B","L_B",""]];
+        const mp = Object.fromEntries(nodes.map(n => [n.id, n]));
+        edges.forEach(([u,v,t]) => {
+          const act = mp[u].act && mp[v].act;
+          html += `<line x1="${mp[u].x}" y1="${mp[u].y}" x2="${mp[v].x}" y2="${mp[v].y}" class="edge-line ${act?'mst-active edge-flow':''}" />`;
+          if (t) html += `<text x="${(mp[u].x+mp[v].x)/2}" y="${(mp[u].y+mp[v].y)/2 - 6}" font-family="JetBrains Mono" font-size="9" fill="${act?'#34d399':'#64748b'}" text-anchor="middle">${t}</text>`;
+        });
+        nodes.forEach(n => {
+          const cls = n.leaf && n.act ? (acao==="TRIP_ALARME"?"blocked":"highlighted") : (n.act ? "running" : "std");
+          html += `<g><rect x="${n.x-72}" y="${n.y-18}" width="144" height="36" class="node-rect ${cls}" />
+            <text x="${n.x}" y="${n.y+4}" class="node-text">${n.lbl}</text></g>`;
+        });
+      } else {
+        // CART / C4.5 put Seg at root -> Caixa -> Fmt -> Cor
+        const pSeg = effSeg === "Falha";
+        const pCx = !pSeg && dtInputs.caixa === "Cheia";
+        const pFmt = !pSeg && !pCx;
+        const pGrd = pFmt && dtInputs.fmt === "Grande";
+        const pPeq = pFmt && dtInputs.fmt === "Pequena";
+
+        const nodes = [
+          { id: "S",  x: 380, y: 42,  lbl: dtAlg==="CART"?"Seg == Falha? (ΔG=0.181)":"Seg? (GR=0.579)", act: true },
+          { id: "T1", x: 165, y: 125, lbl: "TRIP_ALARME", act: pSeg, leaf: true, trip: true },
+          { id: "C",  x: 520, y: 125, lbl: "Caixa == Cheia?", act: !pSeg },
+          { id: "T2", x: 330, y: 215, lbl: "TRIP_ALARME", act: pCx, leaf: true, trip: true },
+          { id: "F",  x: 615, y: 215, lbl: "Fmt == Grande?", act: pFmt },
+          { id: "CG", x: 470, y: 310, lbl: dtAlg==="CART"?"Cor == Verde?":"Cor (Grande)", act: pGrd },
+          { id: "CB", x: 675, y: 310, lbl: dtAlg==="CART"?"Cor == Azul?":"Cor (Pequena)", act: pPeq },
+          { id: "L_G", x: 470, y: 392, lbl: pGrd ? acao : "CX-301 / CX-302 / DESC", act: pGrd, leaf: true },
+          { id: "L_B", x: 675, y: 392, lbl: pPeq ? acao : "CX-303 / DESC-304", act: pPeq, leaf: true }
+        ];
+        const edges = [
+          ["S","T1","Sim"],["S","C","Não"],["C","T2","Sim"],["C","F","Não"],
+          ["F","CG","Grande"],["F","CB","Peq"],["CG","L_G",dtInputs.cor],["CB","L_B",dtInputs.cor]
+        ];
+        const mp = Object.fromEntries(nodes.map(n => [n.id, n]));
+        edges.forEach(([u,v,t]) => {
+          const act = mp[u].act && mp[v].act;
+          html += `<line x1="${mp[u].x}" y1="${mp[u].y}" x2="${mp[v].x}" y2="${mp[v].y}" class="edge-line ${act?'mst-active edge-flow':''}" />`;
+          html += `<text x="${(mp[u].x+mp[v].x)/2}" y="${(mp[u].y+mp[v].y)/2 - 4}" font-family="JetBrains Mono" font-size="8.5" fill="${act?'#34d399':'#64748b'}" text-anchor="middle">${t}</text>`;
+        });
+        nodes.forEach(n => {
+          const cls = (n.trip && n.act) ? "blocked" : (n.leaf && n.act) ? "highlighted" : (n.act ? "running" : "std");
+          html += `<g><rect x="${n.x-72}" y="${n.y-17}" width="144" height="34" class="node-rect ${cls}" />
+            <text x="${n.x}" y="${n.y+4}" class="node-text">${n.lbl}</text></g>`;
+        });
+      }
+      svg.innerHTML = html;
+
+      const stEl = document.getElementById("st-code-preview");
+      if (stEl) {
+        stEl.innerText =
+`(* IEC 61131-3 ST — Causa Raiz: ${rootCause} *)
+IF (Seg_Falha OR Pressao_Ar <= 4.30 OR Corrente_M101 > 4.20) THEN
+    Acao_SCADA := TRIP_ALARME; (* Suprime ${suppressed} alarmes secundários *)
+ELSIF (Caixa_Cheia) THEN Acao_SCADA := TRIP_ALARME;
+ELSE Acao_SCADA := ${acao}; END_IF;`;
+      }
+
+      setLegend([
+        { style: "background:#0ea5e9;", label: "Nó de Decisão Percorrido" },
+        { style: "background:#10b981;", label: "Folha Selecionada (Ação Atuador)" },
+        { style: "background:#ef4444;", label: "TRIP_ALARME / Causa Raiz" }
+      ]);
+
+      setKPIs(
+        "Decisão / Classe:", acao,
+        "Alarm Flood (ISA-18.2):", suppressed > 0 ? `${suppressed} alarmes suprimidos` : "0 (Causa: NORMAL)",
+        "Causa Raiz & Diagnóstico:",
+        `${rootCause} | Entrada: [${effSeg}, ${dtInputs.caixa}, ${dtInputs.fmt}, ${dtInputs.cor}] → ${acao}`,
+        suppressed > 0
+          ? `ALARM FLOOD MITIGADO: Causa raiz única '${rootCause}' isolada na raiz (${dtAlg}), suprimindo ${suppressed} alarmes em cascata!`
+          : `Árvore ${dtAlg} classificou a peça [${dtInputs.fmt}, ${dtInputs.cor}] para ${acao}.`
+      );
+
+      resetTagsNominal();
+      if (acao === "TRIP_ALARME") {
+        setTag("M-101", "M-101: TRIP", "trip");
+        setTag("XV-101", "XV-101: BLOQUEADO", "trip");
+        setTag("HS-302", "HS-302: ALARME ON", "trip");
+      } else if (acao === "CX-301") setTag("XV-201", "XV-201 (Verm): AVANÇADO", "open");
+      else if (acao === "CX-302") setTag("XV-202", "XV-202 (Verde): AVANÇADO", "open");
+      else if (acao === "CX-303") setTag("XV-203", "XV-203 (Azul): AVANÇADO", "open");
+    }
+
+    /* =========================================================================
+       3. SELETOR PRINCIPAL DOS 6 MODOS DO SIMULADOR
+       ========================================================================= */
+    window.selecionarModo = function(m) {
+      currentMode = m;
+      stopAnim();
+      document.querySelectorAll(".scenario-btn").forEach((b, idx) => {
+        b.classList.toggle("active", idx === (m - 1));
+      });
+      if (m === 1) renderMode1UI();
+      else if (m === 2) renderMode2UI();
+      else if (m === 3) renderMode3UI();
+      else if (m === 4) renderMode4UI();
+      else if (m === 5) renderMode5UI();
+      else if (m === 6) renderMode6UI();
+    };
+
+    // Inicialização síncrona
     window.renderizarSlide();
-    window.carregarCenario(1);
+    window.selecionarModo(1);
   </script>
 </body>
 </html>
